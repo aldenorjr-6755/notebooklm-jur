@@ -1,0 +1,338 @@
+{
+ "titulo": "Coletânea Temática de Jurisprudência: Controle de Constitucionalidade",
+ "serie": "CTJ-STF",
+ "fonte": "ctj_controle_de_constitucionalidade.pdf",
+ "total": 66,
+ "sumario": [
+  {
+   "tema": "Siglas, abreviaturas e notações",
+   "pagina": 9,
+   "nivel": 0
+  },
+  {
+   "tema": "Supremacia da Constituição",
+   "pagina": 11,
+   "nivel": 0
+  },
+  {
+   "tema": "Recepção e controle de constitucionalidade",
+   "pagina": 13,
+   "nivel": 0
+  },
+  {
+   "tema": "Interpretação constitucional",
+   "pagina": 17,
+   "nivel": 0
+  },
+  {
+   "tema": "Bloco de constitucionalidade",
+   "pagina": 18,
+   "nivel": 0
+  },
+  {
+   "tema": "Teoria dos diálogos institucionais — superação legislativa",
+   "pagina": 20,
+   "nivel": 0
+  },
+  {
+   "tema": "Espécies de inconstitucionalidade",
+   "pagina": 22,
+   "nivel": 0
+  },
+  {
+   "tema": "Inconstitucionalidade formal",
+   "pagina": 22,
+   "nivel": 1
+  },
+  {
+   "tema": "Inconstitucionalidade material",
+   "pagina": 24,
+   "nivel": 1
+  },
+  {
+   "tema": "Inconstitucionalidade originária e superveniente",
+   "pagina": 24,
+   "nivel": 1
+  },
+  {
+   "tema": "Inconstitucionalidade reflexa",
+   "pagina": 26,
+   "nivel": 1
+  },
+  {
+   "tema": "Modalidades de controle de constitucionalidade",
+   "pagina": 27,
+   "nivel": 0
+  },
+  {
+   "tema": "Controle prévio (ou preventivo)",
+   "pagina": 27,
+   "nivel": 1
+  },
+  {
+   "tema": "Controle posterior (ou repressivo)",
+   "pagina": 29,
+   "nivel": 1
+  },
+  {
+   "tema": "Controle de constitucionalidade difuso",
+   "pagina": 31,
+   "nivel": 0
+  },
+  {
+   "tema": "Cláusula de reserva de plenário",
+   "pagina": 32,
+   "nivel": 1
+  },
+  {
+   "tema": "Abstrativização do controle difuso e o papel do Senado",
+   "pagina": 36,
+   "nivel": 1
+  },
+  {
+   "tema": "Teoria da transcendência dos motivos determinantes",
+   "pagina": 39,
+   "nivel": 1
+  },
+  {
+   "tema": "Controle de constitucionalidade concentrado",
+   "pagina": 42,
+   "nivel": 0
+  },
+  {
+   "tema": "Ação direta de inconstitucionalidade",
+   "pagina": 46,
+   "nivel": 1
+  },
+  {
+   "tema": "Legitimidade",
+   "pagina": 46,
+   "nivel": 1
+  },
+  {
+   "tema": "Parâmetro e objeto",
+   "pagina": 59,
+   "nivel": 1
+  },
+  {
+   "tema": "Pedido",
+   "pagina": 72,
+   "nivel": 1
+  },
+  {
+   "tema": "Procedimento",
+   "pagina": 75,
+   "nivel": 1
+  },
+  {
+   "tema": "Medida cautelar",
+   "pagina": 79,
+   "nivel": 1
+  },
+  {
+   "tema": "Ação direta de inconstitucionalidade por omissão",
+   "pagina": 85,
+   "nivel": 1
+  },
+  {
+   "tema": "Legitimidade",
+   "pagina": 86,
+   "nivel": 1
+  },
+  {
+   "tema": "Pedido",
+   "pagina": 87,
+   "nivel": 1
+  },
+  {
+   "tema": "Procedimento",
+   "pagina": 87,
+   "nivel": 1
+  },
+  {
+   "tema": "Medida cautelar",
+   "pagina": 88,
+   "nivel": 1
+  },
+  {
+   "tema": "Ação declaratória de constitucionalidade",
+   "pagina": 88,
+   "nivel": 1
+  },
+  {
+   "tema": "Legitimidade",
+   "pagina": 89,
+   "nivel": 1
+  },
+  {
+   "tema": "Parâmetro e objeto",
+   "pagina": 89,
+   "nivel": 1
+  },
+  {
+   "tema": "Pedido",
+   "pagina": 90,
+   "nivel": 1
+  },
+  {
+   "tema": "Procedimento",
+   "pagina": 90,
+   "nivel": 1
+  },
+  {
+   "tema": "Medida cautelar",
+   "pagina": 91,
+   "nivel": 1
+  },
+  {
+   "tema": "Arguição de descumprimento de preceito fundamental",
+   "pagina": 93,
+   "nivel": 1
+  },
+  {
+   "tema": "Preceito fundamental",
+   "pagina": 97,
+   "nivel": 1
+  },
+  {
+   "tema": "Subsidiariedade",
+   "pagina": 98,
+   "nivel": 1
+  },
+  {
+   "tema": "Legitimidade ativa",
+   "pagina": 103,
+   "nivel": 1
+  },
+  {
+   "tema": "Pedido",
+   "pagina": 105,
+   "nivel": 1
+  },
+  {
+   "tema": "Procedimento",
+   "pagina": 105,
+   "nivel": 1
+  },
+  {
+   "tema": "Medida liminar",
+   "pagina": 106,
+   "nivel": 1
+  },
+  {
+   "tema": "Controvérsia constitucional relevante",
+   "pagina": 107,
+   "nivel": 1
+  },
+  {
+   "tema": "Hipóteses de (des)cabimento",
+   "pagina": 108,
+   "nivel": 1
+  },
+  {
+   "tema": "Estado de coisas inconstitucional",
+   "pagina": 111,
+   "nivel": 1
+  },
+  {
+   "tema": "Ação direta de inconstitucionalidade interventiva",
+   "pagina": 112,
+   "nivel": 1
+  },
+  {
+   "tema": "Fungibilidade das ações",
+   "pagina": 113,
+   "nivel": 0
+  },
+  {
+   "tema": "Intervenção de terceiros",
+   "pagina": 114,
+   "nivel": 0
+  },
+  {
+   "tema": "Amicus curiae",
+   "pagina": 115,
+   "nivel": 1
+  },
+  {
+   "tema": "Audiência pública",
+   "pagina": 124,
+   "nivel": 0
+  },
+  {
+   "tema": "Efeitos da decisão",
+   "pagina": 125,
+   "nivel": 0
+  },
+  {
+   "tema": "Efeito vinculante e erga omnes",
+   "pagina": 125,
+   "nivel": 1
+  },
+  {
+   "tema": "Efeito ex tunc e modulação dos efeitos",
+   "pagina": 129,
+   "nivel": 1
+  },
+  {
+   "tema": "Overruling, distinguishing e overriding",
+   "pagina": 134,
+   "nivel": 1
+  },
+  {
+   "tema": "Efeito repristinatório tácito",
+   "pagina": 134,
+   "nivel": 1
+  },
+  {
+   "tema": "Técnicas de decisão",
+   "pagina": 136,
+   "nivel": 0
+  },
+  {
+   "tema": "Interpretação conforme à Constituição",
+   "pagina": 136,
+   "nivel": 1
+  },
+  {
+   "tema": "Declaração de inconstitucionalidade sem redução de texto",
+   "pagina": 138,
+   "nivel": 1
+  },
+  {
+   "tema": "Inconstitucionalidade por arrastamento",
+   "pagina": 138,
+   "nivel": 1
+  },
+  {
+   "tema": "inconstitucionalidade de lei ainda constitucional",
+   "pagina": 138,
+   "nivel": 0
+  },
+  {
+   "tema": "Apelo ao legislador",
+   "pagina": 139,
+   "nivel": 1
+  },
+  {
+   "tema": "Mutação constitucional",
+   "pagina": 140,
+   "nivel": 1
+  },
+  {
+   "tema": "Prospective overruling",
+   "pagina": 141,
+   "nivel": 1
+  },
+  {
+   "tema": "e nos municípios",
+   "pagina": 143,
+   "nivel": 0
+  },
+  {
+   "tema": "Reclamação",
+   "pagina": 144,
+   "nivel": 0
+  }
+ ]
+}

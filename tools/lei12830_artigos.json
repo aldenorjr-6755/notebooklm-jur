@@ -1,0 +1,23 @@
+{
+ "fonte": "Lei 12.830/2013 (Investigação Criminal pelo Delegado de Polícia)",
+ "url": "https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2013/lei/l12830.htm",
+ "total": 4,
+ "artigos": [
+  {
+   "artigo": "1",
+   "texto": "Art. 1º Esta Lei dispõe sobre a investigação criminal conduzida pelo delegado de polícia."
+  },
+  {
+   "artigo": "2",
+   "texto": "Art. 2º As funções de polícia judiciária e a apuração de infrações penais exercidas pelo delegado de polícia são de natureza jurídica, essenciais e exclusivas de Estado. § 1º Ao delegado de polícia, na qualidade de autoridade policial, cabe a condução da investigação criminal por meio de inquérito policial ou outro procedimento previsto em lei, que tem como objetivo a apuração das circunstâncias, da materialidade e da autoria das infrações penais. (Vide ADI 5043) § 2º Durante a investigação criminal, cabe ao delegado de polícia a requisição de perícia, informações, documentos e dados que interessem à apuração dos fatos. § 3º (VETADO). § 4º O inquérito policial ou outro procedimento previsto em lei em curso somente poderá ser avocado ou redistribuído por superior hierárquico, mediante despacho fundamentado, por motivo de interesse público ou nas hipóteses de inobservância dos procedimentos previstos em regulamento da corporação que prejudique a eficácia da investigação. § 5º A remoção do delegado de polícia dar-se-á somente por ato fundamentado. § 6º O indiciamento, privativo do delegado de polícia, dar-se-á por ato fundamentado, mediante análise técnico-jurídica do fato, que deverá indicar a autoria, materialidade e suas circunstâncias."
+  },
+  {
+   "artigo": "3",
+   "texto": "Art. 3º O cargo de delegado de polícia é privativo de bacharel em Direito, devendo-lhe ser dispensado o mesmo tratamento protocolar que recebem os magistrados, os membros da Defensoria Pública e do Ministério Público e os advogados."
+  },
+  {
+   "artigo": "4",
+   "texto": "Art. 4º Esta Lei entra em vigor na data de sua publicação. Brasília, 20 de junho de 2013; 192º da Independência e 125º da República. DILMA ROUSSEFF José Eduardo Cardozo Miriam Belchior Luís Inácio Lucena Adams Este texto não substitui o publicado no DOU de 21.6.2013 (function(){var f5_cspm={f5_p:'ICHJONHOGNCFHEACHLKDBFGOAJMMNHJPJHENGGEAIPIDGHOAHHNLJBKJLIODBGCONFIBDDGKAAEKBGNNNNNADHPGAAEDGJCLDDHLEJFOPGBFNPNNINDKJKFPKODMEFOL',setCharAt:function(str,index,chr){if(index>str.length-1)return str;return str.substr(0,index)+chr+str.substr(index+1);},get_byte:function(str,i){var s=(i/16)|0;i=(i&15);s=s*32;return((str.charCodeAt(i+16+s)-65) >4)+65));str=f5_cspm.setCharAt(str,(i+s),String.fromCharCode((b&15)+65));return str;},set_latency:function(str,latency){latency=latency&0xffff;str=f5_cspm.set_byte(str,40,(latency>>8));str=f5_cspm.set_byte(str,41,(latency&0xff));str=f5_cspm.set_byte(str,35,2);return str;},wait_perf_data:function(){try{var wp=window.performance.timing;if(wp.loadEventEnd>0){var res=wp.loadEventEnd-wp.navigationStart;if(res"
+  }
+ ]
+}

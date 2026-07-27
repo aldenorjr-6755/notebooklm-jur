@@ -1,0 +1,783 @@
+{
+ "titulo": "Coletânea Temática de Jurisprudência: Direito Penal e Processual Penal",
+ "serie": "CTJ-STF",
+ "fonte": "CTJ_Direito_Penal.pdf",
+ "total": 155,
+ "sumario": [
+  {
+   "tema": "Siglas, abreviaturas e notações",
+   "pagina": 11,
+   "nivel": 0
+  },
+  {
+   "tema": "Princípios Penais e Processuais Penais",
+   "pagina": 13,
+   "nivel": 0
+  },
+  {
+   "tema": "Princípio da Ampla Defesa",
+   "pagina": 17,
+   "nivel": 1
+  },
+  {
+   "tema": "Princípio da Dignidade da Pessoa Humana",
+   "pagina": 26,
+   "nivel": 1
+  },
+  {
+   "tema": "Princípio da Identidade Física do Juiz",
+   "pagina": 30,
+   "nivel": 1
+  },
+  {
+   "tema": "Princípio da Individualização da Pena",
+   "pagina": 31,
+   "nivel": 1
+  },
+  {
+   "tema": "Princípio da Insignificância",
+   "pagina": 35,
+   "nivel": 1
+  },
+  {
+   "tema": "Princípio da Isonomia",
+   "pagina": 59,
+   "nivel": 1
+  },
+  {
+   "tema": "Princípio da Legalidade",
+   "pagina": 61,
+   "nivel": 1
+  },
+  {
+   "tema": "Princípio da Motivação",
+   "pagina": 63,
+   "nivel": 1
+  },
+  {
+   "tema": "Princípio da Não Autoincriminação",
+   "pagina": 70,
+   "nivel": 1
+  },
+  {
+   "tema": "Princípio da Non Reformatio In Pejus",
+   "pagina": 73,
+   "nivel": 1
+  },
+  {
+   "tema": "Princípio da Presunção de Inocência",
+   "pagina": 78,
+   "nivel": 1
+  },
+  {
+   "tema": "Princípio da Publicidade",
+   "pagina": 87,
+   "nivel": 1
+  },
+  {
+   "tema": "Princípio da Razoável Duração do Processo",
+   "pagina": 88,
+   "nivel": 1
+  },
+  {
+   "tema": "Princípio do Contraditório",
+   "pagina": 95,
+   "nivel": 1
+  },
+  {
+   "tema": "Princípio do Devido Processo Legal",
+   "pagina": 99,
+   "nivel": 1
+  },
+  {
+   "tema": "Princípio do Juiz Natural",
+   "pagina": 104,
+   "nivel": 1
+  },
+  {
+   "tema": "Princípio do Non Bis In Idem",
+   "pagina": 108,
+   "nivel": 1
+  },
+  {
+   "tema": "Aplicação da Lei Penal",
+   "pagina": 113,
+   "nivel": 0
+  },
+  {
+   "tema": "Dolo / Culpa",
+   "pagina": 124,
+   "nivel": 0
+  },
+  {
+   "tema": "Imputabilidade",
+   "pagina": 130,
+   "nivel": 0
+  },
+  {
+   "tema": "Concurso de Pessoas",
+   "pagina": 132,
+   "nivel": 0
+  },
+  {
+   "tema": "Pena Restritiva de Direito",
+   "pagina": 138,
+   "nivel": 0
+  },
+  {
+   "tema": "Multa",
+   "pagina": 141,
+   "nivel": 0
+  },
+  {
+   "tema": "Substituição da Pena",
+   "pagina": 143,
+   "nivel": 0
+  },
+  {
+   "tema": "Circunstâncias Judiciais",
+   "pagina": 147,
+   "nivel": 0
+  },
+  {
+   "tema": "Qualificadoras",
+   "pagina": 159,
+   "nivel": 0
+  },
+  {
+   "tema": "Privilégios",
+   "pagina": 164,
+   "nivel": 0
+  },
+  {
+   "tema": "Agravantes",
+   "pagina": 166,
+   "nivel": 0
+  },
+  {
+   "tema": "Atenuantes",
+   "pagina": 171,
+   "nivel": 0
+  },
+  {
+   "tema": "Causas de Aumento de Pena",
+   "pagina": 174,
+   "nivel": 0
+  },
+  {
+   "tema": "Causas de Diminuição de Pena",
+   "pagina": 179,
+   "nivel": 0
+  },
+  {
+   "tema": "Concurso de Crimes",
+   "pagina": 186,
+   "nivel": 0
+  },
+  {
+   "tema": "Concurso Formal",
+   "pagina": 186,
+   "nivel": 1
+  },
+  {
+   "tema": "Concurso Material",
+   "pagina": 188,
+   "nivel": 1
+  },
+  {
+   "tema": "Crime Continuado",
+   "pagina": 190,
+   "nivel": 1
+  },
+  {
+   "tema": "Suspensão Condicional da Pena",
+   "pagina": 196,
+   "nivel": 0
+  },
+  {
+   "tema": "Efeitos da Condenação",
+   "pagina": 199,
+   "nivel": 0
+  },
+  {
+   "tema": "Execução da Pena",
+   "pagina": 205,
+   "nivel": 0
+  },
+  {
+   "tema": "Comutação da Pena",
+   "pagina": 222,
+   "nivel": 1
+  },
+  {
+   "tema": "Detração da Pena",
+   "pagina": 225,
+   "nivel": 1
+  },
+  {
+   "tema": "Execução Provisória da Pena",
+   "pagina": 226,
+   "nivel": 1
+  },
+  {
+   "tema": "Livramento Condicional da Pena",
+   "pagina": 230,
+   "nivel": 1
+  },
+  {
+   "tema": "Regime de Cumprimento da Pena",
+   "pagina": 234,
+   "nivel": 1
+  },
+  {
+   "tema": "Medida de Segurança",
+   "pagina": 249,
+   "nivel": 0
+  },
+  {
+   "tema": "Extinção da Punibilidade",
+   "pagina": 251,
+   "nivel": 0
+  },
+  {
+   "tema": "Anistia / Graça / Indulto",
+   "pagina": 256,
+   "nivel": 1
+  },
+  {
+   "tema": "Prescrição",
+   "pagina": 260,
+   "nivel": 1
+  },
+  {
+   "tema": "Crimes em Espécie",
+   "pagina": 274,
+   "nivel": 0
+  },
+  {
+   "tema": "Crimes contra a Pessoa",
+   "pagina": 278,
+   "nivel": 1
+  },
+  {
+   "tema": "Crimes contra a Vida",
+   "pagina": 278,
+   "nivel": 1
+  },
+  {
+   "tema": "Crimes contra a Honra",
+   "pagina": 282,
+   "nivel": 1
+  },
+  {
+   "tema": "Crimes contra o Patrimônio",
+   "pagina": 288,
+   "nivel": 1
+  },
+  {
+   "tema": "Crimes contra a Dignidade Sexual",
+   "pagina": 300,
+   "nivel": 1
+  },
+  {
+   "tema": "Crimes contra a Paz Pública",
+   "pagina": 306,
+   "nivel": 1
+  },
+  {
+   "tema": "Apologia e Incitação ao Crime",
+   "pagina": 306,
+   "nivel": 1
+  },
+  {
+   "tema": "Associação Criminosa",
+   "pagina": 307,
+   "nivel": 1
+  },
+  {
+   "tema": "Crimes contra a Fé Pública",
+   "pagina": 310,
+   "nivel": 1
+  },
+  {
+   "tema": "Crimes contra a Administração Pública",
+   "pagina": 315,
+   "nivel": 1
+  },
+  {
+   "tema": "Crimes Praticados por Funcionário Público contra a Administração em Geral",
+   "pagina": 315,
+   "nivel": 1
+  },
+  {
+   "tema": "Crimes Praticados por Particular contra a Administração em Geral",
+   "pagina": 326,
+   "nivel": 1
+  },
+  {
+   "tema": "Crimes Praticados contra a Administração da Justiça",
+   "pagina": 332,
+   "nivel": 1
+  },
+  {
+   "tema": "Armas",
+   "pagina": 335,
+   "nivel": 1
+  },
+  {
+   "tema": "Criança e Adolescente",
+   "pagina": 345,
+   "nivel": 1
+  },
+  {
+   "tema": "Crime Hediondo",
+   "pagina": 352,
+   "nivel": 1
+  },
+  {
+   "tema": "Crimes de Responsabilidade",
+   "pagina": 355,
+   "nivel": 1
+  },
+  {
+   "tema": "Drogas",
+   "pagina": 359,
+   "nivel": 1
+  },
+  {
+   "tema": "Falência",
+   "pagina": 380,
+   "nivel": 1
+  },
+  {
+   "tema": "Lavagem de Capitais",
+   "pagina": 382,
+   "nivel": 1
+  },
+  {
+   "tema": "Licitação",
+   "pagina": 389,
+   "nivel": 1
+  },
+  {
+   "tema": "Meio Ambiente",
+   "pagina": 393,
+   "nivel": 1
+  },
+  {
+   "tema": "Ordem Tributária, Ordem Econômica e Relações de Consumo",
+   "pagina": 398,
+   "nivel": 1
+  },
+  {
+   "tema": "Organização Criminosa",
+   "pagina": 406,
+   "nivel": 1
+  },
+  {
+   "tema": "Previdência Social",
+   "pagina": 408,
+   "nivel": 1
+  },
+  {
+   "tema": "Sistema Financeiro Nacional",
+   "pagina": 413,
+   "nivel": 1
+  },
+  {
+   "tema": "Trânsito",
+   "pagina": 420,
+   "nivel": 1
+  },
+  {
+   "tema": "Violência Doméstica",
+   "pagina": 425,
+   "nivel": 1
+  },
+  {
+   "tema": "Contravenção Penal",
+   "pagina": 430,
+   "nivel": 0
+  },
+  {
+   "tema": "Direito Penal do Trabalho",
+   "pagina": 434,
+   "nivel": 0
+  },
+  {
+   "tema": "Direito Penal Eleitoral",
+   "pagina": 436,
+   "nivel": 0
+  },
+  {
+   "tema": "Direito Penal e Processual Penal Militar",
+   "pagina": 443,
+   "nivel": 0
+  },
+  {
+   "tema": "Princípio da Insignificância",
+   "pagina": 451,
+   "nivel": 1
+  },
+  {
+   "tema": "Crimes em Espécie",
+   "pagina": 456,
+   "nivel": 1
+  },
+  {
+   "tema": "Competência / Jurisdição",
+   "pagina": 461,
+   "nivel": 1
+  },
+  {
+   "tema": "Extinção da Punibilidade",
+   "pagina": 472,
+   "nivel": 1
+  },
+  {
+   "tema": "Nulidades",
+   "pagina": 474,
+   "nivel": 1
+  },
+  {
+   "tema": "Inquérito Policial",
+   "pagina": 481,
+   "nivel": 0
+  },
+  {
+   "tema": "Inquérito Judicial",
+   "pagina": 495,
+   "nivel": 0
+  },
+  {
+   "tema": "Ação Penal",
+   "pagina": 496,
+   "nivel": 0
+  },
+  {
+   "tema": "Denúncia",
+   "pagina": 513,
+   "nivel": 0
+  },
+  {
+   "tema": "Queixa",
+   "pagina": 536,
+   "nivel": 0
+  },
+  {
+   "tema": "Competência / Jurisdição",
+   "pagina": 538,
+   "nivel": 0
+  },
+  {
+   "tema": "Conexão / Continência",
+   "pagina": 570,
+   "nivel": 1
+  },
+  {
+   "tema": "Exceções / Suspeição / Impedimento",
+   "pagina": 575,
+   "nivel": 1
+  },
+  {
+   "tema": "Prerrogativa de Função",
+   "pagina": 580,
+   "nivel": 1
+  },
+  {
+   "tema": "Prevenção",
+   "pagina": 589,
+   "nivel": 1
+  },
+  {
+   "tema": "Direito de Defesa",
+   "pagina": 592,
+   "nivel": 0
+  },
+  {
+   "tema": "Autodefesa",
+   "pagina": 599,
+   "nivel": 1
+  },
+  {
+   "tema": "Defesa Preliminar",
+   "pagina": 602,
+   "nivel": 1
+  },
+  {
+   "tema": "Defesa Técnica",
+   "pagina": 606,
+   "nivel": 1
+  },
+  {
+   "tema": "Resposta à Acusação",
+   "pagina": 614,
+   "nivel": 1
+  },
+  {
+   "tema": "Sustentação Oral",
+   "pagina": 616,
+   "nivel": 1
+  },
+  {
+   "tema": "Provas",
+   "pagina": 621,
+   "nivel": 0
+  },
+  {
+   "tema": "Colaboração Premiada",
+   "pagina": 628,
+   "nivel": 1
+  },
+  {
+   "tema": "Diligência",
+   "pagina": 635,
+   "nivel": 1
+  },
+  {
+   "tema": "Interceptação Telefônica",
+   "pagina": 640,
+   "nivel": 1
+  },
+  {
+   "tema": "Interrogatório",
+   "pagina": 650,
+   "nivel": 1
+  },
+  {
+   "tema": "Perícia",
+   "pagina": 658,
+   "nivel": 1
+  },
+  {
+   "tema": "Prova Documental",
+   "pagina": 661,
+   "nivel": 1
+  },
+  {
+   "tema": "Prova Ilícita",
+   "pagina": 662,
+   "nivel": 1
+  },
+  {
+   "tema": "Prova Testemunhal",
+   "pagina": 673,
+   "nivel": 1
+  },
+  {
+   "tema": "Ministério Público",
+   "pagina": 679,
+   "nivel": 0
+  },
+  {
+   "tema": "Prisão",
+   "pagina": 688,
+   "nivel": 0
+  },
+  {
+   "tema": "Prisão Domiciliar",
+   "pagina": 692,
+   "nivel": 1
+  },
+  {
+   "tema": "Prisão em Flagrante",
+   "pagina": 697,
+   "nivel": 1
+  },
+  {
+   "tema": "Prisão Preventiva",
+   "pagina": 699,
+   "nivel": 1
+  },
+  {
+   "tema": "Prisão Temporária",
+   "pagina": 727,
+   "nivel": 1
+  },
+  {
+   "tema": "Liberdade Provisória",
+   "pagina": 729,
+   "nivel": 0
+  },
+  {
+   "tema": "Medidas Cautelares Diversas da Prisão",
+   "pagina": 734,
+   "nivel": 0
+  },
+  {
+   "tema": "Atos de Comunicação Processual",
+   "pagina": 739,
+   "nivel": 0
+  },
+  {
+   "tema": "Carta de Ordem",
+   "pagina": 739,
+   "nivel": 1
+  },
+  {
+   "tema": "Carta Precatória",
+   "pagina": 739,
+   "nivel": 1
+  },
+  {
+   "tema": "Carta Rogatória",
+   "pagina": 740,
+   "nivel": 1
+  },
+  {
+   "tema": "Citação",
+   "pagina": 741,
+   "nivel": 1
+  },
+  {
+   "tema": "Intimação",
+   "pagina": 745,
+   "nivel": 1
+  },
+  {
+   "tema": "Notificação",
+   "pagina": 756,
+   "nivel": 1
+  },
+  {
+   "tema": "Prazos",
+   "pagina": 757,
+   "nivel": 0
+  },
+  {
+   "tema": "Tribunal do Júri",
+   "pagina": 766,
+   "nivel": 0
+  },
+  {
+   "tema": "Competência",
+   "pagina": 772,
+   "nivel": 1
+  },
+  {
+   "tema": "Nulidades",
+   "pagina": 777,
+   "nivel": 1
+  },
+  {
+   "tema": "Plenitude de Defesa",
+   "pagina": 782,
+   "nivel": 1
+  },
+  {
+   "tema": "Pronúncia",
+   "pagina": 783,
+   "nivel": 1
+  },
+  {
+   "tema": "Quesitação",
+   "pagina": 789,
+   "nivel": 1
+  },
+  {
+   "tema": "Recursos",
+   "pagina": 793,
+   "nivel": 1
+  },
+  {
+   "tema": "Sigilo das Votações",
+   "pagina": 794,
+   "nivel": 1
+  },
+  {
+   "tema": "Soberania dos Veredictos",
+   "pagina": 795,
+   "nivel": 1
+  },
+  {
+   "tema": "Nulidades",
+   "pagina": 799,
+   "nivel": 0
+  },
+  {
+   "tema": "Ausência de Nulidade",
+   "pagina": 800,
+   "nivel": 1
+  },
+  {
+   "tema": "Nulidade Reconhecida",
+   "pagina": 813,
+   "nivel": 1
+  },
+  {
+   "tema": "Absoluta",
+   "pagina": 819,
+   "nivel": 1
+  },
+  {
+   "tema": "Relativa",
+   "pagina": 820,
+   "nivel": 1
+  },
+  {
+   "tema": "Recursos",
+   "pagina": 823,
+   "nivel": 0
+  },
+  {
+   "tema": "Revisão Criminal",
+   "pagina": 842,
+   "nivel": 0
+  },
+  {
+   "tema": "Habeas Corpus",
+   "pagina": 846,
+   "nivel": 0
+  },
+  {
+   "tema": "Cabível",
+   "pagina": 847,
+   "nivel": 1
+  },
+  {
+   "tema": "Incabível",
+   "pagina": 857,
+   "nivel": 1
+  },
+  {
+   "tema": "Prejudicado",
+   "pagina": 878,
+   "nivel": 1
+  },
+  {
+   "tema": "Recurso em Habeas Corpus",
+   "pagina": 882,
+   "nivel": 1
+  },
+  {
+   "tema": "Questões Diversas",
+   "pagina": 886,
+   "nivel": 0
+  },
+  {
+   "tema": "Tratados Internacionais",
+   "pagina": 890,
+   "nivel": 0
+  },
+  {
+   "tema": "Juizado Especial Criminal",
+   "pagina": 894,
+   "nivel": 0
+  },
+  {
+   "tema": "Suspensão Condicional do Processo — Sursis Processual",
+   "pagina": 897,
+   "nivel": 1
+  },
+  {
+   "tema": "Transação Penal",
+   "pagina": 902,
+   "nivel": 1
+  },
+  {
+   "tema": "Tribunal Penal Internacional",
+   "pagina": 906,
+   "nivel": 0
+  }
+ ]
+}

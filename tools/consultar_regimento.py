@@ -1,0 +1,47 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+consultar_regimento.py — texto literal de artigo de Regimento Interno (STF, TJMA ou TSE).
+
+Fontes (datasets gerados por extrair_regimento.py):
+    --fonte stf   -> regimento_stf.json   (RISTF, até Emenda Regimental 59/2023)
+    --fonte tjma  -> regimento_tjma.json   (RITJMA, consolidado até Resolução-GP 13, 26/02/2026)
+    --fonte tse   -> regimento_tse.json    (RITSE, Resolução n. 4.510, de 29/09/1952, anotado)
+
+Uso:
+    python consultar_regimento.py --fonte stf 21
+    python consultar_regimento.py --fonte tjma 96 --json
+    python consultar_regimento.py --fonte tse 35
+"""
+import sys, os, json, re, argparse
+try: sys.stdout.reconfigure(encoding="utf-8")
+except Exception: pass
+
+BASE = os.path.dirname(os.path.abspath(__file__))
+MAP = {"stf": "regimento_stf.json", "tjma": "regimento_tjma.json", "tse": "regimento_tse.json"}
+
+def norm(s):
+    s = s.strip().upper().replace("º","").replace("°","")
+    m = re.match(r'(\d+)\s*-?\s*([A-Z])?', s)
+    return None if not m else m.group(1)+(f"-{m.group(2)}" if m.group(2) else "")
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--fonte", required=True, choices=["stf","tjma","tse"])
+    ap.add_argument("artigo")
+    ap.add_argument("--json", action="store_true")
+    a = ap.parse_args()
+    base = json.load(open(os.path.join(BASE, MAP[a.fonte]), encoding="utf-8"))
+    idx = {r["artigo"]: r for r in base["artigos"]}
+    r = idx.get(norm(a.artigo))
+    if not r:
+        m = f"Art. {a.artigo} não encontrado em {base['fonte']}."
+        print(json.dumps({"erro": m}, ensure_ascii=False) if a.json else m); return
+    if a.json:
+        print(json.dumps({"fonte": base["fonte"], **r}, ensure_ascii=False, indent=1)); return
+    print(f"=== Art. {r['artigo']} — {base['fonte']} ===\n")
+    print(r["texto"])
+    print("\n⚠️ Confira emenda/resolução posterior à data da consolidação antes de citar.")
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,83 @@
+{
+ "titulo": "Direito Ambiental",
+ "serie": "Supremo Contemporâneo",
+ "fonte": "DireitoAmbiental.pdf",
+ "total": 15,
+ "sumario": [
+  {
+   "tema": "Lista de siglas",
+   "pagina": 13,
+   "nivel": 0
+  },
+  {
+   "tema": "CONAMA",
+   "pagina": 17,
+   "nivel": 0
+  },
+  {
+   "tema": "Licenciamento ambiental",
+   "pagina": 25,
+   "nivel": 0
+  },
+  {
+   "tema": "Fundo Amazônia",
+   "pagina": 45,
+   "nivel": 0
+  },
+  {
+   "tema": "Fundo Clima",
+   "pagina": 55,
+   "nivel": 0
+  },
+  {
+   "tema": "Concessão de licença ambiental pelo método simplificado",
+   "pagina": 71,
+   "nivel": 0
+  },
+  {
+   "tema": "Supressão de marcos regulatórios ambientais",
+   "pagina": 87,
+   "nivel": 0
+  },
+  {
+   "tema": "Liberação de agrotóxicos sem análise dos órgãos competentes",
+   "pagina": 105,
+   "nivel": 0
+  },
+  {
+   "tema": "Prescrição do dano ambiental",
+   "pagina": 117,
+   "nivel": 0
+  },
+  {
+   "tema": "Novo Código Florestal",
+   "pagina": 141,
+   "nivel": 0
+  },
+  {
+   "tema": "Uso do amianto crisotila",
+   "pagina": 201,
+   "nivel": 0
+  },
+  {
+   "tema": "Rinha de galos",
+   "pagina": 227,
+   "nivel": 0
+  },
+  {
+   "tema": "Importação de pneus usados",
+   "pagina": 247,
+   "nivel": 0
+  },
+  {
+   "tema": "Demarcação da Reserva Indígena Raposa Serra do Sol",
+   "pagina": 273,
+   "nivel": 0
+  },
+  {
+   "tema": "Dano ambiental",
+   "pagina": 315,
+   "nivel": 0
+  }
+ ]
+}

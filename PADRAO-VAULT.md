@@ -1,0 +1,495 @@
+# PADRÃO DE VAULT — especificação canônica
+
+> Norma que governa **todos** os vaults Obsidian em `~/OneDrive/0-Obsidian/`.
+> Mora aqui, e não dentro de um vault, porque uma norma que vale para os oito não pode
+> pertencer a um deles. Mesmo lugar de `FONTES-CANONICAS.md` (manual único da infra compartilhada).
+>
+> Estado da conformidade real: ver `PADRAO-VAULT-DIAGNOSTICO.md` (snapshot datado, envelhece).
+> Este arquivo é a norma e não envelhece com o inventário.
+
+Fixada em 2026-07-26. Método de base: CODE (Tiago Forte) + arquitetura Karpathy (RAW → WIKI → OUTPUTS).
+
+---
+
+## 1. As duas classes de vault
+
+O padrão é **híbrido explícito**: admite dois modelos de autonomia. O que ele **não** admite é um
+vault que não diga em qual está, ou que diga um e se comporte como o outro.
+
+| | **Classe A — autossuficiente** | **Classe B — leve** |
+|---|---|---|
+| `.claude/agents/` | dentro do vault | em `~/.claude/agents/` |
+| `.claude/skills/` | dentro do vault | em `~/.claude/skills/` |
+| `.claude/tools/` (helpers + datasets) | dentro do vault | em `~/.notebooklm/tools/` |
+| `.claude/corpora/` | dentro do vault | em `~/.notebooklm/<corpus>/` |
+| `.claude/commands/` | dentro do vault | dentro do vault (sempre local) |
+| `.claude/settings.json` | obrigatório | obrigatório |
+| Caminho executável permitido | **só** `.claude/...` relativo | `~/`-based, cada um declarado |
+| Sobrevive a `git clone` numa máquina nova | sim, sozinho | não, precisa da infra externa |
+
+### 1.1 A regra que dá liga ao híbrido
+
+**A classe é declarada na primeira seção de `REQUISITOS-EXTERNOS.md` e ecoada no cabeçalho do
+`CLAUDE.md`. O vault tem de ser coerente com a própria declaração.**
+
+A declaração usa um **marcador formal e greppável**, na primeira linha útil dos dois arquivos:
+
+```
+> **Classe A — autossuficiente.**
+> **Classe B — leve.** Depende de `~/.claude/` e `~/.notebooklm/` (ver seções abaixo).
+```
+
+O marcador literal importa: prosa solta do tipo "este vault é autossuficiente para leitura" aparece
+hoje em quase todos os `REQUISITOS-EXTERNOS.md` sem constituir declaração de classe, e um `grep`
+por "autossuficiente" dá falso positivo em oito de oito. A auditoria procura `**Classe A` / `**Classe B`.
+
+Daí decorrem dois deveres assimétricos:
+
+- **Classe A não pode ter linha executável com caminho externo.** Caminho de fora é tolerado
+  **apenas** como proveniência — campo `fontes`, prosa de origem, referência bibliográfica.
+  Um `python ~/.notebooklm/tools/x.py` num vault Classe A é defeito, não conveniência.
+- **Classe B tem de listar em `REQUISITOS-EXTERNOS.md` toda dependência externa que de fato usa.**
+  Listar metade dos helpers que o próprio `CLAUDE.md` invoca é defeito: o arquivo existe justamente
+  para ser a lista de reposição numa máquina nova.
+
+Migrar de B para A é promoção legítima e esperada quando o vault amadurece. O caminho é: mover os
+agentes e skills do domínio de `~/.claude/` para `<vault>/.claude/`, espelhar os corpora, criar
+`settings.json` e trocar a declaração de classe.
+
+### 1.2 O que fica no escopo global (`~/.claude`) em qualquer hipótese
+
+Só o **transversal** — o que serve a mais de um domínio e não pertence a nenhum: helpers de código e
+súmula genéricos, agentes de pesquisa jurisprudencial ampla, skills de formato (`docx-juridico-padrao`,
+`pdf-ocr-to-markdown`), utilitários de sistema. Agente ou skill de um domínio só vive no global
+enquanto o vault dono for Classe B — e, mesmo assim, **declarado** por esse vault.
+
+---
+
+## 2. Invariantes — valem para as duas classes
+
+### 2.1 Raiz do vault
+
+Quatro arquivos, sem exceção:
+
+| Arquivo | Papel |
+|---|---|
+| `CLAUDE.md` | constituição do vault: escopo, pastas, convenções, fontes, limites |
+| `index.md` | índice de navegação da raiz (Karpathy) |
+| `MOC-<Vault>.md` | mapa de conteúdo curado |
+| `REQUISITOS-EXTERNOS.md` | declaração de classe + dependências + checklist de restauração |
+
+O MOC fica **na raiz**. Vault que guarde os MOCs em subpasta (`60-MOCs/`) ou que use um nome próprio
+(`Mapa do Vault.md`) declara o desvio no `CLAUDE.md` — e não deixa um stub vazio na raiz fingindo
+que o invariante foi cumprido.
+
+`CLAUDE.md` **aponta** para `REQUISITOS-EXTERNOS.md` por wikilink; não duplica o conteúdo dele.
+Duas fontes de verdade divergem — é questão de tempo.
+
+### 2.2 Esquema de pastas
+
+Canônico:
+
+```
+00-Inbox/          RAW   captura, processar semanalmente
+10-Wiki/           WIKI  conhecimento atômico e permanente
+  Conceitos/             CONC-
+  Jurisprudencia/        JUR-
+  Legislacao/            LEG-
+  Teses/                 TESE-
+20-Casos/          OUT   casos concretos (sem dado sensível)
+30-Pecas/          OUT   modelos e peças
+40-Recursos/       RAW   doutrina, corpora internos, material bruto
+50-Checklist/      OUT   CK-
+90-Arquivo/        RAW   bruto já destilado (criada sob demanda)
+_Templates/              TEMPLATE-
+```
+
+**`90-Arquivo/` — o destino do bruto destilado.** Fixada em 2026-07-26. Depois que o item do
+`00-Inbox/` vira nota atômica na `10-Wiki/`, o original desce para `90-Arquivo/` e nunca se apaga:
+bruto é evidência, e a síntese que gerar dúvida se confere nele. É pasta **sob demanda** — só existe
+onde há bruto arquivado, e por isso sua ausência não é lacuna (§2.2).
+
+O arquivo não pode morar dentro do `00-Inbox/`. Enquanto morava (`00-Inbox/_processados/`, convenção
+não declarada em três vaults), o Inbox do Criminal exibia 50 itens e contradizia de fora o próprio
+invariante de que Inbox vazia é o estado saudável — captura pendente e evidência arquivada são
+estados opostos e não cabem na mesma pasta.
+
+> **Conflito com documentação publicada.** O e-book *O Segundo Cérebro Jurídico* ensina
+> `_processados/` nos capítulos 3, 5 e 6 e nos apêndices A e B. Diferente do caso `TEMPLATE-Julgado`
+> (§2.4), aqui a norma prevaleceu sobre o texto publicado: o defeito era estrutural, não de
+> nomenclatura. O e-book ficou intacto e pende errata.
+
+Desvio de domínio é **permitido e declarado** no `CLAUDE.md`. Um vault de psicologia clínica trocar
+`20-Casos/30-Pecas` por `20-Clinica/30-Pesquisa` é adequação legítima; o que não pode é o desvio ser
+silencioso.
+
+**Pasta vazia é lacuna, não estrutura** — com uma exceção: **`00-Inbox/` vazia é o estado saudável**,
+significa que a captura foi processada. É acúmulo ali que é sintoma, não vazio.
+
+Fora o inbox, pasta sem nenhuma nota ou tem o vazio **declarado** no `CLAUDE.md` — dizendo por que
+está reservada e o que a preencheria — ou é removida. Andaime esquecido polui o índice e mente sobre
+o tamanho do vault; declarar custa uma linha e distingue "reservado" de "abandonado".
+
+Cabe declarar como reservada, por exemplo, a `20-Casos/` de um vault cujo `CLAUDE.md` proíbe dado
+sensível: o vazio ali é decisão, não descuido.
+
+### 2.3 `index.md`
+
+Um por pasta de conteúdo povoada, incluindo subpastas de `10-Wiki/`. Isentos: `_Templates/`,
+`Anexos/`, artefatos gerados (`graphify-out/`, `_grafo/`) e pastas vazias.
+
+O índice é regenerado sempre que uma nota é criada, editada ou movida na pasta. Contagem defasada
+no índice de raiz é defeito objetivo — o `lint-vault` detecta por mtime.
+
+### 2.4 Templates
+
+Nomeados `TEMPLATE-<Tipo>.md`, na pasta de templates do vault — `_Templates/` no esquema canônico,
+ou a pasta equivalente do esquema declarado (`99-Templates/` no Eleitoral). **O nome do arquivo é
+invariante; a pasta segue o esquema declarado em §2.2.**
+
+**Um template por pasta canônica de produção povoada** — a regra é essa, e dela sai o conjunto:
+
+| Pasta | Template |
+|---|---|
+| `10-Wiki/Conceitos/` | `TEMPLATE-Conceito.md` |
+| `10-Wiki/Jurisprudencia/` | `TEMPLATE-Julgado.md` |
+| `10-Wiki/Legislacao/` | `TEMPLATE-Legislacao.md` |
+| `10-Wiki/Teses/` | `TEMPLATE-Tese.md` |
+| `20-Casos/` | `TEMPLATE-Caso.md` |
+| `50-Checklist/` | `TEMPLATE-Checklist.md` |
+
+Pasta vazia não exige template (mas pasta vazia é lacuna — §2.2). Subpasta própria de `10-Wiki/`
+(`Autores/`, `Obras/`) exige o template correspondente: subpasta sem template produz notas sem
+esquema, e é assim que um vault acaba com 15% das notas sem frontmatter.
+
+**Decisão fixada:** `TEMPLATE-Julgado.md`. A pasta `Jurisprudencia/` nomeia a *coleção*; o template
+nomeia o *tipo de nota*, e cada nota ali documenta um julgado (ou súmula, ou tema). Quatro vaults já
+usavam `Julgado`, contra dois com `Jurisprudencia`, e o e-book *O Segundo Cérebro Jurídico* ensina
+`TEMPLATE-Julgado` em dois capítulos — mudar o padrão criaria conflito com a documentação publicada.
+
+> Correção de rota: a primeira versão desta norma fixou `TEMPLATE-Jurisprudencia`, por coerência com
+> o nome da pasta. Estava errado — o argumento era estético e ignorava tanto a prática majoritária
+> quanto o e-book. Revertido em 2026-07-26.
+
+Nota de estado: em 2026-07-26 **nenhum dos oito vaults tinha o conjunto completo**, e havia dois
+dialetos disjuntos. A regra "um por pasta povoada" existe para não voltar a divergir.
+
+### 2.5 Nomes de nota
+
+Notas de `10-Wiki/` levam prefixo de tipo: `CONC-`, `JUR-`, `LEG-`, `TESE-`. Checklists levam `CK-`.
+
+O prefixo agrupa por tipo no explorador, torna o wikilink autoexplicativo e permite `grep` por
+categoria. Nome em prosa dentro de `10-Wiki/` é desvio — sobretudo quando o `CLAUDE.md` do próprio
+vault declara o prefixo e as notas não o seguem, que é incoerência interna, não convenção.
+
+**Exceção declarada.** Um vault pode nomear pelo próprio instituto (`AIJE.md`) ou pelo autor
+(`Carl Rogers.md`) em vez do prefixo, desde que (a) declare a convenção no `CLAUDE.md` e (b) o campo
+`tipo` do frontmatter carregue o tipo em 100% das notas — é ele que passa a ser o marcador. O que a
+norma não admite é o vault declarar o prefixo e não aplicá-lo.
+
+Ao renomear nota já ligada, grave o nome antigo em `aliases` e reescreva os wikilinks na mesma
+operação. O alias é a rede de segurança: link que escapar da reescrita continua resolvendo.
+
+### 2.5.1 Ligação: link, âncora de seção e transclusão
+
+Fixado em 2026-07-26. São três operações distintas e a escolha entre elas não é estilo:
+
+| Forma | Sintaxe | Quando |
+|---|---|---|
+| Link | `[[CONC-Prisao-Preventiva]]` | remeter à nota inteira |
+| Âncora de seção | `[[CONC-Prisao-Preventiva#Tese central]]` | remeter a **um trecho** de nota longa |
+| Transclusão | `![[CONC-Prisao-Preventiva#Tese central]]` | **reusar** o trecho, exibindo-o aqui |
+
+**A regra é: texto que precisa aparecer em dois lugares se transclui, não se copia.** Checklist que
+repete a definição do conceito, MOC que reproduz o enunciado da tese, peça-modelo que recita a base
+legal — tudo isso hoje é cópia, e cópia diverge do original em silêncio. A transclusão mantém um
+único texto-fonte e o exibe onde for preciso; corrigido o original, corrige-se em todo lugar.
+
+A âncora de seção resolve o problema irmão: nota longa recebe link genérico e o leitor (humano ou
+agente) tem de varrer 1.000 palavras para achar o parágrafo que interessava. Para transcluir ou
+ancorar é preciso que a nota de destino tenha `##` estáveis — o que é mais um motivo para os
+títulos dos templates serem fixos.
+
+Estado em 2026-07-26: das 1.562 notas dos oito vaults, **uma** usava transclusão e **uma** usava
+âncora de seção. Não é preferência estabelecida contra o recurso; é recurso que nunca entrou na
+norma nem nos templates, e por isso não foi usado. Os templates passam a trazer o gancho.
+
+Duas cautelas:
+
+- **Não transcluir camada RAW.** Trecho de `90-Arquivo/` ou `40-Recursos/` entra por citação com
+  fonte e página (`## [p. N]`), não por `![[ ]]`: o bruto é evidência e deve ser citado como tal,
+  com a origem visível ao lado.
+- **Transclusão não substitui destilação.** Nota que é só um punhado de `![[ ]]` de outras notas
+  não é nota atômica — é índice, e o lugar dela é o `index.md` ou o MOC.
+
+### 2.5.2 Atomicidade — o que é nota longa demais
+
+Fixado em 2026-07-26, depois de medir os nove vaults. **Extensão isolada não é defeito.** A
+literatura de Zettelkasten fala em 80-100 palavras por nota; num vault jurídico isso é irreal — um
+instituto exige base legal, posição dos tribunais, contraponto e ângulo de defesa, e nada disso cabe
+em cem palavras. O que se audita não é o tamanho: é se a nota trata **uma coisa**.
+
+Notas a partir de **900 palavras** entram em triagem e caem em quatro categorias. Só uma é defeito:
+
+| Categoria | O que é | Conduta |
+|---|---|---|
+| **Catálogo** | coleção, índice, mapa mental, registry — longo por natureza | não fatiar |
+| **Lei anotada** | um `##` por artigo do diploma | não fatiar: quebra a unidade da lei |
+| **Densa** | uma linha argumentativa só, tratada a fundo | não fatiar; **ancorar** as seções |
+| **Bloco inchado** | uma seção concentra ≥25% da nota e passa de 400 palavras | **extrair** |
+
+O bloco inchado é o defeito real, e nestes vaults ele tem forma reconhecível: a nota de conceito
+**engoliu um catálogo de jurisprudência**, ou a seção "Onde aprofundar" — que era para ser ponteiro —
+virou conteúdo. O remédio não é picar a nota ao meio: é devolver o bloco à camada a que ele pertence
+(`10-Wiki/Jurisprudencia/` para julgado, `index.md`/MOC para ponteiro) e **transcluir de volta** o
+que ainda precisar aparecer ali (§2.5.1).
+
+Duas consequências que a norma assume:
+
+- **Fatiar por contagem de palavras é proibido.** Fragmento que não se sustenta sozinho não é nota
+  atômica — é nota mutilada, e o vault fica pior. Se as partes não têm título próprio defensável, a
+  nota é *densa*, não *inchada*.
+- **O lint sinaliza, não condena.** A seção de notas longas do `lint-vault` classifica e sugere;
+  a decisão de extrair é humana, caso a caso.
+
+Medição de 2026-07-26, para calibrar expectativa: 69 notas passavam de 900 palavras nos nove vaults;
+**38 delas não eram defeito** (catálogo, lei anotada ou densa).
+
+### 2.6 Frontmatter — esquema em português
+
+**Obrigatório:**
+
+```yaml
+---
+titulo: Nome legível da nota
+tipo: conceito | jurisprudencia | legislacao | tese | caso | checklist
+area: <domínio do vault>
+tags: [<area>/<subtema>, <tipo>]
+status: rascunho | processado | verificar | arquivado
+criado: AAAA-MM-DD
+fontes:
+  - Fonte 1 (com URL ou id de notebook quando houver)
+---
+```
+
+**Opcional:** `atualizado`, `subtema`, `aliases`, `related`.
+
+#### Dois eixos de classificação, e só um carregador para cada
+
+Fixado em 2026-07-26. A nota é classificada por **assunto** e por **estado**, e os dois eixos são
+independentes e obrigatórios:
+
+| Eixo | Pergunta | Carregador | Forma |
+|---|---|---|---|
+| Assunto | *do que trata?* | `tags` | `<area>/<subtema>` + `<tipo>` |
+| Estado | *em que pé está?* | `status` | vocabulário fechado abaixo |
+
+O eixo de estado entrou porque tag de tópico não ajuda na hora de produzir: para achar o que falta
+terminar, o que ainda não foi conferido e o que já pode ser citado em peça, é o estado que se
+consulta, não o assunto. O eixo de assunto ficou porque é ele que sustenta MOC, índice e navegação.
+
+**Cada eixo tem um único carregador.** Estado não vira também tag `status/x`: duas fontes de verdade
+divergem, e a norma já rejeita isso em §2.1. Com o Dataview instalado nos oito, `WHERE status = "x"`
+resolve a consulta que a tag resolveria, e ainda entra em tabela de índice.
+
+**Vocabulário fechado de `status`:**
+
+| Valor | Significado |
+|---|---|
+| `rascunho` | capturado, ainda não destilado nem conectado |
+| `processado` | destilado, com frontmatter completo e ligado ao MOC |
+| `verificar` | tem `[VERIFICAR]` pendente — **não citar em peça antes de conferir** |
+| `arquivado` | superado por norma nova ou virada de jurisprudência; fica pelo histórico |
+
+Valor fora dessa lista é defeito. Comentário inline no valor (`status: rascunho  # rascunho | …`)
+também é defeito: o comentário pertence ao template, não à nota preenchida.
+
+`verificar` não é decorativo. O risco de citação inventada tem sanção real, e é esse valor que
+distingue a nota que pode ir para uma peça da que ainda depende do `verificador-citacoes`.
+
+Regras:
+
+- **Tags hierárquicas** `<area>/<subtema>` (`familia/guarda`, `criminal/prova`). Rolam para o pai na
+  contagem do Obsidian e evitam o achatamento de centenas de tags planas.
+- **O `<tipo>` da lista de tags é plano de propósito** — `conceito`, `jurisprudencia`, `tese`. Não é
+  achatamento e não deve ser reportado como defeito. Auditoria que conte tag plana sem descontar o
+  `<tipo>` produz falso positivo em massa: no inventário de 2026-07-26, as sete tags planas mais
+  frequentes dos oito vaults eram todas o `<tipo>` prescrito aqui.
+- `subtema` literal na lista de tags é **resíduo de template**, não tag. O `lint-vault` caça.
+- `tipo` reflete a **natureza da nota**, não a da fonte. Nota conceitual que cita um julgado é
+  `tipo: conceito`, não `tipo: jurisprudencia`.
+- `fontes` é onde caminho externo e id de NotebookLM são legítimos, em qualquer classe de vault.
+- Nota sem frontmatter não é nota — é rascunho no `00-Inbox/`.
+
+#### O que não é nota, e por isso não exige frontmatter
+
+O esquema acima governa **nota**. Não governa:
+
+- **Camada RAW convertida** — o que vive em `90-Arquivo/`, `40-Recursos/` e `Anexos/` é fonte, não
+  nota: PDF virado Markdown, protocolo oficial, texto de lei paginado em `## [p. N]`. Exigir
+  `titulo`/`tipo`/`tags` de um POP da perícia é inventar metadado sobre documento de terceiro. A
+  proveniência dessas conversões mora no `index.md` da pasta, que é onde se procura.
+- **Arquivos de infraestrutura da raiz** — `CLAUDE.md`, `REQUISITOS-EXTERNOS.md`, `LEIA-ME.md`.
+- **`index.md` e MOC**, que têm esquema próprio e mínimo: `type: index` e `updated: AAAA-MM-DD`.
+  Esse esquema é obrigatório — `index.md` sem ele é defeito, e é a lacuna real que a auditoria de
+  2026-07-26 encontrou (12 índices e 1 MOC).
+
+### 2.7 Política de caminhos
+
+**Zero caminho absoluto `C:\Users\...` em qualquer arquivo do vault.** Sem exceção de classe.
+
+| Contexto | Forma correta |
+|---|---|
+| Dentro do vault | relativo: `.claude/tools/x.py`, `10-Wiki/Conceitos/...` |
+| Infra externa (só Classe B) | `~/`-based: `~/.notebooklm/tools/x.py` |
+| Outro vault | wikilink ou nome do vault em prosa — nunca caminho de disco |
+| **Saída gerada** (minuta, CSV, relatório) | **`prazos/`** — nunca `/tmp/`, nunca `20-Casos/` |
+
+**A pasta de saída é `prazos/`. Fixado em 2026-07-26.** Vale nas duas classes. Até então o Ambiental
+gravava em `20-Casos/<CODIGO>/` e os demais em `prazos/`, e a divergência sozinha respondia por 7 das
+31 colisões de agente entre vaults Classe A (`PADRAO-VAULT-TRIAGEM-COLISOES.md`).
+
+`20-Casos/` **não** serve de pasta de saída: a §2.2 a define como conteúdo curado **sem dado
+sensível**, e minuta gerada carrega dado do caso. São coisas distintas — `20-Casos/<CODIGO>/` é a
+nota do caso, `prazos/` é o rascunho gerado. Slash command que **cria** a pasta do caso segue usando
+`20-Casos/<CODIGO>/`: ali o caminho é o destino legítimo, não convenção de saída.
+
+Caminho absoluto quebra em máquina nova, quebra quando o vault muda de lugar (os oito já migraram
+de `C:\Users\alden\<Nome>` para o OneDrive) e quebra quando aponta para vault desativado.
+
+Único uso tolerado: a **linha de detecção** dentro do próprio `/health-check`, que precisa citar o
+padrão que caça.
+
+### Como se declara um recurso externo — por nome
+
+Vault Classe A pode citar recurso externo **desde que ele esteja listado pelo nome** na seção de
+declaração do seu `REQUISITOS-EXTERNOS.md` (a que registra o que ficou fora, com o substituto local
+de cada item). A auditoria é um confronto de duas listas:
+
+- recurso **citado** em `CLAUDE.md`/`.claude/` e **não declarado** → defeito;
+- recurso **declarado** e não mais citado → declaração a revisar (ou foi internalizado e a linha deve
+  sair, ou nunca foi usado e vale como registro do que ficou fora).
+
+Não contam como dependência: `PADRAO-VAULT.md` (ponteiro desta norma), `FONTES-CANONICAS.md`
+(catálogo da máquina) e a convenção de gravar saída em `prazos/`.
+
+> **Marca inline foi abandonada.** Até 2026-07-26, Ambiental e Constitucional exigiam anotar cada
+> citação externa com `[externo]` ou `[corpus externo opcional]` no próprio texto. A prática caiu por
+> dois motivos concretos: a marca chegou a ser inserida **dentro de linha de comando**, quebrando o
+> copiar-colar, e um `grep` que procurasse só uma das duas formas produzia falso positivo. Declaração
+> por nome, em lugar único, é verificável por diferença de listas — a marca espalhada não era.
+
+### 2.8 `settings.json`
+
+`settings.json` é o portátil e é **obrigatório** nas duas classes — acompanha a cópia do vault e
+carrega as permissões que o vault precisa para funcionar. `settings.local.json` é só para o que é
+específico da máquina.
+
+Ter apenas `settings.local.json` significa que o vault não funciona ao ser copiado: as permissões
+ficaram para trás.
+
+Coerência mínima: se o vault tem `skills/lint-vault/`, o `settings.json` permite executá-lo.
+
+### 2.9 Auditoria — `/health-check` + `lint-vault`
+
+Todo vault tem os dois:
+
+- **`.claude/commands/health-check.md`** — auditor de conformidade estrutural, parametrizado com as
+  contagens esperadas daquele vault (canários de infraestrutura, caminho externo na camada
+  executável, dívida `[VERIFICAR]`, rascunho antigo, dado sensível em `20-Casos/`). Relata primeiro,
+  corrige só depois de confirmação humana.
+- **`lint-vault`** — higiene das notas (wikilinks quebrados, `index.md` ausente ou defasado, notas
+  órfãs, resíduo de template, cobertura do MOC, e os dois eixos do §2.6). Classe A o carrega como
+  skill própria; Classe B usa a global.
+- **`verificar-fila`** — trabalha a dívida de conferência que o eixo `status` torna visível, em ciclo
+  gerar-avaliar-reparar: lista as notas em `verificar`, confere cada citação pelo agente
+  `verificador-citacoes`, repara **só** o trecho reprovado e libera a nota apenas com dívida zerada.
+
+**Invariante do §2.6 que o lint checa e a fila trabalha:** nota com `[VERIFICAR]` no corpo tem
+`status: verificar`, e nota em `verificar` tem marcador no corpo. Nota marcada `processado` com
+dívida pendente é a incoerência mais cara do vault — parece pronta para citar em peça e não está.
+
+O que a norma **não** admite é esvaziar a fila apagando marcador sem conferência: isso converte
+dívida visível em risco invisível, e é pior do que não rodar nada. Citação que não se confirma
+continua marcada, e o que se registra é a busca feita — onde, quando, com que resultado.
+
+Referência de implementação: `Ambiental/.claude/commands/health-check.md` e
+`Ambiental/.claude/skills/lint-vault/scripts/lint_vault.py`.
+
+### 2.10 Artefatos gerados
+
+`graphify-out/`, `_grafo/`, `00-Grafo/`, caches e builds são **regeneráveis** e carregam caminhos da
+máquina de origem. Declarados como tal em `REQUISITOS-EXTERNOS.md` e cobertos por `.graphifyignore`.
+Não entram na contagem de notas do vault nem exigem `index.md`.
+
+---
+
+## 3. Modelos de referência
+
+| Classe | Exemplar | Por quê |
+|---|---|---|
+| **A** | `Ambiental` | 24 agentes, 6 skills, 62 helpers/datasets, 3 corpora, `settings.json` próprio, `/health-check` calibrado. Gêmeo de `Constitucional` no `settings.json` e no esqueleto do `CLAUDE.md`. |
+| **B** | `ProcessoCivil` | `CLAUDE.md` enxuto (92 linhas), cobertura de `index.md` completa, `REQUISITOS-EXTERNOS.md` fiel ao que usa. Falta-lhe só `settings.json` e a declaração de classe. |
+
+Ao criar vault novo, copiar a estrutura do exemplar da classe pretendida e rodar o checklist da §4
+antes da primeira nota.
+
+---
+
+## 4. Checklist de conformidade
+
+Mecânico e verificável. Serve para auditar vault existente e para dar por pronto um vault novo.
+
+**Declaração**
+- [ ] `REQUISITOS-EXTERNOS.md` traz o marcador `**Classe A` ou `**Classe B` na primeira seção
+- [ ] `CLAUDE.md` ecoa o mesmo marcador no cabeçalho e aponta para `REQUISITOS-EXTERNOS.md` por wikilink
+- [ ] `CLAUDE.md` não duplica o conteúdo do `REQUISITOS-EXTERNOS.md`
+
+**Raiz e estrutura**
+- [ ] Existem `CLAUDE.md`, `index.md`, `MOC-<Vault>.md`, `REQUISITOS-EXTERNOS.md`
+- [ ] MOC na raiz é real (não stub); desvio de local declarado no `CLAUDE.md`
+- [ ] Esquema de pastas canônico, ou desvio declarado no `CLAUDE.md`
+- [ ] Nenhuma pasta vazia sem propósito declarado
+- [ ] `index.md` em toda pasta de conteúdo povoada
+- [ ] Contagem do `index.md` da raiz bate com o disco
+
+**Convenções de nota**
+- [ ] `_Templates/` com um `TEMPLATE-<Tipo>.md` por pasta canônica de produção povoada
+- [ ] Template para toda subpasta própria de `10-Wiki/`
+- [ ] Notas de `10-Wiki/` com prefixo `CONC-`/`JUR-`/`LEG-`/`TESE-`
+- [ ] Frontmatter com as sete chaves obrigatórias em português (inclui `status`)
+- [ ] `status` dentro do vocabulário fechado, sem comentário inline no valor
+- [ ] Tags hierárquicas `<area>/<subtema>` — descontando o `<tipo>`, que é plano por norma
+- [ ] Nenhum `subtema` literal na lista de tags (resíduo de template)
+- [ ] `tipo` reflete a natureza da nota, não a da fonte
+- [ ] `index.md` e MOC com `type: index` + `updated:`
+- [ ] RAW (`90-Arquivo/`, `40-Recursos/`, `Anexos/`) e infra da raiz **não** cobrados de frontmatter
+- [ ] Texto repetido em duas notas está transcluído (`![[nota#seção]]`), não copiado
+
+**Infraestrutura**
+- [ ] `.claude/settings.json` existe
+- [ ] `settings.local.json` só com o que é da máquina
+- [ ] `settings.json` permite executar o que o vault carrega (lint, helpers)
+- [ ] Classe A: `agents/`, `skills/`, `tools/`, `corpora/` dentro do vault
+- [ ] Classe B: toda dependência externa usada está listada em `REQUISITOS-EXTERNOS.md`
+
+**Caminhos**
+- [ ] Zero `C:\Users\...` (exceto a linha de detecção do `/health-check`)
+- [ ] Classe A: nenhuma linha executável com caminho externo
+- [ ] Nenhum caminho apontando para vault desativado ou local pré-migração
+
+**Auditoria**
+- [ ] `.claude/commands/health-check.md` presente e com contagens calibradas
+- [ ] `lint-vault` acessível (skill própria em A, global em B)
+- [ ] Artefatos gerados declarados como regeneráveis e cobertos por `.graphifyignore`
+
+---
+
+## 5. O que a norma deliberadamente não uniformiza
+
+- **Tamanho.** Um vault de 39 notas e um de 1.265 são igualmente conformes.
+- **Vocabulário de domínio.** `area`, `subtema` e o conjunto de tags são de cada vault.
+- **Profundidade do `CLAUDE.md`.** 73 linhas ou 462, conforme a complexidade do domínio — desde que
+  não duplique o `REQUISITOS-EXTERNOS.md`.
+- **Corpora.** Quais acervos espelhar é decisão de custo-benefício por vault, registrada no
+  `REQUISITOS-EXTERNOS.md` com o que ficou de fora e por quê.

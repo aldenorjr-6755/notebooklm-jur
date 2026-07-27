@@ -1,0 +1,333 @@
+{
+ "titulo": "Coletânea Temática de Jurisprudência: Advocacia e OAB",
+ "serie": "CTJ-STF",
+ "fonte": "ctj_advocacia_e_oab.pdf",
+ "total": 65,
+ "sumario": [
+  {
+   "tema": "Siglas, abreviaturas e notações",
+   "pagina": 9,
+   "nivel": 0
+  },
+  {
+   "tema": "1. Advocacia",
+   "pagina": 11,
+   "nivel": 0
+  },
+  {
+   "tema": "Atividade de advocacia",
+   "pagina": 12,
+   "nivel": 1
+  },
+  {
+   "tema": "Capacidade postulatória (atividade jurídica)",
+   "pagina": 15,
+   "nivel": 1
+  },
+  {
+   "tema": "Nulidades",
+   "pagina": 20,
+   "nivel": 1
+  },
+  {
+   "tema": "Renúncia a mandato",
+   "pagina": 23,
+   "nivel": 1
+  },
+  {
+   "tema": "Advogado empregado",
+   "pagina": 23,
+   "nivel": 1
+  },
+  {
+   "tema": "Ética do advogado",
+   "pagina": 25,
+   "nivel": 1
+  },
+  {
+   "tema": "Direitos do advogado",
+   "pagina": 27,
+   "nivel": 1
+  },
+  {
+   "tema": "Imunidade",
+   "pagina": 33,
+   "nivel": 1
+  },
+  {
+   "tema": "Formalidades da prisão",
+   "pagina": 36,
+   "nivel": 1
+  },
+  {
+   "tema": "Honorários advocatícios",
+   "pagina": 41,
+   "nivel": 1
+  },
+  {
+   "tema": "Incompatibilidades e impedimentos",
+   "pagina": 46,
+   "nivel": 1
+  },
+  {
+   "tema": "Infrações e sanções disciplinares",
+   "pagina": 49,
+   "nivel": 1
+  },
+  {
+   "tema": "Do processo na OAB",
+   "pagina": 49,
+   "nivel": 1
+  },
+  {
+   "tema": "Direito de defesa e devido processo legal",
+   "pagina": 49,
+   "nivel": 1
+  },
+  {
+   "tema": "2. Ordem dos Advogados do Brasil",
+   "pagina": 50,
+   "nivel": 0
+  },
+  {
+   "tema": "Função",
+   "pagina": 54,
+   "nivel": 1
+  },
+  {
+   "tema": "Conselho federal",
+   "pagina": 55,
+   "nivel": 1
+  },
+  {
+   "tema": "Conselho seccional",
+   "pagina": 57,
+   "nivel": 1
+  },
+  {
+   "tema": "Presidentes dos conselhos e subseção",
+   "pagina": 58,
+   "nivel": 1
+  },
+  {
+   "tema": "Caixa de assistência dos advogados",
+   "pagina": 59,
+   "nivel": 1
+  },
+  {
+   "tema": "Eleições e mandatos",
+   "pagina": 60,
+   "nivel": 1
+  },
+  {
+   "tema": "3. Defensoria Pública",
+   "pagina": 61,
+   "nivel": 0
+  },
+  {
+   "tema": "Função constitucional",
+   "pagina": 62,
+   "nivel": 1
+  },
+  {
+   "tema": "Estruturação",
+   "pagina": 66,
+   "nivel": 1
+  },
+  {
+   "tema": "Direito de opção pela carreira de defensor",
+   "pagina": 68,
+   "nivel": 1
+  },
+  {
+   "tema": "Autonomia",
+   "pagina": 70,
+   "nivel": 1
+  },
+  {
+   "tema": "Competência",
+   "pagina": 73,
+   "nivel": 1
+  },
+  {
+   "tema": "Competência concorrente",
+   "pagina": 73,
+   "nivel": 1
+  },
+  {
+   "tema": "Legitimidade",
+   "pagina": 75,
+   "nivel": 1
+  },
+  {
+   "tema": "Ação civil ex delicto",
+   "pagina": 76,
+   "nivel": 1
+  },
+  {
+   "tema": "Ação civil pública",
+   "pagina": 77,
+   "nivel": 1
+  },
+  {
+   "tema": "Prerrogativas",
+   "pagina": 78,
+   "nivel": 1
+  },
+  {
+   "tema": "Intimação pessoal",
+   "pagina": 78,
+   "nivel": 1
+  },
+  {
+   "tema": "Prazo em dobro",
+   "pagina": 81,
+   "nivel": 1
+  },
+  {
+   "tema": "Garantias",
+   "pagina": 83,
+   "nivel": 1
+  },
+  {
+   "tema": "Representação processual",
+   "pagina": 84,
+   "nivel": 1
+  },
+  {
+   "tema": "Nulidades",
+   "pagina": 85,
+   "nivel": 1
+  },
+  {
+   "tema": "4. Advocacia pública",
+   "pagina": 87,
+   "nivel": 0
+  },
+  {
+   "tema": "Responsabilidade",
+   "pagina": 88,
+   "nivel": 1
+  },
+  {
+   "tema": "Estrutura",
+   "pagina": 90,
+   "nivel": 1
+  },
+  {
+   "tema": "Função constitucional",
+   "pagina": 91,
+   "nivel": 1
+  },
+  {
+   "tema": "Representação processual",
+   "pagina": 94,
+   "nivel": 1
+  },
+  {
+   "tema": "Estruturação da carreira",
+   "pagina": 95,
+   "nivel": 1
+  },
+  {
+   "tema": "Estágio confirmatório",
+   "pagina": 96,
+   "nivel": 1
+  },
+  {
+   "tema": "Foro privilegiado",
+   "pagina": 97,
+   "nivel": 1
+  },
+  {
+   "tema": "Imunidade",
+   "pagina": 98,
+   "nivel": 1
+  },
+  {
+   "tema": "Prazo recursal",
+   "pagina": 99,
+   "nivel": 1
+  },
+  {
+   "tema": "Ilegitimidade",
+   "pagina": 100,
+   "nivel": 1
+  },
+  {
+   "tema": "5. Procurador federal",
+   "pagina": 101,
+   "nivel": 0
+  },
+  {
+   "tema": "Mandato",
+   "pagina": 102,
+   "nivel": 1
+  },
+  {
+   "tema": "Prazo recursal",
+   "pagina": 103,
+   "nivel": 1
+  },
+  {
+   "tema": "Prerrogativa – intimação pessoal",
+   "pagina": 104,
+   "nivel": 1
+  },
+  {
+   "tema": "Remuneração",
+   "pagina": 105,
+   "nivel": 1
+  },
+  {
+   "tema": "Férias",
+   "pagina": 106,
+   "nivel": 1
+  },
+  {
+   "tema": "Multa processual",
+   "pagina": 107,
+   "nivel": 1
+  },
+  {
+   "tema": "Advocacia privada",
+   "pagina": 108,
+   "nivel": 1
+  },
+  {
+   "tema": "6. Procurador da Fazenda Nacional",
+   "pagina": 109,
+   "nivel": 0
+  },
+  {
+   "tema": "Legitimidade",
+   "pagina": 110,
+   "nivel": 1
+  },
+  {
+   "tema": "Execução fiscal",
+   "pagina": 110,
+   "nivel": 1
+  },
+  {
+   "tema": "Representação judicial da União nas causas fiscais",
+   "pagina": 110,
+   "nivel": 1
+  },
+  {
+   "tema": "7. Advocacia pública estadual",
+   "pagina": 111,
+   "nivel": 0
+  },
+  {
+   "tema": "Função constitucional",
+   "pagina": 112,
+   "nivel": 1
+  },
+  {
+   "tema": "Procurador-geral do Estado",
+   "pagina": 114,
+   "nivel": 1
+  }
+ ]
+}

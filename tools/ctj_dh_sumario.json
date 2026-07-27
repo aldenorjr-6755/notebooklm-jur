@@ -1,0 +1,293 @@
+{
+ "titulo": "Coletânea Temática de Jurisprudência: Direitos Humanos",
+ "serie": "CTJ-STF",
+ "fonte": "CTJ_Direitos_Humanos.pdf",
+ "total": 57,
+ "sumario": [
+  {
+   "tema": "Siglas, abreviaturas e notações",
+   "pagina": 9,
+   "nivel": 0
+  },
+  {
+   "tema": "Dimensões dos direitos humanos",
+   "pagina": 11,
+   "nivel": 0
+  },
+  {
+   "tema": "Posição hierárquica dos tratados internacionais de direitos humanos",
+   "pagina": 13,
+   "nivel": 0
+  },
+  {
+   "tema": "Regimes políticos e direitos humanos",
+   "pagina": 16,
+   "nivel": 0
+  },
+  {
+   "tema": "Teoria dos quatro status de Jellinek",
+   "pagina": 21,
+   "nivel": 0
+  },
+  {
+   "tema": "Princípio da dignidade da pessoa humana",
+   "pagina": 22,
+   "nivel": 0
+  },
+  {
+   "tema": "Princípio da igualdade",
+   "pagina": 28,
+   "nivel": 0
+  },
+  {
+   "tema": "Princípio da legalidade e da retroatividade no direito penal",
+   "pagina": 38,
+   "nivel": 0
+  },
+  {
+   "tema": "Princípio da proporcionalidade",
+   "pagina": 40,
+   "nivel": 0
+  },
+  {
+   "tema": "Princípio da proibição do retrocesso social",
+   "pagina": 42,
+   "nivel": 0
+  },
+  {
+   "tema": "Princípio da reserva do possível e garantia do mínimo existencial",
+   "pagina": 43,
+   "nivel": 0
+  },
+  {
+   "tema": "Direito à vida",
+   "pagina": 46,
+   "nivel": 0
+  },
+  {
+   "tema": "Direito ao nome",
+   "pagina": 49,
+   "nivel": 0
+  },
+  {
+   "tema": "Direito à nacionalidade",
+   "pagina": 50,
+   "nivel": 0
+  },
+  {
+   "tema": "Direito de circulação e de residência",
+   "pagina": 52,
+   "nivel": 0
+  },
+  {
+   "tema": "Direito à propriedade privada",
+   "pagina": 53,
+   "nivel": 0
+  },
+  {
+   "tema": "Proteção da honra e da dignidade",
+   "pagina": 57,
+   "nivel": 0
+  },
+  {
+   "tema": "Direito à indenização",
+   "pagina": 60,
+   "nivel": 0
+  },
+  {
+   "tema": "Direitos do preso",
+   "pagina": 61,
+   "nivel": 0
+  },
+  {
+   "tema": "Direito à integridade pessoal",
+   "pagina": 72,
+   "nivel": 0
+  },
+  {
+   "tema": "Proibição de tortura",
+   "pagina": 75,
+   "nivel": 0
+  },
+  {
+   "tema": "Proibição da escravidão e da servidão",
+   "pagina": 78,
+   "nivel": 0
+  },
+  {
+   "tema": "Direito à liberdade pessoal",
+   "pagina": 81,
+   "nivel": 0
+  },
+  {
+   "tema": "Liberdade de pensamento e de expressão",
+   "pagina": 87,
+   "nivel": 0
+  },
+  {
+   "tema": "Direito de retificação ou resposta",
+   "pagina": 97,
+   "nivel": 0
+  },
+  {
+   "tema": "Liberdade de crença e de religião",
+   "pagina": 99,
+   "nivel": 0
+  },
+  {
+   "tema": "Direitos políticos",
+   "pagina": 105,
+   "nivel": 0
+  },
+  {
+   "tema": "Direito de reunião",
+   "pagina": 109,
+   "nivel": 0
+  },
+  {
+   "tema": "Liberdade de associação",
+   "pagina": 112,
+   "nivel": 0
+  },
+  {
+   "tema": "Garantias judiciais",
+   "pagina": 114,
+   "nivel": 0
+  },
+  {
+   "tema": "Devido processo legal",
+   "pagina": 115,
+   "nivel": 1
+  },
+  {
+   "tema": "Contraditório",
+   "pagina": 116,
+   "nivel": 1
+  },
+  {
+   "tema": "Ampla defesa",
+   "pagina": 117,
+   "nivel": 1
+  },
+  {
+   "tema": "Nemo tenetur se detegere",
+   "pagina": 120,
+   "nivel": 1
+  },
+  {
+   "tema": "Juiz natural",
+   "pagina": 121,
+   "nivel": 1
+  },
+  {
+   "tema": "Coisa julgada",
+   "pagina": 123,
+   "nivel": 1
+  },
+  {
+   "tema": "Publicidade",
+   "pagina": 124,
+   "nivel": 1
+  },
+  {
+   "tema": "Duplo grau de jurisdição",
+   "pagina": 126,
+   "nivel": 1
+  },
+  {
+   "tema": "Reserva de jurisdição",
+   "pagina": 127,
+   "nivel": 1
+  },
+  {
+   "tema": "Presunção de inocência",
+   "pagina": 128,
+   "nivel": 1
+  },
+  {
+   "tema": "Acesso à Justiça",
+   "pagina": 134,
+   "nivel": 1
+  },
+  {
+   "tema": "Razoável duração do processo",
+   "pagina": 137,
+   "nivel": 1
+  },
+  {
+   "tema": "Direito à saúde",
+   "pagina": 139,
+   "nivel": 0
+  },
+  {
+   "tema": "Direito à educação",
+   "pagina": 142,
+   "nivel": 0
+  },
+  {
+   "tema": "Proteção da família",
+   "pagina": 145,
+   "nivel": 0
+  },
+  {
+   "tema": "Direitos da criança e do adolescente",
+   "pagina": 154,
+   "nivel": 0
+  },
+  {
+   "tema": "Proteção da mulher",
+   "pagina": 160,
+   "nivel": 0
+  },
+  {
+   "tema": "Direitos do idoso",
+   "pagina": 167,
+   "nivel": 0
+  },
+  {
+   "tema": "Direitos da pessoa com deficiência",
+   "pagina": 169,
+   "nivel": 0
+  },
+  {
+   "tema": "Direitos do índio",
+   "pagina": 172,
+   "nivel": 0
+  },
+  {
+   "tema": "Direito ao meio ambiente",
+   "pagina": 176,
+   "nivel": 0
+  },
+  {
+   "tema": "Políticas públicas",
+   "pagina": 180,
+   "nivel": 0
+  },
+  {
+   "tema": "Defensoria Pública",
+   "pagina": 182,
+   "nivel": 0
+  },
+  {
+   "tema": "Ministério Público",
+   "pagina": 185,
+   "nivel": 0
+  },
+  {
+   "tema": "Tribunal Penal Internacional",
+   "pagina": 187,
+   "nivel": 0
+  },
+  {
+   "tema": "Processo de extradição",
+   "pagina": 189,
+   "nivel": 0
+  },
+  {
+   "tema": "Questões diversas",
+   "pagina": 197,
+   "nivel": 0
+  }
+ ]
+}

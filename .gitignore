@@ -1,0 +1,67 @@
+# .gitignore de ~/.notebooklm — 2026-07-26
+#
+# POSTURA: LISTA DE PERMISSAO, nao de exclusao. Mesmo desenho de ~/.claude.
+#
+# A pasta tem 4,6 GB e guarda, lado a lado: codigo que custou semanas, corpora
+# regeneraveis de centenas de MB, PERFIS DE NAVEGADOR AUTENTICADOS (cookies de
+# sessao do PJe e do Jusbrasil) e DOCUMENTOS DE CLIENTE identificaveis soltos na
+# raiz. Uma lista de exclusao erraria por omissao, e aqui o erro tem dois nomes:
+# vazamento de credencial e quebra de sigilo profissional.
+#
+# Entra: o que foi ESCRITO A MAO e o que e FONTE CANONICA compacta —
+#        helpers, extratores e os datasets JSON de lei, sumula e glossario.
+# Nao entra: segredo, dado de cliente, binario, app empacotado e corpus
+#        regeneravel pelo proprio coletor.
+
+# 1. Tudo ignorado por padrao.
+/*
+
+# 2. Codigo e norma escritos a mao.
+!/tools/
+!/*.py
+!/PADRAO-VAULT.md
+!/PADRAO-VAULT-DIAGNOSTICO.md
+!/PADRAO-VAULT-TRIAGEM-COLISOES.md
+!/FONTES-CANONICAS.md
+!/pdf_para_markdown.py
+!/.gitignore
+!/.gitattributes
+
+# 3. Dentro de tools/: helpers, extratores e datasets canonicos. Nada de binario.
+/tools/*
+!/tools/*.py
+!/tools/*.json
+!/tools/*.md
+
+# 4. NUNCA — redundante com o `/*`, escrito para quem abrir este arquivo
+#    entender que a exclusao e deliberada e por que.
+#
+#    profiles/ e mcp_*/profile  -> perfis Playwright COM COOKIE DE SESSAO do PJe
+#                                  e do Jusbrasil. E credencial viva.
+#    *.docx *.pdf na raiz       -> pecas e documentos de CLIENTE identificavel.
+#                                  Sigilo profissional (EAOAB art. 34, VII).
+#    biblioteca/, corpora       -> centenas de MB de fonte bruta, regeneravel
+#                                  pelos coletores; o backup delas e o OneDrive.
+#    pdf2md_app*/, tessdata/    -> aplicativo empacotado e modelo de OCR.
+/profiles/
+/mcp_jusia/
+/mcp_pje/
+/prazos/
+/biblioteca/
+/pdf2md_app/
+/pdf2md_app_marker/
+/pdf2md_app_tesseract/
+/tessdata/
+/node_modules/
+/audio/
+*.docx
+*.doc
+*.pdf
+*.zip
+*.exe
+*.mp3
+*.mp4
+
+__pycache__/
+*.pyc
+*.bak-*

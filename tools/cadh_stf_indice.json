@@ -1,0 +1,167 @@
+{
+ "fonte": "STF — Convenção Americana sobre Direitos Humanos, 2ª ed. (CADH anotada com jurisprudência do STF)",
+ "obs": "pagina_pdf = página física do PDF (Anexos/CADH_STF_anotada_2ed.pdf); cobre arts. 1–32 (direitos)",
+ "total": 32,
+ "artigos": [
+  {
+   "artigo": 1,
+   "pagina_pdf": 14,
+   "titulo": "Obrigação De Respeitar Os Direitos"
+  },
+  {
+   "artigo": 2,
+   "pagina_pdf": 38,
+   "titulo": "Dever De Adotar Disposições"
+  },
+  {
+   "artigo": 3,
+   "pagina_pdf": 49,
+   "titulo": "Direito Ao Reconhecimento"
+  },
+  {
+   "artigo": 4,
+   "pagina_pdf": 59,
+   "titulo": "Direito À Vida"
+  },
+  {
+   "artigo": 5,
+   "pagina_pdf": 72,
+   "titulo": "Direito À Integridade Pessoal"
+  },
+  {
+   "artigo": 6,
+   "pagina_pdf": 85,
+   "titulo": "Proibição Da Escravidão E Da Servidão"
+  },
+  {
+   "artigo": 7,
+   "pagina_pdf": 88,
+   "titulo": "Direito À Liberdade Pessoal"
+  },
+  {
+   "artigo": 8,
+   "pagina_pdf": 147,
+   "titulo": "Garantias Judiciais"
+  },
+  {
+   "artigo": 9,
+   "pagina_pdf": 239,
+   "titulo": "Princípio Da Legalidade"
+  },
+  {
+   "artigo": 10,
+   "pagina_pdf": 251,
+   "titulo": "Direito A Indenização"
+  },
+  {
+   "artigo": 11,
+   "pagina_pdf": 252,
+   "titulo": "Proteção Da Honra E Da Dignidade"
+  },
+  {
+   "artigo": 12,
+   "pagina_pdf": 280,
+   "titulo": "Liberdade De Consciência E De Religião"
+  },
+  {
+   "artigo": 13,
+   "pagina_pdf": 286,
+   "titulo": "Liberdade De Pensamento E De Expressão"
+  },
+  {
+   "artigo": 14,
+   "pagina_pdf": 330,
+   "titulo": "Direito De Retificação Ou Resposta"
+  },
+  {
+   "artigo": 15,
+   "pagina_pdf": 336,
+   "titulo": "Direito De Reunião"
+  },
+  {
+   "artigo": 16,
+   "pagina_pdf": 340,
+   "titulo": "Liberdade De Associação"
+  },
+  {
+   "artigo": 17,
+   "pagina_pdf": 343,
+   "titulo": "Proteção Da Família"
+  },
+  {
+   "artigo": 18,
+   "pagina_pdf": 355,
+   "titulo": "Direito Ao Nome"
+  },
+  {
+   "artigo": 19,
+   "pagina_pdf": 363,
+   "titulo": "Direitos Da Criança"
+  },
+  {
+   "artigo": 20,
+   "pagina_pdf": 383,
+   "titulo": "Direito À Nacionalidade"
+  },
+  {
+   "artigo": 21,
+   "pagina_pdf": 388,
+   "titulo": "Direito À Propriedade Privada"
+  },
+  {
+   "artigo": 22,
+   "pagina_pdf": 402,
+   "titulo": "Direito De Circulação E De Residência"
+  },
+  {
+   "artigo": 23,
+   "pagina_pdf": 407,
+   "titulo": "Direitos Políticos"
+  },
+  {
+   "artigo": 24,
+   "pagina_pdf": 427,
+   "titulo": "Igualdade Perante A Lei"
+  },
+  {
+   "artigo": 25,
+   "pagina_pdf": 432,
+   "titulo": "Proteção Judicial"
+  },
+  {
+   "artigo": 26,
+   "pagina_pdf": 440,
+   "titulo": "Desenvolvimento Progressivo"
+  },
+  {
+   "artigo": 27,
+   "pagina_pdf": 446,
+   "titulo": "Suspensão De Garantias"
+  },
+  {
+   "artigo": 28,
+   "pagina_pdf": 451,
+   "titulo": "Cláusula Federal"
+  },
+  {
+   "artigo": 29,
+   "pagina_pdf": 454,
+   "titulo": "Normas De Interpretação"
+  },
+  {
+   "artigo": 30,
+   "pagina_pdf": 464,
+   "titulo": "Alcance Das Restrições"
+  },
+  {
+   "artigo": 31,
+   "pagina_pdf": 467,
+   "titulo": "Reconhecimento De Outros Direitos"
+  },
+  {
+   "artigo": 32,
+   "pagina_pdf": 468,
+   "titulo": "Correlação Entre Deveres E Direitos"
+  }
+ ]
+}

@@ -1,0 +1,367 @@
+[
+  {
+    "numero": 1,
+    "verbete": "Proposta a ação para desconstituir a decisão que rejeitou as contas, anteriormente à impugnação, fica suspensa a inelegibilidade (Lei Complementar n. 64/1990, art. 1º, I, g).",
+    "cancelada": true
+  },
+  {
+    "numero": 2,
+    "verbete": "No processo de registro de candidatos, não tendo o juiz aberto prazo para o suprimento de defeito da instrução do pedido, pode o documento, cuja falta houver motivado o indeferimento, ser juntado com o recurso ordinário.",
+    "cancelada": false
+  },
+  {
+    "numero": 3,
+    "verbete": "Assinada e recebida a ficha de filiação partidária até o termo final do prazo fixado em lei, considera-se satisfeita a correspondente condição de elegibilidade, ainda que não tenha fluído, até a mesma data, o tríduo legal de impugnação.",
+    "cancelada": false
+  },
+  {
+    "numero": 4,
+    "verbete": "Não havendo preferência entre candidatos que pretendam o registro da mesma variação nominal, defere-se o do que primeiro o tenha requerido.",
+    "cancelada": false
+  },
+  {
+    "numero": 5,
+    "verbete": "Serventuário de cartório, celetista, não se inclui na exigência do art. 1º, II, l, da LC n. 64/1990.",
+    "cancelada": false
+  },
+  {
+    "numero": 6,
+    "verbete": "São inelegíveis para o cargo de chefe do Executivo o cônjuge e os parentes, indicados no § 7º do art. 14 da Constituição Federal, do titular do mandato, salvo se este, reelegível, tenha falecido, renunciado ou se afastado definitivamente do cargo até seis meses antes do pleito.",
+    "cancelada": false
+  },
+  {
+    "numero": 7,
+    "verbete": "É inelegível para o cargo de prefeito a irmã da concubina do atual titular do mandato.",
+    "cancelada": true
+  },
+  {
+    "numero": 8,
+    "verbete": "O vice-prefeito é inelegível para o mesmo cargo.",
+    "cancelada": true
+  },
+  {
+    "numero": 9,
+    "verbete": "A suspensão de direitos políticos decorrente de condenação criminal transitada em julgado cessa com o cumprimento ou a extinção da pena, independendo de reabilitação ou de prova de reparação dos danos.",
+    "cancelada": false
+  },
+  {
+    "numero": 10,
+    "verbete": "No processo de registro de candidatos, quando a sentença for entregue em cartório antes de três dias contados da conclusão ao juiz, o prazo para o recurso ordinário, salvo intimação pessoal anterior, só se conta do termo final daquele tríduo.",
+    "cancelada": false
+  },
+  {
+    "numero": 11,
+    "verbete": "No processo de registro de candidatos, o partido que não o impugnou não tem legitimidade para recorrer da sentença que o deferiu, salvo se se cuidar de matéria constitucional.",
+    "cancelada": false
+  },
+  {
+    "numero": 12,
+    "verbete": "São inelegíveis, no município desmembrado, e ainda não instalado, o cônjuge e os parentes consanguíneos ou afins, até o segundo grau ou por adoção, do prefeito do município-mãe, ou de quem o tenha substituído, dentro dos seis meses anteriores ao pleito, salvo se já titular de mandato eletivo.",
+    "cancelada": false
+  },
+  {
+    "numero": 13,
+    "verbete": "Não é autoaplicável o § 9º do art. 14 da Constituição, com a redação da Emenda Constitucional de Revisão n. 4/1994.",
+    "cancelada": false
+  },
+  {
+    "numero": 14,
+    "verbete": "A duplicidade de que cuida o parágrafo único do artigo 22 da Lei n. 9.096/1995 somente fica caracterizada caso a nova filiação houver ocorrido após a remessa das listas previstas no parágrafo único do artigo 58 da referida lei.",
+    "cancelada": true
+  },
+  {
+    "numero": 15,
+    "verbete": "O exercício de mandato eletivo não é circunstância capaz, por si só, de comprovar a condição de alfabetizado do candidato.",
+    "cancelada": false
+  },
+  {
+    "numero": 16,
+    "verbete": "A falta de abertura de conta bancária específica não é fundamento suficiente para a rejeição de contas de campanha eleitoral, desde que, por outros meios, se possa demonstrar sua regularidade (art. 34 da Lei n. 9.096, de 19/9/1995).",
+    "cancelada": true
+  },
+  {
+    "numero": 17,
+    "verbete": "Não é admissível a presunção de que o candidato, por ser beneficiário de propaganda eleitoral irregular, tenha prévio conhecimento de sua veiculação (arts. 36 e 37 da Lei n. 9.504, de 30/9/1997).",
+    "cancelada": true
+  },
+  {
+    "numero": 18,
+    "verbete": "Conquanto investido de poder de polícia, não tem legitimidade o juiz eleitoral para, de ofício, instaurar procedimento com a finalidade de impor multa pela veiculação de propaganda eleitoral em desacordo com a Lei n. 9.504/1997.",
+    "cancelada": false
+  },
+  {
+    "numero": 19,
+    "verbete": "O prazo de inelegibilidade decorrente da condenação por abuso do poder econômico ou político tem início no dia da eleição em que este se verificou e finda no dia de igual número no oitavo ano seguinte (art. 22, XIV, da LC n. 64/1990).",
+    "cancelada": false
+  },
+  {
+    "numero": 20,
+    "verbete": "A prova de filiação partidária daquele cujo nome não constou da lista de filiados de que trata o art. 19 da Lei n. 9.096/1995 pode ser realizada por outros elementos de convicção, salvo quando se tratar de documentos produzidos unilateralmente, destituídos de fé pública.",
+    "cancelada": false
+  },
+  {
+    "numero": 21,
+    "verbete": "O prazo para ajuizamento da representação contra doação de campanha acima do limite legal é de 180 dias, contados da data da diplomação.",
+    "cancelada": true
+  },
+  {
+    "numero": 22,
+    "verbete": "Não cabe mandado de segurança contra decisão judicial recorrível, salvo situações de teratologia ou manifestamente ilegais.",
+    "cancelada": false
+  },
+  {
+    "numero": 23,
+    "verbete": "Não cabe mandado de segurança contra decisão judicial transitada em julgado.",
+    "cancelada": false
+  },
+  {
+    "numero": 24,
+    "verbete": "Não cabe recurso especial eleitoral para simples reexame do conjunto fático-probatório.",
+    "cancelada": false
+  },
+  {
+    "numero": 25,
+    "verbete": "É indispensável o esgotamento das instâncias ordinárias para a interposição de recurso especial eleitoral.",
+    "cancelada": false
+  },
+  {
+    "numero": 26,
+    "verbete": "É inadmissível o recurso que deixa de impugnar especificamente fundamento da decisão recorrida que é, por si só, suficiente para a manutenção desta.",
+    "cancelada": false
+  },
+  {
+    "numero": 27,
+    "verbete": "É inadmissível recurso cuja deficiência de fundamentação impossibilite a compreensão da controvérsia.",
+    "cancelada": false
+  },
+  {
+    "numero": 28,
+    "verbete": "A divergência jurisprudencial que fundamenta o recurso especial interposto com base na alínea b do inciso I do art. 276 do Código Eleitoral somente estará demonstrada mediante a realização de cotejo analítico e a existência de similitude fática entre os acórdãos paradigma e o aresto recorrido.",
+    "cancelada": false
+  },
+  {
+    "numero": 29,
+    "verbete": "A divergência entre julgados do mesmo Tribunal não se presta a configurar dissídio jurisprudencial apto a fundamentar recurso especial eleitoral.",
+    "cancelada": false
+  },
+  {
+    "numero": 30,
+    "verbete": "Não se conhece de recurso especial eleitoral por dissídio jurisprudencial, quando a decisão recorrida estiver em conformidade com a jurisprudência do Tribunal Superior Eleitoral.",
+    "cancelada": false
+  },
+  {
+    "numero": 31,
+    "verbete": "Não cabe recurso especial eleitoral contra acórdão que decide sobre pedido de medida liminar.",
+    "cancelada": false
+  },
+  {
+    "numero": 32,
+    "verbete": "É inadmissível recurso especial eleitoral por violação à legislação municipal ou estadual, ao regimento interno dos Tribunais Eleitorais ou às normas partidárias.",
+    "cancelada": false
+  },
+  {
+    "numero": 33,
+    "verbete": "Somente é cabível ação rescisória de decisões do Tribunal Superior Eleitoral que versem sobre a incidência de causa de inelegibilidade.",
+    "cancelada": false
+  },
+  {
+    "numero": 34,
+    "verbete": "Não compete ao Tribunal Superior Eleitoral processar e julgar mandado de segurança contra ato de membro de Tribunal Regional Eleitoral.",
+    "cancelada": false
+  },
+  {
+    "numero": 35,
+    "verbete": "Não é cabível reclamação para arguir o descumprimento de resposta a consulta ou de ato normativo do Tribunal Superior Eleitoral.",
+    "cancelada": false
+  },
+  {
+    "numero": 36,
+    "verbete": "Cabe recurso ordinário de acórdão de Tribunal Regional Eleitoral que decida sobre inelegibilidade, expedição ou anulação de diploma ou perda de mandato eletivo nas eleições federais ou estaduais (art. 121, § 4º, incisos III e IV, da Constituição Federal).",
+    "cancelada": false
+  },
+  {
+    "numero": 37,
+    "verbete": "Compete originariamente ao Tribunal Superior Eleitoral processar e julgar recurso contra expedição de diploma envolvendo eleições federais ou estaduais.",
+    "cancelada": false
+  },
+  {
+    "numero": 38,
+    "verbete": "Nas ações que visem à cassação de registro, diploma ou mandato, há litisconsórcio passivo necessário entre o titular e o respectivo vice da chapa majoritária.",
+    "cancelada": false
+  },
+  {
+    "numero": 39,
+    "verbete": "Não há formação de litisconsórcio necessário em processos de registro de candidatura.",
+    "cancelada": false
+  },
+  {
+    "numero": 40,
+    "verbete": "O partido político não é litisconsorte passivo necessário em ações que visem à cassação de diploma.",
+    "cancelada": false
+  },
+  {
+    "numero": 41,
+    "verbete": "Não cabe à Justiça Eleitoral decidir sobre o acerto ou desacerto das decisões proferidas por outros órgãos do Judiciário ou dos Tribunais de Contas que configurem causa de inelegibilidade.",
+    "cancelada": false
+  },
+  {
+    "numero": 42,
+    "verbete": "A decisão que julga não prestadas as contas de campanha impede o candidato de obter a certidão de quitação eleitoral durante o curso do mandato ao qual concorreu, persistindo esses efeitos, após esse período, até a efetiva apresentação das contas.",
+    "cancelada": false
+  },
+  {
+    "numero": 43,
+    "verbete": "As alterações fáticas ou jurídicas supervenientes ao registro que beneficiem o candidato, nos termos da parte final do art. 11, § 10, da Lei n. 9.504/1997, também devem ser admitidas para as condições de elegibilidade.",
+    "cancelada": false
+  },
+  {
+    "numero": 44,
+    "verbete": "O disposto no art. 26-C da LC n. 64/1990 não afasta o poder geral de cautela conferido ao magistrado pelo Código de Processo Civil.",
+    "cancelada": false
+  },
+  {
+    "numero": 45,
+    "verbete": "Nos processos de registro de candidatura, o juiz eleitoral pode conhecer de ofício da existência de causas de inelegibilidade ou da ausência de condição de elegibilidade, desde que resguardados o contraditório e a ampla defesa.",
+    "cancelada": false
+  },
+  {
+    "numero": 46,
+    "verbete": "É ilícita a prova colhida por meio da quebra do sigilo fiscal sem prévia e fundamentada autorização judicial, podendo o Ministério Público Eleitoral acessar diretamente apenas a relação dos doadores que excederam os limites legais, para os fins da representação cabível, em que poderá requerer, judicialmente e de forma individualizada, o acesso aos dados relativos aos rendimentos do doador.",
+    "cancelada": false
+  },
+  {
+    "numero": 47,
+    "verbete": "A inelegibilidade superveniente que autoriza a interposição de recurso contra expedição de diploma, fundado no art. 262 do Código Eleitoral, é aquela de índole constitucional ou, se infraconstitucional, superveniente ao registro de candidatura, e que surge até a data do pleito.",
+    "cancelada": false
+  },
+  {
+    "numero": 48,
+    "verbete": "A retirada da propaganda irregular, quando realizada em bem particular, não é capaz de elidir a multa prevista no art. 37, § 1º, da Lei n. 9.504/1997.",
+    "cancelada": false
+  },
+  {
+    "numero": 49,
+    "verbete": "O prazo de cinco dias, previsto no art. 3º da LC n. 64/1990, para o Ministério Público impugnar o registro inicia-se com a publicação do edital, caso em que é excepcionada a regra que determina a sua intimação pessoal.",
+    "cancelada": false
+  },
+  {
+    "numero": 50,
+    "verbete": "O pagamento da multa eleitoral pelo candidato ou a comprovação do cumprimento regular de seu parcelamento após o pedido de registro, mas antes do julgamento respectivo, afasta a ausência de quitação eleitoral.",
+    "cancelada": false
+  },
+  {
+    "numero": 51,
+    "verbete": "O processo de registro de candidatura não é o meio adequado para se afastarem os eventuais vícios apurados no processo de prestação de contas de campanha ou partidárias.",
+    "cancelada": false
+  },
+  {
+    "numero": 52,
+    "verbete": "Em registro de candidatura, não cabe examinar o acerto ou desacerto da decisão que examinou, em processo específico, a filiação partidária do eleitor.",
+    "cancelada": false
+  },
+  {
+    "numero": 53,
+    "verbete": "O filiado a partido político, ainda que não seja candidato, possui legitimidade e interesse para impugnar pedido de registro de coligação partidária da qual é integrante, em razão de eventuais irregularidades havidas em convenção.",
+    "cancelada": false
+  },
+  {
+    "numero": 54,
+    "verbete": "A desincompatibilização de servidor público que possui cargo em comissão é de três meses antes do pleito e pressupõe a exoneração do cargo comissionado, e não apenas seu afastamento de fato.",
+    "cancelada": false
+  },
+  {
+    "numero": 55,
+    "verbete": "A Carteira Nacional de Habilitação gera a presunção da escolaridade necessária ao deferimento do registro de candidatura.",
+    "cancelada": false
+  },
+  {
+    "numero": 56,
+    "verbete": "A multa eleitoral constitui dívida ativa de natureza não tributária, submetendo-se ao prazo prescricional de 10 (dez) anos, nos moldes do art. 205 do Código Civil.",
+    "cancelada": false
+  },
+  {
+    "numero": 57,
+    "verbete": "A apresentação das contas de campanha é suficiente para a obtenção da quitação eleitoral, nos termos da nova redação conferida ao art. 11, § 7º, da Lei n. 9.504/1997, pela Lei n. 12.034/2009.",
+    "cancelada": false
+  },
+  {
+    "numero": 58,
+    "verbete": "Não compete à Justiça Eleitoral, em processo de registro de candidatura, verificar a prescrição da pretensão punitiva ou executória do candidato e declarar a extinção da pena imposta pela Justiça Comum.",
+    "cancelada": false
+  },
+  {
+    "numero": 59,
+    "verbete": "O reconhecimento da prescrição da pretensão executória pela Justiça Comum não afasta a inelegibilidade prevista no art. 1º, I, e, da LC n. 64/1990, porquanto não extingue os efeitos secundários da condenação.",
+    "cancelada": false
+  },
+  {
+    "numero": 60,
+    "verbete": "O prazo da causa de inelegibilidade prevista no art. 1º, I, e, da LC n. 64/1990 deve ser contado a partir da data em que ocorrida a prescrição da pretensão executória, e não do momento da sua declaração judicial.",
+    "cancelada": false
+  },
+  {
+    "numero": 61,
+    "verbete": "O prazo concernente à hipótese de inelegibilidade prevista no art. 1º, I, e, da LC n. 64/1990 projeta-se por oito anos após o cumprimento da pena, seja ela privativa de liberdade, restritiva de direito ou multa.",
+    "cancelada": false
+  },
+  {
+    "numero": 62,
+    "verbete": "Os limites do pedido são demarcados pelos fatos imputados na inicial, dos quais a parte se defende, e não pela capitulação legal atribuída pelo autor.",
+    "cancelada": false
+  },
+  {
+    "numero": 63,
+    "verbete": "Contra acórdão que discute, simultaneamente, condições de elegibilidade e de inelegibilidade é cabível o recurso ordinário.",
+    "cancelada": false
+  },
+  {
+    "numero": 64,
+    "verbete": "A execução fiscal de multa eleitoral só pode atingir os sócios se preenchidos os requisitos para a desconsideração da personalidade jurídica previstos no art. 50 do Código Civil, tendo em vista a natureza não tributária da dívida, observados, ainda, o contraditório e a ampla defesa.",
+    "cancelada": false
+  },
+  {
+    "numero": 65,
+    "verbete": "Considera-se tempestivo o recurso interposto antes da publicação da decisão recorrida.",
+    "cancelada": false
+  },
+  {
+    "numero": 66,
+    "verbete": "A incidência do § 2º do art. 26-C da LC n. 64/1990 não acarreta o imediato indeferimento do registro ou o cancelamento do diploma, sendo necessário o exame da presença de todos os requisitos essenciais à configuração da inelegibilidade, observados os princípios do contraditório e da ampla defesa.",
+    "cancelada": false
+  },
+  {
+    "numero": 67,
+    "verbete": "A perda do mandato em razão da desfiliação partidária não se aplica aos candidatos eleitos pelo sistema majoritário.",
+    "cancelada": false
+  },
+  {
+    "numero": 68,
+    "verbete": "A União é parte legítima para requerer a execução de astreintes fixada por descumprimento de ordem judicial no âmbito da Justiça Eleitoral.",
+    "cancelada": false
+  },
+  {
+    "numero": 69,
+    "verbete": "Os prazos de inelegibilidade previstos nas alíneas j e h do inciso I do art. 1º da LC n. 64/1990 têm termo inicial no dia do primeiro turno da eleição e termo final no dia de igual número no oitavo ano seguinte.",
+    "cancelada": false
+  },
+  {
+    "numero": 70,
+    "verbete": "O encerramento do prazo de inelegibilidade antes do dia da eleição constitui fato superveniente que afasta a inelegibilidade, nos termos do art. 11, § 10, da Lei n. 9.504/1997.",
+    "cancelada": false
+  },
+  {
+    "numero": 71,
+    "verbete": "Na hipótese de negativa de seguimento ao recurso especial e da consequente interposição de agravo, a parte deverá apresentar contrarrazões tanto ao agravo quanto ao recurso especial, dentro do mesmo tríduo legal.",
+    "cancelada": false
+  },
+  {
+    "numero": 72,
+    "verbete": "É inadmissível o recurso especial eleitoral quando a questão suscitada não foi debatida na decisão recorrida e não foi objeto de embargos de declaração.",
+    "cancelada": false
+  },
+  {
+    "numero": 73,
+    "verbete": "A fraude à cota de gênero, consistente no desrespeito ao percentual mínimo de 30% (trinta por cento) de candidaturas femininas, nos termos do art. 10, § 3º, da Lei n. 9.504/1997, configura-se com a presença de um ou alguns dos seguintes elementos, quando os fatos e as circunstâncias do caso concreto assim permitirem concluir: (1) votação zerada ou inexpressiva; (2) prestação de contas zerada, padronizada ou ausência de movimentação financeira relevante; e (3) ausência de atos efetivos de campanha, divulgação ou promoção da candidatura de terceiros. O reconhecimento do ilícito acarretará: (a) a cassação do Demonstrativo de Regularidade de Atos Partidários (Drap) da legenda e dos diplomas dos candidatos a ele vinculados, independentemente de prova de participação, ciência ou anuência deles; (b) a inelegibilidade daqueles que praticaram ou anuíram com a conduta, nas hipóteses de Ação de Investigação Judicial Eleitoral (AIJE); (c) a nulidade dos votos obtidos pelo partido, com a recontagem dos quocientes eleitoral e partidário (art. 222 do Código Eleitoral), inclusive para fins de aplicação do art. 224 do Código Eleitoral.",
+    "cancelada": false
+  }
+]
