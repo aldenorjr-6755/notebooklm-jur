@@ -98,7 +98,7 @@ uma versão local em `<vault>/.claude/commands/` (escopo de projeto vence).
 
 | Fonte | Comando | Cobertura |
 |---|---|---|
-| CF/1988 (texto Planalto) | `python $HOME/.notebooklm/tools/consultar_cf.py <art>` · `/cf` | 276 artigos (ADCT não indexado) |
+| CF/1988 (texto Planalto) | `python $HOME/.notebooklm/tools/consultar_cf.py <art>` · `/cf` | 276 artigos do corpo permanente + **148 do ADCT** (`"ADCT 68"` / `--adct 68`) |
 | A Constituição e o Supremo (CF anotada pelo STF) | `consultar_constituicao_supremo.py <art>` · `/constituicao` | 264 artigos → página do PDF |
 | RISTF | `consultar_regimento.py --fonte stf <art>` · `/ristf` | 370 artigos |
 | RITJMA | `consultar_regimento.py --fonte tjma <art>` · `/ritjma` | 727 artigos |
