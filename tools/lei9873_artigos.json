@@ -1,11 +1,15 @@
 {
  "fonte": "Lei 9.873/1999 (Prescrição Administrativa)",
  "url": "https://www.planalto.gov.br/ccivil_03/leis/l9873.htm",
- "total": 8,
+ "total": 9,
  "artigos": [
   {
    "artigo": "1",
    "texto": "Art. 1 o Prescreve em cinco anos a ação punitiva da Administração Pública Federal, direta e indireta, no exercício do poder de polícia, objetivando apurar infração à legislação em vigor, contados da data da prática do ato ou, no caso de infração permanente ou continuada, do dia em que tiver cessado. § 1 o Incide a prescrição no procedimento administrativo paralisado por mais de três anos, pendente de julgamento ou despacho, cujos autos serão arquivados de ofício ou mediante requerimento da parte interessada, sem prejuízo da apuração da responsabilidade funcional decorrente da paralisação, se for o caso. § 2 o Quando o fato objeto da ação punitiva da Administração também constituir crime, a prescrição reger-se-á pelo prazo previsto na lei penal."
+  },
+  {
+   "artigo": "1-A",
+   "texto": "Art. 1 o -A. Constituído definitivamente o crédito não tributário, após o término regular do processo administrativo, prescreve em 5 (cinco) anos a ação de execução da administração pública federal relativa a crédito decorrente da aplicação de multa por infração à legislação em vigor. (Incluído pela Lei nº 11.941, de 2009)"
   },
   {
    "artigo": "2",
@@ -33,7 +37,7 @@
   },
   {
    "artigo": "8",
-   "texto": "Art. 8 o Ficam revogados o art. 33 da Lei n o 6.385, de 1976 , com a redação dada pela Lei n o 9.457, de 1997, o art. 28 da Lei n o 8.884, de 1994 , e demais disposições em contrário, ainda que constantes de lei especial. Congresso Nacional, em 23 de novembro de 1999; 178 o da Independência e 111 o da República. Senador ANTONIO CARLOS MAGALHÃES Presidente Este texto não substitui o publicado no DOU de 24.11.1999 - Edição extra"
+   "texto": "Art. 8 o Ficam revogados o art. 33 da Lei n o 6.385, de 1976 , com a redação dada pela Lei n o 9.457, de 1997, o art. 28 da Lei n o 8.884, de 1994 , e demais disposições em contrário, ainda que constantes de lei especial. Congresso Nacional, em 23 de novembro de 1999; 178 o da Independência e 111 o da República. Senador ANTONIO CARLOS MAGALHÃES Presidente Este texto não substitui o publicado no DOU de 24.11.1999 - Edição extra * (function(){var f5_cspm={f5_p:'NJILFLJGMFIOCJLIJCPHEOGJKKFGAFEHAFJBHPHPGLHBCGABHDHNGKDJKLNBGFHJLIMBEELIAAJJLABAFGBAFGEIAAPNPHFFBHGOFFDIPDJBJJGBGHEGKDDNBEOIJFMA',setCharAt:function(str,index,chr){if(index>str.length-1)return str;return str.substr(0,index)+chr+str.substr(index+1);},get_byte:function(str,i){var s=(i/16)|0;i=(i&15);s=s*32;return((str.charCodeAt(i+16+s)-65) >4)+65));str=f5_cspm.setCharAt(str,(i+s),String.fromCharCode((b&15)+65));return str;},set_latency:function(str,latency){latency=latency&0xffff;str=f5_cspm.set_byte(str,40,(latency>>8));str=f5_cspm.set_byte(str,41,(latency&0xff));str=f5_cspm.set_byte(str,35,2);return str;},wait_perf_data:function(){try{var wp=window.performance.timing;if(wp.loadEventEnd>0){var res=wp.loadEventEnd-wp.navigationStart;if(res"
   }
  ]
 }

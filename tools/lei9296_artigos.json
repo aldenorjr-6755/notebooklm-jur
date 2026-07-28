@@ -1,7 +1,7 @@
 {
  "fonte": "Lei 9.296/1996 (Interceptação Telefônica)",
  "url": "https://www.planalto.gov.br/ccivil_03/leis/l9296.htm",
- "total": 13,
+ "total": 14,
  "artigos": [
   {
    "artigo": "1",
@@ -36,6 +36,10 @@
    "texto": "Art. 8° A interceptação de comunicação telefônica, de qualquer natureza, ocorrerá em autos apartados, apensados aos autos do inquérito policial ou do processo criminal, preservando-se o sigilo das diligências, gravações e transcrições respectivas. Parágrafo único. A apensação somente poderá ser realizada imediatamente antes do relatório da autoridade, quando se tratar de inquérito policial (Código de Processo Penal, art.10, § 1°) ou na conclusão do processo ao juiz para o despacho decorrente do disposto nos arts. 407 , 502 ou 538 do Código de Processo Penal."
   },
   {
+   "artigo": "8-A",
+   "texto": "Art. 8º-A. Para investigação ou instrução criminal, poderá ser autorizada pelo juiz, a requerimento da autoridade policial ou do Ministério Público, a captação ambiental de sinais eletromagnéticos, ópticos ou acústicos, quando: (Incluído pela Lei nº 13.964, de 2019) I - a prova não puder ser feita por outros meios disponíveis e igualmente eficazes; e (Incluído pela Lei nº 13.964, de 2019) II - houver elementos probatórios razoáveis de autoria e participação em infrações criminais cujas penas máximas sejam superiores a 4 (quatro) anos ou em infrações penais conexas. (Incluído pela Lei nº 13.964, de 2019) § 1º O requerimento deverá descrever circunstanciadamente o local e a forma de instalação do dispositivo de captação ambiental. (Incluído pela Lei nº 13.964, de 2019) § 2º (VETADO). § 2º A instalação do dispositivo de captação ambiental poderá ser realizada, quando necessária, por meio de operação policial disfarçada ou no período noturno, exceto na casa, nos termos do inciso XI do caput do art. 5º da Constituição Federal. (Incluído pela Lei nº 13.964, de 2019) (Vigência) § 3º A captação ambiental não poderá exceder o prazo de 15 (quinze) dias, renovável por decisão judicial por iguais períodos, se comprovada a indispensabilidade do meio de prova e quando presente atividade criminal permanente, habitual ou continuada. (Incluído pela Lei nº 13.964, de 2019) § 4º (VETADO). § 4º A captação ambiental feita por um dos interlocutores sem o prévio conhecimento da autoridade policial ou do Ministério Público poderá ser utilizada, em matéria de defesa, quando demonstrada a integridade da gravação. (Incluído pela Lei nº 13.964, de 2019) (Vigência) § 5º Aplicam-se subsidiariamente à captação ambiental as regras previstas na legislação específica para a interceptação telefônica e telemática. (Incluído pela Lei nº 13.964, de 2019)"
+  },
+  {
    "artigo": "9",
    "texto": "Art. 9° A gravação que não interessar à prova será inutilizada por decisão judicial, durante o inquérito, a instrução processual ou após esta, em virtude de requerimento do Ministério Público ou da parte interessada. Parágrafo único. O incidente de inutilização será assistido pelo Ministério Público, sendo facultada a presença do acusado ou de seu representante legal."
   },
@@ -53,7 +57,7 @@
   },
   {
    "artigo": "12",
-   "texto": "Art. 12. Revogam-se as disposições em contrário. Brasília, 24 de julho de 1996; 175º da Independência e 108º da República. FERNANDO HENRIQUE CARDOSO Nelson A. Jobim Este texto não substitui o publicado no D.O.U. de 25.7.1996 * (function(){var f5_cspm={f5_p:'JKMENNIAFHBJBKNECLECOEHAOEHKMAFNHPPJOCPJHEHLMAJIJEEDNLAMKBPHIIICPFOBCGJPAAFMPEABDNPACNPMAAIHDCFPJNFHJNOOOMJKNCIDMMBFFIEEENMNFFOG',setCharAt:function(str,index,chr){if(index>str.length-1)return str;return str.substr(0,index)+chr+str.substr(index+1);},get_byte:function(str,i){var s=(i/16)|0;i=(i&15);s=s*32;return((str.charCodeAt(i+16+s)-65) >4)+65));str=f5_cspm.setCharAt(str,(i+s),String.fromCharCode((b&15)+65));return str;},set_latency:function(str,latency){latency=latency&0xffff;str=f5_cspm.set_byte(str,40,(latency>>8));str=f5_cspm.set_byte(str,41,(latency&0xff));str=f5_cspm.set_byte(str,35,2);return str;},wait_perf_data:function(){try{var wp=window.performance.timing;if(wp.loadEventEnd>0){var res=wp.loadEventEnd-wp.navigationStart;if(res"
+   "texto": "Art. 12. Revogam-se as disposições em contrário. Brasília, 24 de julho de 1996; 175º da Independência e 108º da República. FERNANDO HENRIQUE CARDOSO Nelson A. Jobim Este texto não substitui o publicado no D.O.U. de 25.7.1996 *"
   }
  ]
 }

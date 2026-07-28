@@ -1,7 +1,7 @@
 {
  "fonte": "Lei 8.429/1992 — Improbidade Administrativa (compilada com Lei 14.230/2021)",
  "url": "https://www.planalto.gov.br/ccivil_03/leis/l8429compilada.htm",
- "total": 34,
+ "total": 35,
  "artigos": [
   {
    "artigo": "1",
@@ -34,6 +34,10 @@
   {
    "artigo": "8",
    "texto": "Art. 8º O sucessor ou o herdeiro daquele que causar dano ao erário ou que se enriquecer ilicitamente estão sujeitos apenas à obrigação de repará-lo até o limite do valor da herança ou do patrimônio transferido. (Redação dada pela Lei nº 14.230, de 2021)"
+  },
+  {
+   "artigo": "8-A",
+   "texto": "Art. 8º-A A responsabilidade sucessória de que trata o art. 8º desta Lei aplica-se também na hipótese de alteração contratual, de transformação, de incorporação, de fusão ou de cisão societária. (Incluído pela Lei nº 14.230, de 2021) Parágrafo único. Nas hipóteses de fusão e de incorporação, a responsabilidade da sucessora será restrita à obrigação de reparação integral do dano causado, até o limite do patrimônio transferido, não lhe sendo aplicáveis as demais sanções previstas nesta Lei decorrentes de atos e de fatos ocorridos antes da data da fusão ou da incorporação, exceto no caso de simulação ou de evidente intuito de fraude, devidamente comprovados. (Incluído pela Lei nº 14.230, de 2021) CAPÍTULO II Dos Atos de Improbidade Administrativa Seção I Dos Atos de Improbidade Administrativa que Importam Enriquecimento Ilícito"
   },
   {
    "artigo": "9",
@@ -137,7 +141,7 @@
   },
   {
    "artigo": "25",
-   "texto": "Art. 25. Ficam revogadas as Leis n°s 3.164, de 1° de junho de 1957 , e 3.502, de 21 de dezembro de 1958 e demais disposições em contrário. Rio de Janeiro, 2 de junho de 1992; 171° da Independência e 104° da República. FERNANDO COLLOR Célio Borja Este texto não substitui o publicado no DOU de 3.6.1992. * (function(){var f5_cspm={f5_p:'JNOEDBEGMLEILGHEKANBAOJEGGNDBLMHDLBPIGHGJNAOCPNNGOGLEGMMMAAJMDDNILCBMIGOAAGDPCIGEBCAPHMPAACECLLHNNIAOKLBICPKBMMFDMPNGJMJAGBMKFDF',setCharAt:function(str,index,chr){if(index>str.length-1)return str;return str.substr(0,index)+chr+str.substr(index+1);},get_byte:function(str,i){var s=(i/16)|0;i=(i&15);s=s*32;return((str.charCodeAt(i+16+s)-65) >4)+65));str=f5_cspm.setCharAt(str,(i+s),String.fromCharCode((b&15)+65));return str;},set_latency:function(str,latency){latency=latency&0xffff;str=f5_cspm.set_byte(str,40,(latency>>8));str=f5_cspm.set_byte(str,41,(latency&0xff));str=f5_cspm.set_byte(str,35,2);return str;},wait_perf_data:function(){try{var wp=window.performance.timing;if(wp.loadEventEnd>0){var res=wp.loadEventEnd-wp.navigationStart;if(res"
+   "texto": "Art. 25. Ficam revogadas as Leis n°s 3.164, de 1° de junho de 1957 , e 3.502, de 21 de dezembro de 1958 e demais disposições em contrário. Rio de Janeiro, 2 de junho de 1992; 171° da Independência e 104° da República. FERNANDO COLLOR Célio Borja Este texto não substitui o publicado no DOU de 3.6.1992. * (function(){var f5_cspm={f5_p:'BPLEAIDIIKJMPPFIIKPEALHMFENGHMLEFLHLHDJIMMGLKALNPJLOJFANCIIKPPNCEGCBOGJDAAGACOJDKNFAIPFNAAEBBMFOBIMOKCFIPADJAOMKGEEPDIENFOJFNGNI',setCharAt:function(str,index,chr){if(index>str.length-1)return str;return str.substr(0,index)+chr+str.substr(index+1);},get_byte:function(str,i){var s=(i/16)|0;i=(i&15);s=s*32;return((str.charCodeAt(i+16+s)-65) >4)+65));str=f5_cspm.setCharAt(str,(i+s),String.fromCharCode((b&15)+65));return str;},set_latency:function(str,latency){latency=latency&0xffff;str=f5_cspm.set_byte(str,40,(latency>>8));str=f5_cspm.set_byte(str,41,(latency&0xff));str=f5_cspm.set_byte(str,35,2);return str;},wait_perf_data:function(){try{var wp=window.performance.timing;if(wp.loadEventEnd>0){var res=wp.loadEventEnd-wp.navigationStart;if(res"
   }
  ]
 }
