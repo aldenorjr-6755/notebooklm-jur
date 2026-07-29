@@ -294,6 +294,11 @@ def main(argv=None) -> int:
                     help="apaga build/ e dist/ antes de comecar")
     ap.add_argument("--pular-teste", action="store_true",
                     help="nao roda o autoteste no pacote gerado (nao recomendado)")
+    ap.add_argument("--sem-copia-desktop", action="store_true",
+                    help="nao atualiza a copia do app na Area de Trabalho")
+    ap.add_argument("--publicar-desktop", action="store_true",
+                    help="cria a copia na Area de Trabalho se ainda nao existir "
+                         "(por padrao so atualiza a que ja estiver la)")
     a = ap.parse_args(argv)
 
     try:
@@ -355,7 +360,108 @@ def main(argv=None) -> int:
     if a.pular_teste:
         print("  (pulado por --pular-teste)")
         return 0
-    return verificar(alvo)
+    codigo = verificar(alvo)
+    if codigo != 0:
+        return codigo
+
+    # So chega aqui com o pacote APROVADO no autoteste.
+    if a.sem_copia_desktop:
+        print("\n6. Copia da Area de Trabalho: pulada por --sem-copia-desktop.")
+        return 0
+    print("\n6. Atualizando a copia da Area de Trabalho...\n")
+    return publicar_no_desktop(alvo, criar=a.publicar_desktop)
+
+
+def achar_desktop() -> Path | None:
+    """Onde fica a Area de Trabalho DESTA maquina.
+
+    Nao da para presumir `~/Desktop`: com o OneDrive gerenciando as pastas
+    conhecidas ela vira `~/OneDrive/Desktop`, e escrever no lugar errado
+    criaria uma segunda copia fantasma que ninguem abre. A pergunta vai ao
+    registro do Windows, que e' quem sabe a resposta; o resto e' plano B.
+    """
+    if sys.platform == "win32":
+        try:
+            import winreg
+
+            chave = (r"Software\Microsoft\Windows\CurrentVersion"
+                     r"\Explorer\User Shell Folders")
+            with winreg.OpenKey(winreg.HKEY_CURRENT_USER, chave) as k:
+                bruto, _ = winreg.QueryValueEx(k, "Desktop")
+            caminho = Path(os.path.expandvars(bruto))
+            if caminho.is_dir():
+                return caminho
+        except Exception:
+            pass
+    for tentativa in (Path.home() / "OneDrive" / "Desktop",
+                      Path.home() / "Desktop",
+                      Path.home() / "OneDrive" / "Area de Trabalho",
+                      Path.home() / "Area de Trabalho"):
+        if tentativa.is_dir():
+            return tentativa
+    return None
+
+
+def publicar_no_desktop(pasta: Path, criar: bool = False) -> int:
+    """Espelha o pacote recem-VERIFICADO na copia da Area de Trabalho.
+
+    So roda depois do autoteste passar: publicar antes de verificar poria um
+    pacote quebrado exatamente no icone que a pessoa clica.
+
+    Espelha (`robocopy /MIR`) em vez de apagar-e-copiar porque o destino
+    costuma estar dentro do OneDrive: assim so trafega o que mudou de fato, e
+    uma falha no meio nao deixa a pessoa sem aplicativo — o `dist/` continua
+    intacto como origem para refazer.
+
+    Por padrao NAO cria a pasta: se ela nao existe, e' porque ninguem pediu
+    250+ MB na Area de Trabalho, e despejar isso sem aviso seria abuso.
+    """
+    desktop = achar_desktop()
+    if desktop is None:
+        print("  Area de Trabalho nao localizada — copia dispensada.")
+        return 0
+
+    destino = desktop / "pdf2md"
+    if not destino.is_dir() and not criar:
+        print("  Sem copia na Area de Trabalho (%s) — nada a atualizar.\n"
+              "  Para criar: python -m pdf2md.empacotar --publicar-desktop"
+              % destino)
+        return 0
+
+    # Arquivo aberto fica travado no Windows e a copia falha pela metade.
+    travados = [p.name for p in destino.glob("pdf2md*.exe")
+                if p.is_file() and not _gravavel(p)] if destino.is_dir() else []
+    if travados:
+        print("  ! %s em uso — feche o aplicativo e repita. Copia NAO feita."
+              % ", ".join(travados))
+        return 1
+
+    print("  Publicando em %s ..." % destino)
+    if sys.platform != "win32":
+        shutil.copytree(pasta, destino, dirs_exist_ok=True)
+        print("  Copia atualizada.")
+        return 0
+
+    proc = subprocess.run(
+        ["robocopy", str(pasta), str(destino), "/MIR", "/NFL", "/NDL",
+         "/NJH", "/NJS", "/R:2", "/W:2"],
+        capture_output=True, text=True, encoding="utf-8", errors="replace")
+    # robocopy usa codigo de saida como mapa de bits: 0-7 e' sucesso
+    # (1 = copiou, 2 = extras removidos, 4 = incompatibilidade); 8+ e' falha.
+    if proc.returncode >= 8:
+        print("  ! robocopy falhou (codigo %d). Copia da Area de Trabalho "
+              "pode estar incompleta." % proc.returncode)
+        return 1
+    print("  Copia da Area de Trabalho atualizada (codigo %d)." % proc.returncode)
+    return 0
+
+
+def _gravavel(arquivo: Path) -> bool:
+    try:
+        with open(arquivo, "ab"):
+            return True
+    except OSError:
+        return False
 
 
 def verificar(pasta: Path) -> int:
