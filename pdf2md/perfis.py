@@ -40,6 +40,13 @@ class Perfil:
     extrair_imagens: bool = False
     img_min_px: int = 120      # ignora icone/logo abaixo disso
     img_dedup: bool = True     # nao repete a mesma imagem em varias paginas
+    img_ignorar_mobiliario: bool = True
+    """Descarta o que e' moldura da pagina e nao conteudo: papel timbrado e
+    brasao do Judiciario/MP/Defensoria, e o QR do rodape do PJe (que muda a
+    cada pagina e por isso escapa da deduplicacao por bytes). Exige figura
+    PEQUENA e na banda de cabecalho/rodape antes de qualquer outro teste — no
+    corpo da pagina nada e' descartado. Desligue para auditar um documento em
+    que o proprio timbre esteja em discussao (falsidade documental)."""
 
     # --- limpeza / estrutura ----------------------------------------------
     limpar_rodape: bool = False

@@ -179,6 +179,7 @@ class App(ttk.Frame):
         self.var_rodape = tk.BooleanVar()
         self.var_estrut = tk.BooleanVar()
         self.var_preproc = tk.BooleanVar()
+        self.var_mobiliario = tk.BooleanVar()
         grade = ttk.Frame(op)
         grade.grid(row=4, column=0, columnspan=6, sticky="we", padx=(12, 0),
                    pady=(4, 0))
@@ -186,7 +187,8 @@ class App(ttk.Frame):
                 ("Extrair imagens para pasta ao lado", self.var_imagens),
                 ("Limpar rodape do PJe (assinatura/URL)", self.var_rodape),
                 ("Analisar estrutura (titulos e tabelas)", self.var_estrut),
-                ("Realcar imagem antes do OCR (scan ruim)", self.var_preproc))):
+                ("Realcar imagem antes do OCR (scan ruim)", self.var_preproc),
+                ("Ignorar timbre/brasao e QR do rodape", self.var_mobiliario))):
             w = ttk.Checkbutton(grade, text=txt, variable=var)
             w.grid(row=i // 2, column=i % 2, sticky="w", padx=(0, 24), pady=2)
             self.campos.append(w)
@@ -269,6 +271,7 @@ class App(ttk.Frame):
         self.var_rodape.set(p.limpar_rodape)
         self.var_estrut.set(p.estruturado)
         self.var_preproc.set(p.ocr_preproc)
+        self.var_mobiliario.set(p.img_ignorar_mobiliario)
 
     def _alternar_ajuste(self) -> None:
         estado = "normal" if self._ajuste_manual.get() else "disabled"
@@ -409,6 +412,7 @@ class App(ttk.Frame):
                 extrair_imagens=self.var_imagens.get(),
                 estruturado=self.var_estrut.get(),
                 limpar_rodape=self.var_rodape.get(),
+                img_ignorar_mobiliario=self.var_mobiliario.get(),
             )
 
         self.cancelar.clear()

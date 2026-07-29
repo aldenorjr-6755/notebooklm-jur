@@ -72,6 +72,38 @@ RE_NUM_PAG_PJE = re.compile(r"Num\.\s*(\d{4,})\s*[-–]\s*P[aá]g\.\s*(\d+)", re
 RE_ID_PJE = re.compile(r"\bId\.?\s*([0-9a-f]{6,})\b", re.I)
 RE_NUM_DOC_PJE = re.compile(r"N[uú]mero\s+do\s+documento\s*:\s*(\S+)", re.I)
 
+# Timbre, brasao e identidade visual de instituicao publica. Serve para
+# reconhecer o CABECALHO INSTITUCIONAL: quando a pagina se anuncia como oficio
+# do Judiciario, do MP ou da Defensoria, a figura colada no alto dela e'
+# papel timbrado, nao conteudo. Sozinho o texto nao decide nada — ele so
+# corrobora a geometria (ver `_classificar_mobiliario`), porque uma peca que
+# FALA do Ministerio Publico casaria com esta lista sem ter timbre nenhum.
+RE_INSTITUICAO = re.compile(
+    r"\b(poder\s+judici[aá]rio"
+    r"|tribunal\s+(de\s+justi[cç]a|regional|superior|de\s+contas)"
+    r"|supremo\s+tribunal|superior\s+tribunal"
+    r"|justi[cç]a\s+(federal|do\s+trabalho|eleitoral|militar)"
+    r"|conselho\s+nacional\s+de\s+justi[cç]a"
+    r"|minist[eé]rio\s+p[uú]blico|promotoria\s+de\s+justi[cç]a"
+    r"|procuradoria[-\s]+geral|procuradoria\s+da\s+rep[uú]blica"
+    r"|defensoria\s+p[uú]blica"
+    r"|advocacia[-\s]+geral\s+da\s+uni[aã]o"
+    r"|rep[uú]blica\s+federativa\s+do\s+brasil"
+    r"|(comarca|vara)\s+\S+"
+    r"|(pol[ií]cia|delegacia)\s+(civil|federal|militar)"
+    r"|governo\s+do\s+estado|prefeitura\s+municipal)\b", re.I)
+
+# --------------------------------------------------------------------------
+# Mobiliario de pagina: o que se repete como moldura e nao e' conteudo.
+# --------------------------------------------------------------------------
+BANDA_TOPO = 0.18        # fracao da altura que conta como cabecalho
+BANDA_RODAPE = 0.16      # idem, rodape
+FRACAO_MOBILIARIO = 0.06  # timbre/QR ocupam pouco da pagina; acima disso e' figura
+QR_PROPORCAO = (0.72, 1.40)   # largura/altura de um QR: quadrado, com folga
+QR_LADO_MAXIMO = 0.20         # ... e pequeno em relacao a largura da pagina
+MIN_PAGINAS_RECORRENTE = 3    # aparecer em 3+ paginas ja e' moldura
+FRACAO_PAGINAS_RECORRENTE = 0.5   # ou em metade das paginas, no documento curto
+
 # Tudo que e' CARIMBO, para efeito de MEDIR se a pagina tem corpo. Note que
 # esta lista e' mais ampla que a do `limpar_rodape`: aqui entra tambem o
 # `Num. X - Pag. N`, que na saida e' util (identifica o documento) mas que,
@@ -119,6 +151,10 @@ class Resultado:
     """Quantas chegaram tendo apenas carimbo (antes do OCR)."""
     imagens: int = 0
     pasta_imagens: Path | None = None
+    imagens_descartadas: dict[str, int] = field(default_factory=dict)
+    """Figuras NAO extraidas, por motivo (timbre, qrcode, rodape, repetida...).
+    Filtro que descarta em silencio e' filtro em que nao se pode confiar: o
+    numero sai no cabecalho do Markdown para poder ser conferido."""
     docs_pje: list[tuple[str, int, int]] = field(default_factory=list)
     rodapes_removidos: int = 0
     controles_removidos: int = 0
@@ -162,6 +198,8 @@ class Resultado:
             self.origem.name[:42], self.paginas, self.chars, self.media_chars,
             self.paginas_ocr, self.imagens, self.duracao,
         )
+        if self.imagens_descartadas:
+            s += "\n   descartadas: %s" % _descartes_por_extenso(self.imagens_descartadas)
         if self.aviso_estrutura:
             s += "\n   AVISO: analise de estrutura indisponivel (%s) — Markdown mais cru." \
                  % self.aviso_estrutura
@@ -339,25 +377,192 @@ def _figura_relevante(larg: int, alt: int, minimo: int) -> bool:
     return (max(larg, alt) >= minimo
             and min(larg, alt) >= LADO_MINIMO
             and larg * alt >= AREA_MINIMA)
-def _extrair_imagens(doc, page, num: int, perfil: Perfil, pasta: Path,
-                     vistos: set[str], pagina_e_scan: bool) -> list[str]:
-    salvos: list[str] = []
-    area_pag = abs(page.rect.width * page.rect.height) or 1
+ROTULO_DESCARTE = {
+    "timbre": "papel timbrado/brasao",
+    "qrcode": "QR do rodape",
+    "rodape": "selo de rodape",
+    "repetida": "repeticao da mesma figura",
+    "miniatura": "icone/filete",
+    "pagina digitalizada": "a propria folha digitalizada",
+}
 
-    # bbox por xref, para saber o tamanho relativo de cada figura na pagina
-    bbox_por_xref: dict[int, float] = {}
+
+def _descartes_por_extenso(descartes: dict[str, int]) -> str:
+    return ", ".join("%d %s" % (qtd, ROTULO_DESCARTE.get(motivo, motivo))
+                     for motivo, qtd in sorted(descartes.items(),
+                                               key=lambda kv: -kv[1]))
+
+
+def _chave_posicao(bb, larg_pag: float, alt_pag: float) -> tuple:
+    """Posicao da figura na pagina, arredondada a 1% — a "casa" que ela ocupa.
+
+    E' o que permite reconhecer o QR do rodape do PJe, que MUDA A CADA PAGINA
+    (codifica o numero do documento) e por isso escapa da deduplicacao por
+    bytes, mas cai sempre na mesma casa.
+    """
+    return (round(bb[0] / larg_pag, 2), round(bb[1] / alt_pag, 2),
+            round((bb[2] - bb[0]) / larg_pag, 2),
+            round((bb[3] - bb[1]) / alt_pag, 2))
+
+
+def _censo_mobiliario(doc, alvos: list[int]) -> tuple[set, set]:
+    """Descobre, ANTES de gravar qualquer figura, o que e' moldura da pagina.
+
+    Roda em duas chaves porque os dois casos falham de formas diferentes:
+
+    * por `xref` — o brasao/timbre e' o MESMO objeto reaproveitado em todas as
+      paginas. A deduplicacao por bytes ja evitava a repeticao, mas guardava a
+      PRIMEIRA ocorrencia: o timbre virava "Figura da p. 1". So se sabe que ele
+      era moldura depois de ver a pagina 3 — dai a necessidade deste censo.
+    * por POSICAO — o QR do rodape muda de bytes e de xref a cada pagina, e so
+      a recorrencia geometrica o denuncia.
+
+    Nao decide sozinho: quem descarta e' `_classificar_mobiliario`, que ainda
+    exige que a figura seja pequena e esteja na banda de cabecalho/rodape.
+    """
+    pgs_por_xref: dict[int, set[int]] = {}
+    pgs_por_pos: dict[tuple, set[int]] = {}
+    for idx in alvos:
+        pg = doc[idx]
+        larg_pag = pg.rect.width or 1
+        alt_pag = pg.rect.height or 1
+        for info in pg.get_image_info(xrefs=True):
+            xr, bb = info.get("xref"), info.get("bbox")
+            if not bb:
+                continue
+            if xr:
+                pgs_por_xref.setdefault(xr, set()).add(idx)
+            pgs_por_pos.setdefault(
+                _chave_posicao(bb, larg_pag, alt_pag), set()).add(idx)
+
+    limiar = min(MIN_PAGINAS_RECORRENTE,
+                 max(2, int(len(alvos) * FRACAO_PAGINAS_RECORRENTE)))
+    recorrente_xref = {x for x, ps in pgs_por_xref.items() if len(ps) >= limiar}
+    recorrente_pos = {k for k, ps in pgs_por_pos.items() if len(ps) >= limiar}
+    return recorrente_xref, recorrente_pos
+
+
+_CACHE_QR: dict[str, bool] = {}
+
+
+def _e_qrcode(dados: bytes, digest: str) -> bool:
+    """Decodifica de verdade, em vez de supor pela forma.
+
+    Com OpenCV a resposta e' categorica: ou o detector acha um QR ali, ou nao
+    acha. Sem OpenCV a funcao devolve False e a decisao fica inteiramente com
+    a geometria + recorrencia — que ja pegam o QR do rodape do PJe, so que sem
+    poder afirmar que e' um QR.
+    """
+    if digest in _CACHE_QR:
+        return _CACHE_QR[digest]
+    achou = False
+    try:
+        import cv2
+        import numpy as np
+
+        buf = np.frombuffer(dados, dtype=np.uint8)
+        img = cv2.imdecode(buf, cv2.IMREAD_GRAYSCALE)
+        if img is not None and min(img.shape[:2]) >= 20:
+            achou = bool(cv2.QRCodeDetector().detect(img)[0])
+    except Exception:
+        achou = False
+    _CACHE_QR[digest] = achou
+    return achou
+
+
+def _classificar_mobiliario(bb, larg_pag: float, alt_pag: float,
+                            xref: int, censo: tuple[set, set],
+                            quadrada: bool, institucional: bool) -> tuple:
+    """Decide se a figura e' moldura. Devolve (motivo, testar_qr).
+
+    `motivo` ja vem pela POSICAO — timbre em cima, rodape embaixo —, e
+    `testar_qr` apenas autoriza o caller a promover o rotulo a "qrcode" se o
+    decodificador confirmar. Assim um brasao quadrado no alto da pagina nunca
+    e' rotulado de rodape so porque o OpenCV nao leu QR nenhum nele.
+
+    A ordem importa: primeiro exige que a figura seja pequena e esteja na
+    moldura da pagina; so entao pergunta se ela se repete ou se a pagina se
+    anuncia como documento oficial. Uma foto grande no meio da pagina nunca
+    chega a ser testada — que e' o ponto, porque o custo de descartar uma
+    figura de verdade e' muito maior que o de manter um brasao.
+    """
+    recorrente_xref, recorrente_pos = censo
+    larg = (bb[2] - bb[0]) / larg_pag
+    alt = (bb[3] - bb[1]) / alt_pag
+    if larg * alt > FRACAO_MOBILIARIO:
+        return None, False                # grande demais para ser moldura
+
+    no_topo = bb[1] / alt_pag <= BANDA_TOPO
+    no_rodape = bb[3] / alt_pag >= (1 - BANDA_RODAPE)
+    if not (no_topo or no_rodape):
+        return None, False                # esta no corpo da pagina
+
+    # As duas recorrencias NAO valem o mesmo, e trata-las como iguais custou
+    # uma prancha fotografica no teste de regressao:
+    #
+    # * mesmo `xref` em varias paginas = e' literalmente o MESMO objeto colado
+    #   de novo. Brasao, timbre, marca d'agua. Sinal forte por si so.
+    # * mesma POSICAO com bytes diferentes = pode ser o QR do PJe (que muda a
+    #   cada pagina), mas pode igualmente ser a foto que o perito poe sempre
+    #   no mesmo lugar da prancha. Aqui a posicao sozinha nao decide: exige-se
+    #   tambem a forma de QR — pequeno e quadrado.
+    qr_like = quadrada and larg <= QR_LADO_MAXIMO
+    repete_objeto = xref in recorrente_xref
+    repete_lugar = _chave_posicao(bb, larg_pag, alt_pag) in recorrente_pos
+
+    if repete_objeto:
+        pass                              # moldura
+    elif repete_lugar and qr_like:
+        pass                              # candidato a QR variavel
+    elif institucional and no_topo and not repete_lugar:
+        # Documento oficial de uma unica pagina: nao ha recorrencia que
+        # denuncie o timbre, e o cabecalho institucional e' o unico sinal.
+        pass
+    else:
+        return None, False
+
+    motivo = "timbre" if no_topo else "rodape"
+    return motivo, qr_like
+
+
+def _extrair_imagens(doc, page, num: int, perfil: Perfil, pasta: Path,
+                     vistos: set[str], pagina_e_scan: bool,
+                     censo: tuple[set, set] | None = None,
+                     texto_util: int = 0,
+                     institucional: bool = False) -> tuple[list[str], dict]:
+    """Grava as figuras da pagina. Devolve (caminhos, descartes por motivo)."""
+    salvos: list[str] = []
+    descartes: dict[str, int] = {}
+    larg_pag = page.rect.width or 1
+    alt_pag = page.rect.height or 1
+    area_pag = abs(larg_pag * alt_pag) or 1
+
+    def _descartar(motivo: str) -> None:
+        descartes[motivo] = descartes.get(motivo, 0) + 1
+
+    # bbox por xref, para saber o tamanho e a posicao de cada figura na pagina
+    bbox_por_xref: dict[int, tuple] = {}
+    fracao_por_xref: dict[int, float] = {}
     for info in page.get_image_info(xrefs=True):
         xr = info.get("xref")
         bb = info.get("bbox")
         if xr and bb:
-            bbox_por_xref[xr] = abs((bb[2] - bb[0]) * (bb[3] - bb[1])) / area_pag
+            bbox_por_xref[xr] = bb
+            fracao_por_xref[xr] = abs((bb[2] - bb[0]) * (bb[3] - bb[1])) / area_pag
 
     for k, info in enumerate(page.get_images(full=True), start=1):
         xref = info[0]
-        fracao = bbox_por_xref.get(xref, 0.0)
-        # A digitalizacao da propria pagina nao e' uma figura do laudo.
-        if pagina_e_scan and fracao > 0.85:
+        fracao = fracao_por_xref.get(xref, 0.0)
+
+        # A digitalizacao da propria pagina nao e' uma figura do laudo. O censo
+        # do passo 1 e' a fonte principal, mas ele mede COBERTURA e pode nao
+        # marcar a pagina; entao a ausencia de texto extraido serve de segunda
+        # testemunha: imagem que cobre a folha inteira numa pagina que nao
+        # rendeu texto e' a propria folha, e o remedio dela e' OCR, nao figura.
+        if fracao > 0.85 and (pagina_e_scan or texto_util < LIMIAR_TEXTO_UTIL):
+            _descartar("pagina digitalizada")
             continue
+
         try:
             base = doc.extract_image(xref)
         except Exception:
@@ -368,10 +573,29 @@ def _extrair_imagens(doc, page, num: int, perfil: Perfil, pasta: Path,
             continue
         larg, alt = base.get("width", 0), base.get("height", 0)
         if not _figura_relevante(larg, alt, perfil.img_min_px):
+            _descartar("miniatura")
             continue  # espacador, filete ou icone
 
         digest = hashlib.md5(dados).hexdigest()
+
+        bb = bbox_por_xref.get(xref)
+        if perfil.img_ignorar_mobiliario and bb and censo is not None:
+            proporcao = (larg / alt) if alt else 0
+            quadrada = QR_PROPORCAO[0] <= proporcao <= QR_PROPORCAO[1]
+            motivo, testar_qr = _classificar_mobiliario(
+                bb, larg_pag, alt_pag, xref, censo, quadrada, institucional)
+            # O decodificador so REFINA o rotulo de quem ja seria descartado
+            # pela posicao. Sem OpenCV, ou quando ele nao le nada, o descarte
+            # acontece do mesmo jeito — pelo motivo geometrico.
+            if motivo and testar_qr and _e_qrcode(dados, digest):
+                motivo = "qrcode"
+            if motivo:
+                _descartar(motivo)
+                vistos.add(digest)
+                continue
+
         if perfil.img_dedup and digest in vistos:
+            _descartar("repetida")
             continue
         vistos.add(digest)
 
@@ -381,7 +605,7 @@ def _extrair_imagens(doc, page, num: int, perfil: Perfil, pasta: Path,
         (pasta / nome).write_bytes(dados)
         salvos.append("%s/%s" % (pasta.name, nome))
 
-    return salvos
+    return salvos, descartes
 
 
 # ==========================================================================
@@ -535,6 +759,7 @@ def converter(
         sem_camada: dict[int, bool] = {}      # nem carimbo tem
         so_carimbo: dict[int, bool] = {}      # tem carimbo, mas nao tem corpo
         tem_imagem: dict[int, bool] = {}      # ha conteudo visual na pagina
+        institucional: dict[int, bool] = {}   # a pagina se anuncia como oficial
         for idx in alvos:
             pg = doc[idx]
             bruto = (pg.get_text("text") or "").strip()
@@ -543,6 +768,16 @@ def converter(
             sem_camada[num] = len(bruto) < LIMIAR_PAGINA_VAZIA
             so_carimbo[num] = len(util) < LIMIAR_TEXTO_UTIL
             tem_imagem[num] = _cobertura_imagem(pg) >= FRACAO_PAGINA_DIGITALIZADA
+            # So o topo do texto: o timbre esta no alto, e uma peca que CITA o
+            # Ministerio Publico no corpo nao pode virar pagina timbrada.
+            institucional[num] = bool(RE_INSTITUICAO.search(bruto[:400]))
+
+        # Censo das figuras: precisa varrer o documento inteiro antes de gravar
+        # a primeira, senao o timbre da pagina 1 e' salvo antes de se saber que
+        # ele se repete ate o fim.
+        censo_img = (_censo_mobiliario(doc, alvos)
+                     if cfg.extrair_imagens and cfg.img_ignorar_mobiliario
+                     else (set(), set()))
         # Ambas as situacoes exigem OCR: a pagina sem nada e a pagina que so
         # tem carimbo. Ignorar a segunda foi exatamente o defeito que fazia o
         # conversor declarar "completo" sobre autos digitalizados.
@@ -643,8 +878,13 @@ def converter(
 
             if cfg.extrair_imagens and escrever:
                 try:
-                    p.imagens = _extrair_imagens(
-                        doc, page, num, cfg, pasta_img, vistos, e_scan)
+                    p.imagens, descartes = _extrair_imagens(
+                        doc, page, num, cfg, pasta_img, vistos, e_scan,
+                        censo=censo_img, texto_util=p.util,
+                        institucional=institucional.get(num, False))
+                    for motivo, qtd in descartes.items():
+                        res.imagens_descartadas[motivo] = \
+                            res.imagens_descartadas.get(motivo, 0) + qtd
                 except Exception:
                     p.imagens = []
 
@@ -738,6 +978,11 @@ def _montar_markdown(caminho: Path, doc, paginas: list[Pagina],
     if res.imagens:
         cab.append("> - Imagens extraidas: **%d** em `%s/`."
                    % (res.imagens, (res.pasta_imagens or Path("")).name))
+    if res.imagens_descartadas:
+        cab.append("> - Figuras descartadas como moldura de pagina: %s. "
+                   "Continuam no PDF original — se alguma delas era conteudo, "
+                   "reconverta com `img_ignorar_mobiliario=False`."
+                   % _descartes_por_extenso(res.imagens_descartadas))
     if res.rodapes_removidos:
         cab.append("> - Linhas de rodape do PJe removidas: %d (assinatura/URL/numero do documento)."
                    % res.rodapes_removidos)

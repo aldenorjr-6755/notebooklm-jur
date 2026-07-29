@@ -164,6 +164,18 @@ def diagnostico() -> dict:
                 type(exc).__name__, exc)
     d["modulos"] = modulos
 
+    # O OpenCV fica FORA do executavel de proposito (custaria ~112 MB para
+    # refinar um rotulo). Sem ele o timbre e o QR do rodape continuam sendo
+    # descartados pela geometria — muda so o nome do motivo no relatorio, de
+    # "QR do rodape" para "selo de rodape". Isto e' declarado porque, senao, o
+    # mesmo PDF sai com rotulos diferentes no script e no .exe, e a divergencia
+    # pareceria defeito.
+    try:
+        import cv2  # noqa: F401
+        d["decodifica_qr"] = True
+    except Exception:
+        d["decodifica_qr"] = False
+
     faltas = [k for k, v in modulos.items() if v is None and k in ("PyMuPDF",)]
     if not d["tesseract"]:
         faltas.append("Tesseract (OCR indisponivel)")
@@ -182,6 +194,10 @@ def texto_diagnostico() -> str:
         "Ghostscript   : %s" % (d["ghostscript"] or "nao encontrado (opcional)"),
         "TESSDATA      : %s" % (d["tessdata"] or "-"),
         "Idiomas OCR   : %s" % (", ".join(d["idiomas"]) or "nenhum"),
+        "Leitura de QR : %s" % ("OpenCV (rotula 'QR do rodape')"
+                                if d.get("decodifica_qr") else
+                                "sem OpenCV — o QR ainda e' descartado pela "
+                                "geometria, mas sai rotulado 'selo de rodape'"),
         "",
         "Modulos Python:",
     ]

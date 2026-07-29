@@ -74,6 +74,10 @@ def montar_parser() -> argparse.ArgumentParser:
                     help="extrai as figuras para <nome>_imagens/")
     ap.add_argument("--sem-imagens", dest="imagens", action="store_false",
                     help="nao extrai figuras")
+    ap.add_argument("--manter-mobiliario", dest="mobiliario",
+                    action="store_false", default=None,
+                    help="mantem timbre/brasao e QR do rodape como figura "
+                         "(por padrao sao descartados)")
     ap.add_argument("--rapido", dest="estruturado", action="store_false", default=None,
                     help="pula a analise de estrutura (mais rapido, MD mais cru)")
     ap.add_argument("--limpar-rodape", action="store_true", default=None,
@@ -259,6 +263,7 @@ def main(argv=None) -> int:
             ("ocr_dpi", args.dpi),
             ("ocr_preproc", args.preproc),
             ("extrair_imagens", args.imagens),
+            ("img_ignorar_mobiliario", args.mobiliario),
             ("estruturado", args.estruturado),
             ("limpar_rodape", args.limpar_rodape),
         ) if v is not None
