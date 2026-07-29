@@ -281,6 +281,15 @@ if dobrados:
     w(f"> **{len(dobrados)} agentes do registry existem em mais de um escopo.** Duplicata **diverge em")
     w("> silêncio** quando editada de um lado só — e nada avisa, porque as duas resolvem.")
     w(">")
+    w("> **Não conclua daqui que é resíduo a apagar.** Auditoria de 2026-07-28 comparou os 269 pares")
+    w("> de agente e skill dos cofres Classe A: **106 eram cópia morta** (idêntica ou divergindo só em")
+    w("> linha de caminho), mas **99 eram fork de domínio** — o `jurisprudencia-stj-stf` do Eleitoral,")
+    w("> por exemplo, tem um bloco inteiro de matéria eleitoral que a global não tem — e **28 são")
+    w("> compartilhados** entre dois cofres, de modo que apagar do global os desliga de ambos. Pior:")
+    w("> em **96 dos 99 forks a cópia GLOBAL estava mais nova**, o que inverte o diagnóstico — ali o")
+    w("> defasado é o cofre. Antes de remover qualquer par, classifique: idêntico × só-caminho ×")
+    w("> substantivo, e confira a data dos dois lados.")
+    w(">")
     if com_global:
         por_cofre = {}
         for a in com_global:

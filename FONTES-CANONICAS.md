@@ -207,22 +207,15 @@ Marcados **(apagado)** os 3 notebooks já removidos da conta — registro em
 | `acervo-familia-sucessoes` | `~/.claude/` | `0efe9aef-c085-42d2-9dcb-28b1d5e7faf8` · `7ecafd16-fd43-4167-a6bd-ef9d58742ae5` · `b90f1834-9dff-4d4c-bcd9-39d5c93f4ed4` · `c29cb334-adae-4aed-bd50-b0efad82faeb` |
 | `analise-confronto-testemunhal` | `~/.claude/` | `10bb4a29-6c43-4bb3-94a1-5e76021c286f` · `9681d5f6-db1f-4cf6-afd1-9bdebea3e8f4` · `bc44b655-5b7c-436e-8b06-fecef4943b35` · `db064855-08a6-4f69-9dee-c46053c97202` · `fb0eba5a-8050-4437-9391-5cb8ddb23162` |
 | `analise-deteccao-engano-depoimento` | vault **Criminal** | `9681d5f6-db1f-4cf6-afd1-9bdebea3e8f4` |
-| `analise-deteccao-engano-depoimento` | `~/.claude/` | `9681d5f6-db1f-4cf6-afd1-9bdebea3e8f4` |
 | `analise-dinamica-juri` | vault **Criminal** | `56a8a026-1b5b-4831-8030-afc129416d05` |
-| `analise-dinamica-juri` | `~/.claude/` | `56a8a026-1b5b-4831-8030-afc129416d05` |
 | `analise-emocao-punicao-decisao` | vault **Criminal** | `50601a41-c3a1-4c7a-b283-01298590e83e` |
-| `analise-emocao-punicao-decisao` | `~/.claude/` | `50601a41-c3a1-4c7a-b283-01298590e83e` |
 | `analise-entrevista-investigativa` | vault **Criminal** | `db064855-08a6-4f69-9dee-c46053c97202` |
-| `analise-entrevista-investigativa` | `~/.claude/` | `db064855-08a6-4f69-9dee-c46053c97202` |
 | `analise-falsas-confissoes` | vault **Criminal** | `27b30c76-5fdb-4a69-bf17-719b10b3c797` |
-| `analise-falsas-confissoes` | `~/.claude/` | `27b30c76-5fdb-4a69-bf17-719b10b3c797` |
 | `analise-narrativista` | vault **Criminal** | `9a8fc69d-cd63-423e-b5f4-02cb01ed61d1` |
 | `analise-narrativista` | vault **Eleitoral** | `9a8fc69d-cd63-423e-b5f4-02cb01ed61d1` |
 | `analise-narrativista` | `~/.claude/` | `9a8fc69d-cd63-423e-b5f4-02cb01ed61d1` |
 | `analise-obediencia-institucional-policial` | vault **Criminal** | `bc44b655-5b7c-436e-8b06-fecef4943b35` |
-| `analise-obediencia-institucional-policial` | `~/.claude/` | `bc44b655-5b7c-436e-8b06-fecef4943b35` |
 | `analise-percepcao-memoria-estresse` | vault **Criminal** | `10bb4a29-6c43-4bb3-94a1-5e76021c286f` |
-| `analise-percepcao-memoria-estresse` | `~/.claude/` | `10bb4a29-6c43-4bb3-94a1-5e76021c286f` |
 | `analise-probatoria-abdutiva` | vault **Criminal** | `d08c1d17-4d50-453b-be44-d2c715838b89` |
 | `analise-probatoria-abdutiva` | vault **Eleitoral** | `d08c1d17-4d50-453b-be44-d2c715838b89` |
 | `analise-probatoria-abdutiva` | `~/.claude/` | `d08c1d17-4d50-453b-be44-d2c715838b89` |
@@ -236,23 +229,15 @@ Marcados **(apagado)** os 3 notebooks já removidos da conta — registro em
 | `analise-probatoria-wigmore` | vault **Eleitoral** | `6d255d90-1475-4a59-a582-ba0e13c98456` |
 | `analise-probatoria-wigmore` | `~/.claude/` | `6d255d90-1475-4a59-a582-ba0e13c98456` |
 | `analise-reconhecimento-pessoas` | vault **Criminal** | `ff66be9a-cfbe-4ef0-9fef-175cfc3094f3` |
-| `analise-reconhecimento-pessoas` | `~/.claude/` | `ff66be9a-cfbe-4ef0-9fef-175cfc3094f3` |
 | `analise-resposta-imobilidade-tonica` | vault **Criminal** | `29b37d18-e8bf-49e3-b246-c4a522f0ad49` |
-| `analise-resposta-imobilidade-tonica` | `~/.claude/` | `29b37d18-e8bf-49e3-b246-c4a522f0ad49` |
 | `analise-testemunho-infantil` | vault **Criminal** | `60f750db-3396-42e5-b1cc-5b4b86caceb3` |
-| `analise-testemunho-infantil` | `~/.claude/` | `60f750db-3396-42e5-b1cc-5b4b86caceb3` |
 | `analise-validade-metodo-pericial` | `~/.claude/` | `130f97d7-bb0e-46cd-a762-f436b09da632` |
 | `analise-vies-confirmacao-investigativa` | vault **Criminal** | `7faae4b1-ddef-421e-a841-1e5b95226521` |
-| `analise-vies-confirmacao-investigativa` | `~/.claude/` | `7faae4b1-ddef-421e-a841-1e5b95226521` |
 | `analise-vies-implicito-racial` | vault **Criminal** | `a081bc9c-bf4c-40ea-89d6-27dd862bbd8b` |
-| `analise-vies-implicito-racial` | `~/.claude/` | `a081bc9c-bf4c-40ea-89d6-27dd862bbd8b` |
 | `argumentacao-defeasivel` | vault **Criminal** | `aefebf29-2f9c-4aa4-bc02-b7109f7a8f44` |
-| `argumentacao-defeasivel` | `~/.claude/` | `aefebf29-2f9c-4aa4-bc02-b7109f7a8f44` |
 | `avaliacao-risco-periculosidade` | vault **Criminal** | `b3335faf-d51c-4f2f-b3de-1a5ba34310b5` |
-| `avaliacao-risco-periculosidade` | `~/.claude/` | `b3335faf-d51c-4f2f-b3de-1a5ba34310b5` |
 | `boletim-precedentes-stj` | `~/.claude/` | `4688b958-d033-4dfd-bebf-e359fe7695f9` · `9deca780-1a21-4362-83cd-669c4fc3e759` · `f2e4a886-fa20-43bc-8f7c-8a1d82ae77fd` |
 | `cadeia-custodia-prova-digital` | vault **Criminal** | `3fd409ea-05d1-45e2-af52-136351041675` |
-| `cadeia-custodia-prova-digital` | `~/.claude/` | `3fd409ea-05d1-45e2-af52-136351041675` |
 | `carl-rogers-pca` | vault **Psicologia** | `8c715fc1-e83a-4a6a-8f07-9fac510385a8` |
 | `corroboracao-falsificacionista` | vault **Criminal** | `92efec4d-de9b-48e9-bf3b-d8beba52d0e1` |
 | `corroboracao-falsificacionista` | vault **Eleitoral** | `92efec4d-de9b-48e9-bf3b-d8beba52d0e1` |
@@ -274,12 +259,10 @@ Marcados **(apagado)** os 3 notebooks já removidos da conta — registro em
 | `doutrina-penal-critica` | vault **Criminal** | `cfd7c963-8e12-405a-a2f0-6281567f5329` |
 | `doutrina-penal-critica` | `~/.claude/` | `cfd7c963-8e12-405a-a2f0-6281567f5329` |
 | `epistemologia-do-testemunho` | vault **Criminal** | `2532e5f9-f47d-4ac4-9576-e7c0c23e8814` |
-| `epistemologia-do-testemunho` | `~/.claude/` | `2532e5f9-f47d-4ac4-9576-e7c0c23e8814` |
 | `informativo-tse` | vault **Eleitoral** | `245fd015-9e5b-4e93-ab67-3c9e5f79c2fc` · `2b904247-8693-499a-a87b-cc18c4b874f0` · `42ad973e-8eaa-4b81-894d-034e006a969e` · `72c946e0-fcd7-48d0-842e-7dd1af077e96` · `cb7ec492-a514-4a0b-bce1-0b3b4c37effa` |
 | `informativo-tse` | `~/.claude/` | `245fd015-9e5b-4e93-ab67-3c9e5f79c2fc` · `2b904247-8693-499a-a87b-cc18c4b874f0` · `42ad973e-8eaa-4b81-894d-034e006a969e` · `72c946e0-fcd7-48d0-842e-7dd1af077e96` · `cb7ec492-a514-4a0b-bce1-0b3b4c37effa` |
 | `informativos-stj` | `~/.claude/` | `460d5c0a-feb5-48a9-b70a-d98f67695ccf` · `5083fc24-eb3c-4250-aad3-b6632ec928e1` · `9b8f0368-48f3-495a-9d6f-7283066e3b50` |
 | `injustica-epistemica` | vault **Criminal** | `fb0eba5a-8050-4437-9391-5cb8ddb23162` |
-| `injustica-epistemica` | `~/.claude/` | `fb0eba5a-8050-4437-9391-5cb8ddb23162` |
 | `irvin-yalom` | vault **Psicologia** | `f5509d65-2531-4922-8d7c-2b374a6f79ae` |
 | `jurisprudencia-corpus` | vault **Constitucional** | `cb154c24-d844-45bc-b659-592a1ab6684a` |
 | `jurisprudencia-corpus` | `~/.claude/` | `cb154c24-d844-45bc-b659-592a1ab6684a` |
@@ -287,14 +270,22 @@ Marcados **(apagado)** os 3 notebooks já removidos da conta — registro em
 | `justo-processo` | `~/.claude/` | `3fd409ea-05d1-45e2-af52-136351041675` |
 | `leslie-greenberg` | vault **Psicologia** | `49a3a3ff-640f-49f9-a539-6152e49c0575` |
 | `neurodireito-responsabilidade-penal` | vault **Criminal** | `32526abb-c2e8-4dcf-b46f-6a9759ebca9b` |
-| `neurodireito-responsabilidade-penal` | `~/.claude/` | `32526abb-c2e8-4dcf-b46f-6a9759ebca9b` |
 | `rtj-stf` | vault **Constitucional** | `23559e60-804b-46fc-97ec-d7aeea131bd4` **(apagado)** · `a01e1821-48bd-4c80-880a-d00c29617255` **(apagado)** · `a35d98d9-8a0f-4c29-826e-da9e5a981291` **(apagado)** |
 | `rtj-stf` | `~/.claude/` | `23559e60-804b-46fc-97ec-d7aeea131bd4` **(apagado)** · `a01e1821-48bd-4c80-880a-d00c29617255` **(apagado)** · `a35d98d9-8a0f-4c29-826e-da9e5a981291` **(apagado)** |
 
-> **34 agentes do registry existem em mais de um escopo.** Duplicata **diverge em
+> **16 agentes do registry existem em mais de um escopo.** Duplicata **diverge em
 > silêncio** quando editada de um lado só — e nada avisa, porque as duas resolvem.
 >
-> **Vault × `~/.claude/` (34):** **Ambiental** 1 · **Constitucional** 4 · **Criminal** 29 · **Eleitoral** 8. Num cofre Classe A isto é **resíduo de promoção**, salvo se o recurso for
+> **Não conclua daqui que é resíduo a apagar.** Auditoria de 2026-07-28 comparou os 269 pares
+> de agente e skill dos cofres Classe A: **106 eram cópia morta** (idêntica ou divergindo só em
+> linha de caminho), mas **99 eram fork de domínio** — o `jurisprudencia-stj-stf` do Eleitoral,
+> por exemplo, tem um bloco inteiro de matéria eleitoral que a global não tem — e **28 são
+> compartilhados** entre dois cofres, de modo que apagar do global os desliga de ambos. Pior:
+> em **96 dos 99 forks a cópia GLOBAL estava mais nova**, o que inverte o diagnóstico — ali o
+> defasado é o cofre. Antes de remover qualquer par, classifique: idêntico × só-caminho ×
+> substantivo, e confira a data dos dois lados.
+>
+> **Vault × `~/.claude/` (16):** **Ambiental** 1 · **Constitucional** 4 · **Criminal** 11 · **Eleitoral** 8. Num cofre Classe A isto é **resíduo de promoção**, salvo se o recurso for
 > transversal (norma §1.2), caso em que a duplicata é deliberada.
 >
 > **Entre cofres, sem passar pelo global (8):** `analise-narrativista` · `analise-probatoria-abdutiva` · `analise-probatoria-bayesiana` · `analise-probatoria-standards` · `analise-probatoria-wigmore` · `corroboracao-falsificacionista` · `dialetica-atomista-holista` · `direitos-fundamentais`. Aqui é compartilhamento entre domínios — legítimo, mas cada cópia envelhece sozinha.
@@ -329,7 +320,7 @@ Acervos com vários notebooks por período (IDs no arquivo):
 | `perspectivas_direito_penal` | 11 |
 | `ristj_343a` | 2 |
 | `senso_incomum` | 749 |
-| `validade_pericial` | 12 |
+| `validade_pericial` | 24 |
 
 ## Biblioteca (obras em PDF/HTML e sua versão Markdown)
 
@@ -363,8 +354,8 @@ Verificação da conversão (páginas, chars/página, NUL, OCR pendente):
 
 **Escopo de usuário (`~/.claude/`) — vale em qualquer vault:**
 
-- **223 agentes** em `~/.claude/agents/` — descobertos por intenção; a descrição de cada um já diz quando acioná-lo. Não replique catálogo de agente em `CLAUDE.md`.
-- **168 skills** em `~/.claude/skills/`.
+- **183 agentes** em `~/.claude/agents/` — descobertos por intenção; a descrição de cada um já diz quando acioná-lo. Não replique catálogo de agente em `CLAUDE.md`.
+- **103 skills** em `~/.claude/skills/`.
 - **74 slash commands** em `~/.claude/commands/`.
 
 **Escopo de vault (`<vault>/.claude/`) — 9 cofres com infra própria.**
