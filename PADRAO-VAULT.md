@@ -255,6 +255,98 @@ Duas consequências que a norma assume:
 Medição de 2026-07-26, para calibrar expectativa: 69 notas passavam de 900 palavras nos nove vaults;
 **38 delas não eram defeito** (catálogo, lei anotada ou densa).
 
+### 2.5.3 Identificação de caso — numeração CNJ
+
+Fixado em 2026-07-27. **Todo caso que seja processo judicial é identificado pelo número único CNJ**
+(Resolução CNJ 65/2008), no formato `NNNNNNN-DD.AAAA.J.TR.OOOO`, em **todos** os vaults.
+
+O número CNJ é o identificador; o rótulo humano vive no `titulo` e nos `aliases`.
+
+| Onde | Forma |
+|---|---|
+| Nome da pasta/nota em `20-Casos/` | `0839168-12.2026.8.10.0001` — só o número |
+| Frontmatter | `cnj: "0839168-12.2026.8.10.0001"` — obrigatório em `tipo: caso` |
+| Rótulo legível | `titulo:` e `aliases: ["Op. Inauditus", "núcleo PM — VECCO"]` |
+| Autos conexos | `cnj_relacionados: ["0814474-76.2026.8.10.0001", …]` |
+
+Código interno (`2026-VECCO-001`, `Caso-03`) **não** identifica caso. Ele parece organizado e não é:
+não casa com o PJe, não casa com a peça protocolada, não casa com a intimação, e obriga a manter de
+cabeça uma tabela de-para que ninguém mantém. O número CNJ já é o identificador que o tribunal, o
+DJEN, o DataJud e o cliente usam — o vault passa a usar o mesmo.
+
+**Caso ainda sem número CNJ.** Inquérito, PIC, procedimento administrativo e cautelar não distribuída
+não têm número único. Aí:
+
+```yaml
+cnj: sem-numero
+identificador: "IP 7685/2026-SENARC"   # o número que o órgão de origem de fato usa
+```
+
+A pasta fica com o nome provisório até a distribuição. **Distribuído, renomeia-se para o CNJ** e o
+nome antigo vai para `aliases` — é a mesma regra de renomeação do §2.5, e o alias é o que impede o
+wikilink antigo de quebrar.
+
+**Conflito com a regra de sigilo — resolvido aqui.** Quatro `CLAUDE.md` diziam "nunca número de
+processo identificável em `20-Casos/`". Essa cláusula fica **revogada** nesta parte, e o motivo é
+que ela misturava duas coisas:
+
+- o **número dos autos** é dado público de identificação processual (é o que se digita na consulta
+  do tribunal) — fica no vault, sempre;
+- a **identificação das partes** (nome completo, CPF, endereço, matrícula prisional, nome de criança
+  ou adolescente) continua fora: iniciais e função, como já era.
+
+A cautela real não é sobre gravar o número: é sobre **o que sai do vault**. Antes de mandar caso a
+serviço externo (NotebookLM, Perplexity) ou para terceiro, conferir segredo de justiça e anonimizar —
+regra que já existia e continua valendo integralmente.
+
+**Onde a regra não incide.** Vault cujo "caso" não é processo judicial — grupo vulnerável na
+`20-Grupos/` do Dissertacao, nota de processo clínico na `20-Clinica/Casos/` do Psicologia — não tem
+número CNJ para usar. O desvio é legítimo e **declarado no `CLAUDE.md`**, com o identificador que o
+substitui. O que a norma não admite é vault jurídico inventar código próprio para processo que tem
+número.
+
+O `lint-vault` detecta (nota `tipo: caso` sem `cnj`, `cnj` malformado, pasta de caso com nome que
+não é CNJ nem tem `sem-numero` declarado).
+
+### 2.5.4 Anonimização — vale para a camada OUTPUTS inteira
+
+Fixado em 2026-07-27. A regra de anonimização das partes **não para em `20-Casos/`**: alcança
+também a camada de saída — `30-Pecas/`, `50-Outputs/` e equivalentes do esquema declarado.
+
+O motivo é que a separação anterior não se sustentava. Anonimizar a ficha do caso e deixar o nome
+completo e o CPF do cliente na minuta guardada ao lado protege exatamente nada: as duas notas vivem
+no mesmo vault, sincronizam para a mesma nuvem e entram no mesmo `graphify`, no mesmo backup e no
+mesmo `notebooklm source add` distraído.
+
+| Camada | O que fica gravado |
+|---|---|
+| `10-Wiki/` | não há parte — é conhecimento |
+| `20-Casos/` | **iniciais + função** (`S.F.P.`, `A.P.G.J. — Desembargador`) |
+| `30-Pecas/` · `50-Outputs/` | **iniciais + marcador de preenchimento** no lugar da qualificação |
+| `40-Recursos/` · `90-Arquivo/` · `Anexos/` | **texto fiel** — é evidência, não se reescreve |
+
+**A minuta não perde utilidade: ganha um campo a preencher.** No lugar da qualificação vai o
+marcador, que também serve de lembrete de conferir a qualificação na fonte certa (os autos), e não
+na memória de quem redigiu:
+
+```
+**Representado:** S.F.P. — [QUALIFICAÇÃO COMPLETA: preencher no protocolo, conforme os autos]
+```
+
+Quem exporta preenche na hora de protocolar. O que a norma proíbe é **guardar** a qualificação na
+camada curada, não usá-la na peça que vai ao juízo.
+
+**RAW continua fiel.** Extrato de PJe, laudo, acórdão e transcrição ficam com os nomes que têm — é
+evidência, e evidência adulterada não serve para conferir síntese nenhuma. A consequência prática é
+que o bruto com nome **não pode morar em pasta de OUTPUTS**: seu lugar é `90-Arquivo/` (§2.2).
+
+**Autoridade não é parte.** Juiz, promotor, delegado e perito que atuam de ofício seguem nomeados —
+identificá-los é descrever ato público do processo, não expor dado de cliente.
+
+O `lint-vault` detecta CPF e CNPJ na camada curada — é o sinal mecanicamente verificável de que uma
+qualificação escapou. Nome completo ele não detecta, e por isso o marcador é convenção de escrita,
+não achado de auditoria.
+
 ### 2.6 Frontmatter — esquema em português
 
 **Obrigatório:**
@@ -272,7 +364,9 @@ fontes:
 ---
 ```
 
-**Opcional:** `atualizado`, `subtema`, `aliases`, `related`.
+**Obrigatório em `tipo: caso`:** `cnj` — número único CNJ ou `sem-numero` + `identificador` (§2.5.3).
+
+**Opcional:** `atualizado`, `subtema`, `aliases`, `related`, `cnj_relacionados`.
 
 #### Dois eixos de classificação, e só um carregador para cada
 
@@ -462,6 +556,11 @@ Mecânico e verificável. Serve para auditar vault existente e para dar por pron
 - [ ] Tags hierárquicas `<area>/<subtema>` — descontando o `<tipo>`, que é plano por norma
 - [ ] Nenhum `subtema` literal na lista de tags (resíduo de template)
 - [ ] `tipo` reflete a natureza da nota, não a da fonte
+- [ ] Caso judicial nomeado e identificado pelo número CNJ; `cnj` no frontmatter (§2.5.3)
+- [ ] Caso sem CNJ traz `cnj: sem-numero` + `identificador` do órgão de origem
+- [ ] Partes por iniciais em `20-Casos/` **e** na camada de saída (`30-Pecas/`, `50-Outputs/`) — §2.5.4
+- [ ] Nenhum CPF/CNPJ na camada curada; qualificação substituída por marcador de preenchimento
+- [ ] Bruto com nome de parte mora em `90-Arquivo/`, nunca em pasta de OUTPUTS
 - [ ] `index.md` e MOC com `type: index` + `updated:`
 - [ ] RAW (`90-Arquivo/`, `40-Recursos/`, `Anexos/`) e infra da raiz **não** cobrados de frontmatter
 - [ ] Texto repetido em duas notas está transcluído (`![[nota#seção]]`), não copiado
