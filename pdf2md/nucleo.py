@@ -528,7 +528,7 @@ def _classificar_mobiliario(bb, larg_pag: float, alt_pag: float,
 def _extrair_imagens(doc, page, num: int, perfil: Perfil, pasta: Path,
                      vistos: set[str], pagina_e_scan: bool,
                      censo: tuple[set, set] | None = None,
-                     texto_util: int = 0,
+                     pagina_sem_corpo: bool = False,
                      institucional: bool = False) -> tuple[list[str], dict]:
     """Grava as figuras da pagina. Devolve (caminhos, descartes por motivo)."""
     salvos: list[str] = []
@@ -554,12 +554,17 @@ def _extrair_imagens(doc, page, num: int, perfil: Perfil, pasta: Path,
         xref = info[0]
         fracao = fracao_por_xref.get(xref, 0.0)
 
-        # A digitalizacao da propria pagina nao e' uma figura do laudo. O censo
-        # do passo 1 e' a fonte principal, mas ele mede COBERTURA e pode nao
-        # marcar a pagina; entao a ausencia de texto extraido serve de segunda
-        # testemunha: imagem que cobre a folha inteira numa pagina que nao
-        # rendeu texto e' a propria folha, e o remedio dela e' OCR, nao figura.
-        if fracao > 0.85 and (pagina_e_scan or texto_util < LIMIAR_TEXTO_UTIL):
+        # A digitalizacao da propria pagina nao e' uma figura do laudo.
+        #
+        # `pagina_sem_corpo` vem do censo do passo 1 e mede a pagina ANTES do
+        # OCR — que e' o unico momento em que a resposta significa alguma
+        # coisa. Medir depois do OCR foi o defeito que este comentario existe
+        # para impedir de voltar: a pagina digitalizada com o carimbo do PJe
+        # por cima nao e' "vazia" (o carimbo e' texto nativo, passa de 20
+        # caracteres brutos), e depois do OCR ela tem texto de sobra — de modo
+        # que a folha escaneada inteira passava por figura. Num processo real
+        # de 1.107 paginas isso salvou 562 folhas como se fossem fotos.
+        if fracao > 0.85 and pagina_sem_corpo:
             _descartar("pagina digitalizada")
             continue
 
@@ -880,7 +885,7 @@ def converter(
                 try:
                     p.imagens, descartes = _extrair_imagens(
                         doc, page, num, cfg, pasta_img, vistos, e_scan,
-                        censo=censo_img, texto_util=p.util,
+                        censo=censo_img, pagina_sem_corpo=precisa,
                         institucional=institucional.get(num, False))
                     for motivo, qtd in descartes.items():
                         res.imagens_descartadas[motivo] = \
