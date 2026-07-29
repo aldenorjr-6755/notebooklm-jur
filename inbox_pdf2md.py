@@ -325,6 +325,14 @@ def vigiar(args) -> int:
             if not event.is_directory:
                 self._tratar(event.dest_path)
 
+    # Varre ANTES de vigiar: o que caiu no Inbox com o vigia desligado (ou
+    # entre o logoff e o login) nunca geraria evento e ficaria por converter
+    # para sempre. Num autostart isso e' a diferenca entre a automacao valer
+    # e a automacao mentir.
+    if not args.sem_varredura_inicial:
+        log.info("Varredura inicial antes de vigiar.")
+        varredura(args)
+
     obs = Observer()
     for nome, inbox in inboxes:
         obs.schedule(Gatilho(nome, inbox), str(inbox), recursive=True)
@@ -354,6 +362,8 @@ def main(argv=None) -> int:
                     help="restringe a um cofre (repetivel); padrao: todos")
     ap.add_argument("--watch", action="store_true",
                     help="vigia as pastas em vez de fazer uma volta so")
+    ap.add_argument("--sem-varredura-inicial", action="store_true",
+                    help="com --watch, nao converte o que ja estava na pasta")
     ap.add_argument("--check", action="store_true",
                     help="so mede a perda; nao escreve .md nem imagens")
     ap.add_argument("--refazer", action="store_true",
