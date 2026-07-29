@@ -36,6 +36,16 @@ import fitz  # PyMuPDF
 
 LIMIAR_PAGINA_VAZIA = 20  # caracteres brutos; abaixo disso nem carimbo existe
 
+# Guarda de sobrescrita. Todo .md deste motor traz `**conversao** AAAA-MM-DD
+# HH:MM` no cabecalho; se o arquivo foi tocado depois desse carimbo, alguem
+# editou, e edicao humana vale mais que reconversao.
+#
+# A FOLGA absorve o jitter de mtime (sincronizacao do OneDrive, granularidade
+# do NTFS, a propria escrita) — sem ela, um .md recem-gerado se acusaria de
+# editado.
+CARIMBO_CONVERSAO = re.compile(r"\*\*conversao\*\* (\d{4}-\d{2}-\d{2} \d{2}:\d{2})")
+FOLGA_CARIMBO = 120  # segundos
+
 # Caracteres RESTANTES depois de descontar o carimbo. E' este o limiar que
 # decide se a pagina tem corpo de verdade.
 #
@@ -163,6 +173,12 @@ class Resultado:
     duracao: float = 0.0
     erro: str | None = None
     cancelado: bool = False
+    preservado: str | None = None
+    """Preenchido quando um .md existente foi RESPEITADO em vez de sobrescrito.
+    A conversao nova vai para `<nome>.pdf2md-novo.md` + a pasta de figuras
+    correspondente: nada se perde dos dois lados, e a escolha entre eles fica
+    com quem editou. Recusar sem gravar seria falhar em silencio pelo outro
+    lado."""
     aviso_estrutura: str | None = None
     """Preenchido quando a analise de estrutura foi pedida mas nao rodou. O
     Markdown sai mais cru (sem titulos/tabelas) — e isso precisa ser dito, nao
@@ -678,6 +694,36 @@ def _limpar_rodape(texto: str) -> tuple[str, int]:
     return txt, removidas
 
 
+def _md_editado(saida: Path) -> str | None:
+    """Motivo para NAO sobrescrever `saida`, ou None quando pode.
+
+    Duas recusas, ambas deliberadas:
+
+      * .md com carimbo de conversao mais VELHO que o mtime -> foi editado a
+        mao depois de gerado.
+      * .md SEM carimbo -> nao saiu deste conversor. Um .md alheio ao lado de
+        um .pdf de mesmo nome nunca deve ser tratado como descartavel.
+    """
+    if not saida.is_file():
+        return None
+    try:
+        cab = saida.read_text(encoding="utf-8", errors="replace")[:4000]
+        mt = saida.stat().st_mtime
+    except OSError:
+        return "ilegivel para conferencia"
+    m = CARIMBO_CONVERSAO.search(cab)
+    if not m:
+        return "nao foi gerado por este conversor (sem carimbo de conversao)"
+    try:
+        carimbo = time.mktime(time.strptime(m.group(1), "%Y-%m-%d %H:%M"))
+    except ValueError:
+        return "carimbo de conversao ilegivel"
+    if mt > carimbo + FOLGA_CARIMBO:
+        return "editado apos a conversao que o gerou (carimbo %s, modificado %s)" % (
+            m.group(1), time.strftime("%Y-%m-%d %H:%M", time.localtime(mt)))
+    return None
+
+
 # ==========================================================================
 # Conversao
 # ==========================================================================
@@ -717,12 +763,17 @@ def converter(
     escrever: bool = True,
     progresso=None,
     cancelar=None,
+    forcar: bool = False,
 ) -> Resultado:
     """Converte UM pdf. `progresso(feito, total, rotulo)`; `cancelar` = Event.
 
     Com `escrever=False` a conversao roda inteira e MEDE o resultado, mas nao
     grava nada em disco — e' o modo de conferencia previsto pela regra
     canonica ("confira a perda ANTES de destilar").
+
+    Com `forcar=True` sobrescreve um .md editado a mao. Sem isso, a conversao
+    e' desviada para `<nome>.pdf2md-novo.md` e o arquivo existente fica intacto
+    (ver `_md_editado`).
     """
     t0 = time.time()
     caminho = Path(caminho)
@@ -821,9 +872,22 @@ def converter(
                 estruturado = {}
                 res.aviso_estrutura = "%s: %s" % (type(exc).__name__, exc)
 
+        # ---- guarda de sobrescrita --------------------------------------
+        # Decidida AQUI, antes de extrair figura, e nao la' embaixo na escrita
+        # do .md: a pasta de imagens comeca a ser gravada dezenas de linhas
+        # antes do Markdown. Guarda no ponto da escrita chegaria tarde — o
+        # acervo de figuras ja teria sido sobrescrito. Ja aconteceu.
+        out_dir = caminho.parent if destino is None else Path(destino)
+        stem = caminho.stem
+        if escrever and not forcar:
+            motivo = _md_editado(out_dir / (stem + ".md"))
+            if motivo:
+                stem = stem + ".pdf2md-novo"
+                res.preservado = "%s.md %s — esta conversao foi para %s.md" % (
+                    caminho.stem, motivo, stem)
+
         # ---- passo 3: pagina a pagina -----------------------------------
-        pasta_img = caminho.parent if destino is None else Path(destino)
-        pasta_img = pasta_img / (caminho.stem + "_imagens")
+        pasta_img = out_dir / (stem + "_imagens")
         vistos: set[str] = set()
         paginas: list[Pagina] = []
         doc_atual: str | None = None
@@ -920,11 +984,10 @@ def converter(
         markdown = _montar_markdown(caminho, doc, paginas, res, cfg, (ini, fim, total))
         if escrever:
             if destino is not None:
-                out_dir = Path(destino)
                 out_dir.mkdir(parents=True, exist_ok=True)
-            else:
-                out_dir = caminho.parent
-            saida = out_dir / (caminho.stem + ".md")
+            # `stem` ja' foi decidido pela guarda de sobrescrita la' em cima —
+            # e' ele que garante que .md e pasta de figuras andem juntos.
+            saida = out_dir / (stem + ".md")
             saida.write_text(markdown, encoding="utf-8")
             res.destino = saida
 
@@ -1081,6 +1144,7 @@ def converter_lote(
     progresso=None,
     progresso_arquivo=None,
     cancelar=None,
+    forcar: bool = False,
 ) -> list[Resultado]:
     """Converte varios PDFs. `progresso_arquivo(i, n, Path)` antes de cada um."""
     arquivos = [Path(a) for a in arquivos]
@@ -1097,7 +1161,8 @@ def converter_lote(
         resultados.append(
             converter(pdf, destino=destino, perfil=perfil,
                       sobrescritas=sobrescritas, intervalo=intervalo,
-                      escrever=escrever, progresso=progresso, cancelar=cancelar)
+                      escrever=escrever, progresso=progresso, cancelar=cancelar,
+                      forcar=forcar)
         )
     return resultados
 

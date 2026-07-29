@@ -204,6 +204,7 @@ def converter_pasta(nome: str, inbox: Path, args) -> tuple[int, int, int]:
             "ocr_idioma": args.idioma,
         },
         escrever=not args.check,
+        forcar=args.forcar,
         progresso_arquivo=lambda i, n, p: log.info("  [%d/%d] %s", i, n, p.name),
     )
 
@@ -215,6 +216,8 @@ def converter_pasta(nome: str, inbox: Path, args) -> tuple[int, int, int]:
             continue
         convertidos += 1
         log.info("  %s", r.resumo())
+        if r.preservado:
+            log.warning("       PRESERVADO: %s", r.preservado)
         if r.imagens:
             log.info("       %d figura(s) em %s/", r.imagens,
                      (r.pasta_imagens or Path("")).name)
@@ -306,11 +309,14 @@ def vigiar(args) -> int:
                                   "ocr": args.ocr,
                                   "ocr_idioma": args.idioma},
                     escrever=not args.check,
+                    forcar=args.forcar,
                 ):
                     if r.erro:
                         log.error("  ERRO  %s -> %s", r.origem.name, r.erro)
                     else:
                         log.info("  %s", r.resumo())
+                        if r.preservado:
+                            log.warning("       PRESERVADO: %s", r.preservado)
                         if r.precisa_ocr:
                             log.warning("       PENDENTE: pagina(s) sem texto -> %s",
                                         _amostra(r.pendentes))
@@ -368,6 +374,10 @@ def main(argv=None) -> int:
                     help="so mede a perda; nao escreve .md nem imagens")
     ap.add_argument("--refazer", action="store_true",
                     help="reconverte mesmo que ja exista .md atualizado")
+    ap.add_argument("--forcar-sobrescrita", dest="forcar", action="store_true",
+                    help="sobrescreve .md editado a mao. NAO e' implicado por "
+                         "--refazer: reconverter e' uma coisa, descartar o que "
+                         "voce editou e' outra")
     ap.add_argument("-p", "--perfil", default="auto",
                     help="perfil do pdf2md (auto|pje|livro|decisao|laudo)")
     ap.add_argument("--ocr", default="auto", choices=["auto", "sempre", "nunca"],

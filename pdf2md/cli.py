@@ -88,6 +88,9 @@ def montar_parser() -> argparse.ArgumentParser:
                     help="ao receber pasta, desce nas subpastas")
     ap.add_argument("--check", action="store_true",
                     help="so mede e relata; nao escreve o .md")
+    ap.add_argument("--forcar-sobrescrita", dest="forcar", action="store_true",
+                    help="sobrescreve .md editado a mao (o padrao e' preservar "
+                         "e gravar a conversao em <nome>.pdf2md-novo.md)")
     ap.add_argument("-q", "--quieto", action="store_true",
                     help="sem barra de progresso por pagina")
     ap.add_argument("--diagnostico", action="store_true",
@@ -301,11 +304,14 @@ def main(argv=None) -> int:
 
         r = converter(pdf, destino=destino, perfil=args.perfil,
                       sobrescritas=sobrescritas, intervalo=faixa,
-                      escrever=not args.check, progresso=prog)
+                      escrever=not args.check, progresso=prog,
+                      forcar=args.forcar)
         if not args.quieto:
             sys.stdout.write("\r" + " " * 60 + "\r")
 
         print("      " + r.resumo().replace("\n", "\n      "))
+        if r.preservado:
+            print("      PRESERVADO: %s" % r.preservado)
         if r.destino:
             print("      -> %s" % r.destino)
         if r.pasta_imagens:
