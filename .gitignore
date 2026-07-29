@@ -24,6 +24,13 @@
 !/PADRAO-VAULT-TRIAGEM-COLISOES.md
 !/FONTES-CANONICAS.md
 !/pdf_para_markdown.py
+# O app pdf2md: ~100 KB de fonte. O binario (dist/, build/) fica de fora,
+# mas o codigo precisa de historico — os tres apps anteriores viviam fora
+# do git e sumiram sem deixar rastro.
+!/pdf2md/
+!/pdf2md/*.py
+!/pdf2md/*.md
+!/PDF2MD.bat
 !/.gitignore
 !/.gitattributes
 
@@ -42,15 +49,17 @@
 #                                  Sigilo profissional (EAOAB art. 34, VII).
 #    biblioteca/, corpora       -> centenas de MB de fonte bruta, regeneravel
 #                                  pelos coletores; o backup delas e o OneDrive.
-#    pdf2md_app*/, tessdata/    -> aplicativo empacotado e modelo de OCR.
+#    tessdata/                  -> modelo de OCR (regeneravel).
+#    dist/, build/              -> saida do PyInstaller (pdf2md): ~430 MB de
+#                                  binario regeneravel por
+#                                  `python -m pdf2md.empacotar`.
 /profiles/
 /mcp_jusia/
 /mcp_pje/
 /prazos/
 /biblioteca/
-/pdf2md_app/
-/pdf2md_app_marker/
-/pdf2md_app_tesseract/
+/dist/
+/build/
 /tessdata/
 /node_modules/
 /audio/

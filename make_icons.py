@@ -68,15 +68,16 @@ def make_icon(path, accent, accent_dark, label):
 
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+
+# Os tres apps antigos (pdf2md_app, _tesseract, _marker) foram apagados em
+# 2026-07-27; sobrou o `pdf2md`, que os substitui. O icone e' gravado na RAIZ
+# do projeto porque e' ali que `pdf2md/empacotar.py` o procura ao gerar o .exe.
 TARGETS = [
-    # pasta do app                        accent          accent_dark      rótulo
-    ("pdf2md_app",          (37, 99, 235),  (29, 64, 175),  "M↓"),  # azul  - PyMuPDF4LLM
-    ("pdf2md_app_tesseract", (22, 163, 74), (15, 110, 50),  "OCR"),       # verde - Tesseract
-    ("pdf2md_app_marker",    (124, 58, 237), (88, 28, 180), "AI"),        # roxo  - Marker
+    # arquivo de saida     accent          accent_dark      rótulo
+    ("pdf2md.ico",         (37, 99, 235),  (29, 64, 175),  "M↓"),   # azul
 ]
 
 if __name__ == "__main__":
-    for folder, accent, dark, label in TARGETS:
-        out = os.path.join(HERE, folder, "icon.ico")
-        os.makedirs(os.path.dirname(out), exist_ok=True)
+    for nome, accent, dark, label in TARGETS:
+        out = os.path.join(HERE, nome)
         make_icon(out, accent, dark, label)
