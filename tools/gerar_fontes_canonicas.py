@@ -7,6 +7,14 @@ de usuário, notebooks citados pelos agentes, corpora locais) e emite um documen
 compacto. Rode depois de acrescentar qualquer fonte nova:
 
     python ~/.notebooklm/tools/gerar_fontes_canonicas.py
+
+DOIS ESCOPOS, desde 2026-07-28. O gerador varre o escopo de usuário (`~/.claude/`)
+E o `.claude/` de cada vault em `~/OneDrive/0-Obsidian/`. Antes varria só o global,
+e por isso o registry de notebooks PERDIA o agente de todo vault Classe A — que, por
+definição, guarda os próprios agentes dentro de si. Foi o que aconteceu quando o vault
+Psicologia foi promovido a Classe A: os quatro agentes de autor saíram de
+`~/.claude/agents/` e, na geração seguinte, o mapeamento notebook->agente sumiria em
+silêncio. Um catálogo que só vê metade da máquina mente sobre a outra metade.
 """
 import ast
 import datetime
@@ -21,9 +29,13 @@ TOOLS = BASE / "tools"
 CMDS = HOME / ".claude" / "commands"
 AGENTS = HOME / ".claude" / "agents"
 SKILLS = HOME / ".claude" / "skills"
+VAULTS = HOME / "OneDrive" / "0-Obsidian"
 OUT = BASE / "FONTES-CANONICAS.md"
 
 UUID = re.compile(r"\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b")
+# Marcador FORMAL de classe (PADRAO-VAULT.md §1.1). Prosa solta do tipo "este vault é
+# autossuficiente para leitura" NÃO é declaração e daria falso positivo em oito de oito.
+CLASSE = re.compile(r"\*\*Classe\s+([AB])\b")
 
 
 def reg_de(script):
@@ -63,6 +75,34 @@ def conta(d, *chaves):
     return "?"
 
 
+def cofres():
+    """Vaults com `.claude/` próprio, com a classe declarada em REQUISITOS-EXTERNOS.md.
+
+    Devolve lista de dicts: nome, caminho, classe ('A'/'B'/'?'), e a contagem de
+    agentes, skills, slash commands e helpers locais.
+    """
+    out = []
+    if not VAULTS.exists():
+        return out
+    for d in sorted(VAULTS.iterdir()):
+        cl = d / ".claude"
+        if not (d.is_dir() and cl.is_dir()):
+            continue
+        req = d / "REQUISITOS-EXTERNOS.md"
+        m = CLASSE.search(req.read_text(encoding="utf-8", errors="ignore")) if req.exists() else None
+        out.append({
+            "nome": d.name,
+            "path": d,
+            "claude": cl,
+            "classe": m.group(1) if m else "?",
+            "agentes": sorted((cl / "agents").glob("*.md")) if (cl / "agents").is_dir() else [],
+            "skills": sorted(p for p in (cl / "skills").iterdir() if p.is_dir()) if (cl / "skills").is_dir() else [],
+            "cmds": sorted((cl / "commands").glob("*.md")) if (cl / "commands").is_dir() else [],
+            "tools": sorted((cl / "tools").glob("*.py")) if (cl / "tools").is_dir() else [],
+        })
+    return out
+
+
 def frontmatter_desc(p):
     txt = p.read_text(encoding="utf-8", errors="ignore")
     m = re.search(r"^---\s*\n(.*?)\n---", txt, re.S)
@@ -75,6 +115,7 @@ def frontmatter_desc(p):
 L = []
 w = L.append
 
+COFRES = cofres()
 hoje = datetime.date.today().isoformat()
 w("# Fontes canônicas — manual único")
 w("")
@@ -95,8 +136,12 @@ w("## Slash commands (escopo de usuário — valem em qualquer vault)")
 w("")
 if CMDS.exists():
     cmds = sorted(CMDS.glob("*.md"))
+    n_loc = sum(len(c["cmds"]) for c in COFRES)
     w(f"{len(cmds)} comandos em `~/.claude/commands/`. Um vault pode sombrear qualquer um deles com")
     w("uma versão local em `<vault>/.claude/commands/` (escopo de projeto vence).")
+    if n_loc:
+        w(f"Há hoje **{n_loc} slash commands locais** distribuídos por {len(COFRES)} cofres — a tabela")
+        w("por vault está no fim deste documento, em *Recursos do Claude Code*.")
     w("")
     w("| Slash | O que faz |")
     w("|---|---|")
@@ -195,12 +240,21 @@ w("")
 w("Extraído dos agentes que efetivamente os consultam — a fonte de verdade é o próprio agente.")
 w("Consulta direta: `notebooklm ask \"<pergunta>\" -n <id> --json`.")
 w("")
-reg_nb = {}
+w("A varredura cobre **os dois escopos**: `~/.claude/agents/` e o `.claude/agents/` de cada vault.")
+w("A coluna **Onde** diz em qual deles o agente vive — num cofre Classe A ele mora dentro do vault,")
+w("e só é acionável com o Claude Code iniciado na raiz dele.")
+w("")
+reg_nb = {}   # (onde, agente) -> set(ids)
 if AGENTS.exists():
     for f in AGENTS.glob("*.md"):
         txt = f.read_text(encoding="utf-8", errors="ignore")
         for uid in set(UUID.findall(txt)):
-            reg_nb.setdefault(f.stem, set()).add(uid)
+            reg_nb.setdefault(("global", f.stem), set()).add(uid)
+for c in COFRES:
+    for f in c["agentes"]:
+        txt = f.read_text(encoding="utf-8", errors="ignore")
+        for uid in set(UUID.findall(txt)):
+            reg_nb.setdefault((c["nome"], f.stem), set()).add(uid)
 mortos = set()
 pmortos = BASE / "notebooks_mortos.txt"
 if pmortos.exists():
@@ -209,13 +263,41 @@ if mortos:
     w(f"Marcados **(apagado)** os {len(mortos)} notebooks já removidos da conta — registro em")
     w("`~/.notebooklm/notebooks_mortos.txt`. Não tente consultá-los.")
     w("")
-w("| Agente | Notebooks |")
-w("|---|---|")
-for agente in sorted(reg_nb):
-    ids = sorted(reg_nb[agente])
+w("| Agente | Onde | Notebooks |")
+w("|---|---|---|")
+for onde, agente in sorted(reg_nb, key=lambda t: (t[1], t[0])):
+    ids = sorted(reg_nb[(onde, agente)])
     fmt = [f"`{i}`" + (" **(apagado)**" if i in mortos else "") for i in ids]
-    w(f"| `{agente}` | {' · '.join(fmt)} |")
+    label = "`~/.claude/`" if onde == "global" else f"vault **{onde}**"
+    w(f"| `{agente}` | {label} | {' · '.join(fmt)} |")
 w("")
+dup = {}
+for onde, agente in reg_nb:
+    dup.setdefault(agente, []).append(onde)
+dobrados = {a: sorted(o for o in ondes) for a, ondes in dup.items() if len(ondes) > 1}
+if dobrados:
+    com_global = sorted(a for a, ondes in dobrados.items() if "global" in ondes)
+    entre_cofres = sorted(a for a, ondes in dobrados.items() if len([o for o in ondes if o != "global"]) > 1)
+    w(f"> **{len(dobrados)} agentes do registry existem em mais de um escopo.** Duplicata **diverge em")
+    w("> silêncio** quando editada de um lado só — e nada avisa, porque as duas resolvem.")
+    w(">")
+    if com_global:
+        por_cofre = {}
+        for a in com_global:
+            for o in dobrados[a]:
+                if o != "global":
+                    por_cofre.setdefault(o, []).append(a)
+        w(f"> **Vault × `~/.claude/` ({len(com_global)}):** "
+          + " · ".join(f"**{v}** {len(por_cofre[v])}" for v in sorted(por_cofre))
+          + ". Num cofre Classe A isto é **resíduo de promoção**, salvo se o recurso for")
+        w("> transversal (norma §1.2), caso em que a duplicata é deliberada.")
+        if entre_cofres:
+            w(">")
+    if entre_cofres:
+        w(f"> **Entre cofres, sem passar pelo global ({len(entre_cofres)}):** "
+          + " · ".join(f"`{a}`" for a in entre_cofres)
+          + ". Aqui é compartilhamento entre domínios — legítimo, mas cada cópia envelhece sozinha.")
+    w("")
 extras = sorted(BASE.glob("*/notebooks_ids.txt"))
 if extras:
     w("Acervos com vários notebooks por período (IDs no arquivo):")
@@ -272,12 +354,39 @@ w("")
 
 n_ag = len(list(AGENTS.glob("*.md"))) if AGENTS.exists() else 0
 n_sk = len([p for p in SKILLS.iterdir() if p.is_dir()]) if SKILLS.exists() else 0
-w("## Recursos globais do Claude Code")
+w("## Recursos do Claude Code — os dois escopos")
+w("")
+w("**Escopo de usuário (`~/.claude/`) — vale em qualquer vault:**")
 w("")
 w(f"- **{n_ag} agentes** em `~/.claude/agents/` — descobertos por intenção; a descrição de cada um já diz quando acioná-lo. Não replique catálogo de agente em `CLAUDE.md`.")
 w(f"- **{n_sk} skills** em `~/.claude/skills/`.")
 w(f"- **{len(list(CMDS.glob('*.md'))) if CMDS.exists() else 0} slash commands** em `~/.claude/commands/`.")
 w("")
+if COFRES:
+    w(f"**Escopo de vault (`<vault>/.claude/`) — {len(COFRES)} cofres com infra própria.**")
+    w("Só acionável com o Claude Code iniciado **na raiz do vault**; o que é local sombreia o global")
+    w("de mesmo nome. Classe **A** guarda tudo dentro de si e sobrevive a um `git clone` sozinho;")
+    w("classe **B** é casca em torno do global e declara as dependências em `REQUISITOS-EXTERNOS.md`")
+    w("(norma: `~/.notebooklm/PADRAO-VAULT.md` §1).")
+    w("")
+    w("| Vault | Classe | Agentes | Skills | Slashes | Helpers |")
+    w("|---|---|---|---|---|---|")
+    for c in COFRES:
+        cl = c["classe"]
+        marca = {"A": "**A** — autossuficiente", "B": "B — leve"}.get(cl, "`?` — **não declarada**")
+        w(f"| {c['nome']} | {marca} | {len(c['agentes'])} | {len(c['skills'])} | {len(c['cmds'])} | {len(c['tools'])} |")
+    w("")
+    sem = [c["nome"] for c in COFRES if c["classe"] == "?"]
+    if sem:
+        w(f"> **Classe não declarada em {len(sem)} cofre(s):** " + " · ".join(f"**{n}**" for n in sem) + ".")
+        w("> A norma §1.1 exige o marcador formal `**Classe A` ou `**Classe B` na primeira linha útil de")
+        w("> `REQUISITOS-EXTERNOS.md`. Sem ele não há como auditar coerência: o vault não diz em que classe está.")
+        w("")
+    incoerentes = [c["nome"] for c in COFRES if c["classe"] == "A" and not c["agentes"] and not c["skills"]]
+    if incoerentes:
+        w("> **Declara Classe A e não tem agente nem skill local:** " + " · ".join(f"**{n}**" for n in incoerentes) + ".")
+        w("> Ou o vault não usa nenhum dos dois (legítimo), ou a declaração não bate com o conteúdo (defeito §1.1).")
+        w("")
 
 OUT.write_text("\n".join(L) + "\n", encoding="utf-8")
 print(f"OK: {OUT} ({len(L)} linhas)")
