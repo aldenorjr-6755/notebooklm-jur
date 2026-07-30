@@ -2,27 +2,37 @@
 # -*- coding: utf-8 -*-
 """
 inbox_pdf2md.py — converte em Markdown os PDFs que caem no `00-Inbox` dos
-vaults, usando o pdf2md como motor.
+vaults (e, opcionalmente, na pasta Downloads), usando o pdf2md como motor.
+E' o watchdog PADRAO de PDF->MD deste ambiente — sucessor do pdf_watcher.py
+(removido; usava pymupdf4llm puro, sem paginacao nem medicao de perda).
 
 O que garante, por decisao de projeto:
 
   * O PDF ORIGINAL FICA. Nada e' movido, renomeado ou apagado — o `.md` nasce
-    ao lado dele, dentro do proprio Inbox.
+    ao lado dele, dentro do proprio Inbox (ou da propria pasta Downloads).
   * As imagens saem para `<nome>_imagens/` e sao REFERENCIADAS POR PAGINA,
     logo abaixo do respectivo `## [p. N]`, como
     `![Figura da p. 7](<nome>_imagens/p0007_img01.png)`. Como o `.md` e a
     pasta ficam lado a lado, o link resolve no Obsidian sem ajuste.
   * A perda e' MEDIDA e relatada por arquivo (paginas, caracteres, media por
     pagina) — a regra canonica manda conferir antes de destilar.
+  * A pasta Downloads NUNCA entra numa varredura em lote por padrao — so os
+    nove Inboxes dos vaults. Downloads e' pasta acumulada de anos, e uma
+    volta comum ali reconverteria tudo de uma vez. Ela so e' processada em
+    lote se pedida NOMINALMENTE (`--vault Downloads`); no dia a dia, entra
+    apenas como vigilancia (`--watch`), pegando so o que chegar dali em
+    diante — o mesmo comportamento watch-only do pdf_watcher.py antigo.
 
-Uma volta (padrao):
+Uma volta (padrao, so os Inboxes dos vaults):
     python inbox_pdf2md.py
     python inbox_pdf2md.py --vault Criminal --vault Familia
+    python inbox_pdf2md.py --vault Downloads            # forca lote em Downloads
     python inbox_pdf2md.py --check          # so mede, nao escreve nada
     python inbox_pdf2md.py --refazer        # reconverte o que ja tem .md
 
-Vigilancia continua (watchdog nas nove pastas):
+Vigilancia continua (watchdog nos nove Inboxes + Downloads):
     python inbox_pdf2md.py --watch
+    python inbox_pdf2md.py --watch --sem-downloads      # so os vaults
 
 Codigo de saida (mesmo contrato do pdf2md):
     0  tudo convertido, nenhuma pagina por ler
@@ -51,6 +61,11 @@ from pdf2md.nucleo import coletar_pdfs, converter_lote  # noqa: E402
 VAULTS = Path(r"C:\Users\alden\OneDrive\0-Obsidian")
 INBOX = "00-Inbox"
 LOG_FILE = RAIZ / "inbox_pdf2md.log"
+
+# Pasta Downloads: monitorada por padrao (--watch), mas NUNCA varrida em lote
+# por padrao — ver docstring do modulo.
+DOWNLOADS = Path.home() / "Downloads"
+NOME_DOWNLOADS = "Downloads"
 
 # Ficheiro ainda em transito (download do navegador, copia em andamento).
 IGNORAR_SUFIXO = (".crdownload", ".part", ".partial", ".tmp", ".opdownload")
@@ -93,19 +108,31 @@ def descobrir_inboxes(filtro: list[str] | None = None) -> list[tuple[str, Path]]
 
     Descobre por varredura em vez de lista fixa: quando nascer o decimo cofre
     ele entra sozinho, e um cofre renomeado nao vira entrada morta.
+
+    Downloads NAO entra aqui por padrao (filtro=None) — so se pedida
+    nominalmente via `filtro` (ex.: `--vault Downloads`), para permitir um
+    lote manual e explicito sem nunca acontecer sozinho numa volta comum.
     """
-    if not VAULTS.is_dir():
-        log.error("Pasta dos vaults nao encontrada: %s", VAULTS)
-        return []
     achados: list[tuple[str, Path]] = []
-    for vault in sorted(p for p in VAULTS.iterdir() if p.is_dir()):
-        inbox = vault / INBOX
-        if not inbox.is_dir():
-            continue
-        if filtro and vault.name.lower() not in {f.lower() for f in filtro}:
-            continue
-        achados.append((vault.name, inbox))
+    if VAULTS.is_dir():
+        for vault in sorted(p for p in VAULTS.iterdir() if p.is_dir()):
+            inbox = vault / INBOX
+            if inbox.is_dir():
+                achados.append((vault.name, inbox))
+    elif not filtro:
+        log.error("Pasta dos vaults nao encontrada: %s", VAULTS)
+
+    if filtro:
+        alvo = {f.lower() for f in filtro}
+        if NOME_DOWNLOADS.lower() in alvo and DOWNLOADS.is_dir():
+            achados.append((NOME_DOWNLOADS, DOWNLOADS))
+        achados = [a for a in achados if a[0].lower() in alvo]
     return achados
+
+
+def pasta_downloads() -> tuple[str, Path] | None:
+    """A pasta Downloads como fonte de vigilancia, se existir."""
+    return (NOME_DOWNLOADS, DOWNLOADS) if DOWNLOADS.is_dir() else None
 
 
 # ---------------------------------------------------------------------------
@@ -276,8 +303,24 @@ def vigiar(args) -> int:
         return 1
 
     inboxes = descobrir_inboxes(args.vault)
+
+    # Downloads entra na VIGILANCIA por padrao (sem --sem-downloads), mesmo
+    # quando ja incluida em `inboxes` via `--vault Downloads` — o guard abaixo
+    # evita duplicata. Se `--vault` restringe a cofres especificos sem citar
+    # Downloads, ela fica de fora (o usuario pediu so aqueles cofres).
+    incluir_downloads = (
+        not args.sem_downloads
+        and (not args.vault or NOME_DOWNLOADS.lower() in {f.lower() for f in args.vault})
+    )
+    if incluir_downloads:
+        dl = pasta_downloads()
+        if dl and dl not in inboxes:
+            inboxes.append(dl)
+        elif not dl:
+            log.warning("Pasta Downloads nao encontrada: %s", DOWNLOADS)
+
     if not inboxes:
-        log.error("Nenhum 00-Inbox para vigiar.")
+        log.error("Nenhuma pasta para vigiar.")
         return 1
 
     class Gatilho(FileSystemEventHandler):
@@ -368,8 +411,13 @@ def main(argv=None) -> int:
                     help="restringe a um cofre (repetivel); padrao: todos")
     ap.add_argument("--watch", action="store_true",
                     help="vigia as pastas em vez de fazer uma volta so")
+    ap.add_argument("--sem-downloads", action="store_true",
+                    help="com --watch, nao inclui a pasta Downloads na vigilancia")
     ap.add_argument("--sem-varredura-inicial", action="store_true",
-                    help="com --watch, nao converte o que ja estava na pasta")
+                    help="com --watch, nao converte o que ja estava na pasta "
+                         "(Downloads nunca entra na varredura inicial, so na "
+                         "vigilancia dali em diante, a menos que pedida via "
+                         "--vault Downloads)")
     ap.add_argument("--check", action="store_true",
                     help="so mede a perda; nao escreve .md nem imagens")
     ap.add_argument("--refazer", action="store_true",
@@ -396,6 +444,17 @@ def main(argv=None) -> int:
         for nome, inbox in descobrir_inboxes(args.vault):
             pdfs = coletar_pdfs([inbox], recursivo=True)
             print("%-16s %-58s %d PDF" % (nome, str(inbox), len(pdfs)))
+        incluir_downloads = (
+            not args.sem_downloads
+            and (not args.vault or NOME_DOWNLOADS.lower() in {f.lower() for f in args.vault})
+        )
+        dl = pasta_downloads() if incluir_downloads else None
+        if dl and dl[0].lower() not in {n.lower() for n, _ in descobrir_inboxes(args.vault)}:
+            # so na vigilancia (--watch), nao entra em varredura em lote —
+            # contagem no nivel raiz apenas, pra nao vasculhar anos de subpastas
+            pdfs_raiz = coletar_pdfs([dl[1]], recursivo=False)
+            print("%-16s %-58s %d PDF na raiz  [so --watch, sem lote]" %
+                  (dl[0], str(dl[1]), len(pdfs_raiz)))
         return 0
 
     # Prepara PATH/TESSDATA e denuncia o que falta — OCR indisponivel muda o
