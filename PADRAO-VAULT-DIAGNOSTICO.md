@@ -694,9 +694,25 @@ sanciona a variação de tamanho (§7, "não uniformiza"), a opção fica em abe
 
 ### Achados registrados, não corrigidos nesta sessão — pendem decisão
 
-8. **MestradoCeuma sem `MOC-MestradoCeuma.md`** — nenhum arquivo, stub ou substituto nomeado, e o `CLAUDE.md` não declara o desvio. É o único dos 13 vaults sem MOC nem exceção declarada. Criar o arquivo exige curadoria de conteúdo (não é correção mecânica) — fica para quando o usuário quiser.
-9. **MestradoCeuma sem `/health-check` local** — o vault-irmão `Dissertacao` (mesmo padrão de vault de projeto) tem; aqui não há, e não está declarado como decisão consciente.
-10. **JuntaMedica — `titulo` do frontmatter ecoa o prefixo do arquivo**: `titulo: CONC-Acidente-Isquemico-Transitorio` em vez de um nome legível ("Acidente Isquêmico Transitório (AIT)"), nas notas amostradas de `10-Wiki/Conceitos/`. Contraria o próprio padrão ("Nome legível da nota") — provável efeito de captura em lote sem revisão de título. Extensão do problema (quantas notas) não medida; requer critério clínico por nota, não só mecânico.
+8. ~~MestradoCeuma sem `MOC-MestradoCeuma.md`~~ — **resolvido em 2026-08-01**: criado, curado a
+   partir do conteúdo real do vault (edital, os 5 conceitos de metodologia + 2 autores, os 6 temas
+   candidatos com o achado central de cada um, a candidatura). `index.md` da raiz passou a apontar
+   para ele e teve duas imprecisões corrigidas de passagem (`Conceitos/`/`Autores/` não estavam
+   vazias — tinham 5 e 2 notas; contagem de templates estava em 9, são 7).
+9. ~~MestradoCeuma sem `/health-check` local~~ — **resolvido em 2026-08-01**: criado
+   `.claude/commands/health-check.md` no padrão do vault-irmão `Dissertacao`, com contagens e
+   vocabulário de `tipo` (`autor|tema|candidatura|checklist`, sem `tese`/`caso`/`grupo`) calibrados
+   ao MestradoCeuma, não copiados cegamente do irmão.
+10. **JuntaMedica — `titulo` do frontmatter ecoa o prefixo do arquivo**: achado **não confirmado** na
+    reconferência de 2026-08-01 — as notas de `10-Wiki/Conceitos/` amostradas trazem `titulo:`
+    legível (`Acidente Isquêmico Transitório (AIT)`, não `CONC-Acidente-Isquemico-Transitorio`).
+    Provável falso positivo do diagnóstico original, ou já corrigido por sessão paralela antes desta
+    reconferência. Sem evidência de que o defeito persista — baixado.
+11. **JuntaMedica não é repositório git** — achado novo em 2026-08-01, fora do escopo dos itens 8-10
+    originais. É o único dos 12 vaults ativos sem `.git`/hook de auto-commit (os 3 nascidos depois do
+    snapshot de 2026-07-26 — Trabalhista, MestradoCeuma, Dissertação — têm; só o JuntaMedica não).
+    Pode ser decisão consciente (dado clínico sensível, menor necessidade de versionamento) ou
+    lacuna — fica para o usuário decidir; não inicializado nesta sessão.
 
 ### Item 7 — blocos-padrão de `CLAUDE.md` (novo `PADRAO-VAULT.md` §6)
 
@@ -722,3 +738,16 @@ Zero caminhos absolutos remanescentes nos 4 vaults auditados (fora do falso posi
 item 7 acima). Acentuação: 3 arquivos corrigidos, zero pendências de ASCII detectadas nos demais 10
 vaults + `PADRAO-VAULT.md`. Frase de propósito: presente agora em 12 dos 13 `CLAUDE.md` de domínio
 (falta só o `SegundoCerebro`, que já tem versão equivalente própria e está em desativação).
+
+### Fechamento em 2026-08-01 (segunda passada, mesma sessão)
+
+Commitados os dois arquivos aqui e o `CLAUDE.md`/`REQUISITOS-EXTERNOS.md` dos 11 vaults com git que
+estavam com edição pendente (alguns muito além do escopo desta auditoria — Criminal e Eleitoral
+carregavam meses de edições acumuladas nunca commitadas). Itens 8 e 9 resolvidos (MOC e
+`/health-check` do MestradoCeuma). Item 10 reconferido e baixado (falso positivo ou já corrigido).
+Item novo 11 registrado (JuntaMedica sem git), decisão pendente do usuário.
+
+Referencial externo verificado contra a doc oficial (`code.claude.com/docs/en/best-practices` e
+`.../memory`, notebook `2e87b1cd` como ponto de partida): não há limite de linhas mandatado — a
+decisão da §7 de não uniformizar tamanho resiste à checagem contra a fonte primária, mesmo
+divergindo do folclore de "200 linhas" comum em conteúdo informal sobre Claude Code.
