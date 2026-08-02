@@ -523,7 +523,7 @@ Não entram na contagem de notas do vault nem exigem `index.md`.
 | Classe | Exemplar | Por quê |
 |---|---|---|
 | **A** | `Ambiental` | 24 agentes, 6 skills, 62 helpers/datasets, 3 corpora, `settings.json` próprio, `/health-check` calibrado. Gêmeo de `Constitucional` no `settings.json` e no esqueleto do `CLAUDE.md`. |
-| **B** | `ProcessoCivil` | `CLAUDE.md` enxuto (92 linhas), cobertura de `index.md` completa, `REQUISITOS-EXTERNOS.md` fiel ao que usa. Falta-lhe só `settings.json` e a declaração de classe. |
+| **B** | `ProcessoCivil` | `CLAUDE.md` enxuto (~123 linhas), cobertura de `index.md` completa, `REQUISITOS-EXTERNOS.md` fiel ao que usa, `settings.json` e declaração de classe presentes (ver `PADRAO-VAULT-DIAGNOSTICO.md` §8-9). |
 
 Ao criar vault novo, copiar a estrutura do exemplar da classe pretendida e rodar o checklist da §4
 antes da primeira nota.
@@ -584,7 +584,85 @@ Mecânico e verificável. Serve para auditar vault existente e para dar por pron
 
 ---
 
-## 5. O que a norma deliberadamente não uniformiza
+## 6. Blocos-padrão de CLAUDE.md — texto canônico para copiar
+
+Fixado em 2026-08-01. Alguns trechos de `CLAUDE.md` se repetem, quase byte a byte, em vários vaults —
+não por acaso: é a mesma regra de máquina (porta do Local REST API, convenção de `index.md`) ou a
+mesma preferência de estilo de trabalho, válida em qualquer domínio. Sem uma fonte única, a cópia
+diverge em silêncio — já aconteceu: o vault Eleitoral perdeu o bullet de *fallback* silencioso que os
+outros quatro com o mesmo bloco têm, e ganhou em troca um bullet redundante de idioma.
+
+**A regra:** o texto abaixo é o canônico. Vault que carrega um destes blocos **copia o texto**
+integralmente no próprio `CLAUDE.md` — não usa `@import` nem wikilink para fora, isso quebraria a
+portabilidade de Classe A — e cita a proveniência numa linha curta logo abaixo do título da seção,
+ex.: `*Bloco-padrão — texto canônico em \`PADRAO-VAULT.md\` §6A; mudar a regra lá primeiro.*`. Ao
+alterar a regra, edita-se **aqui primeiro**, depois se propaga às cópias listadas em cada bloco. É o
+mesmo princípio já usado para agentes e skills copiados entre vaults ("cópias resincronizáveis,
+editar o global não afeta o vault") — aplicado a mais um tipo de artefato: o texto de regra em prosa.
+
+### §6A — Estilo de trabalho e preferências de saída
+
+```
+## Estilo de trabalho e preferências de saída
+
+- **Comandos curtos = execute.** "Sim", "Acrescente X", "Crie Y" são ordens — execute sem pedir confirmação nem listar o plano antes.
+- **Sem preâmbulo.** Não descreva o que vai fazer antes de fazer. Faça e resuma no final.
+- **Resumo final conciso.** Ao terminar tarefa com múltiplos arquivos, entregue uma tabela compacta do que foi criado ou alterado — nada mais.
+- **Criação em paralelo.** Ao criar múltiplas notas independentes, escreva todas em paralelo.
+- **Fallback silencioso.** Se um recurso opcional falhar (<recursos opcionais do vault>), siga pelo local sem narrar a falha em três parágrafos — uma linha basta.
+- **Sem emojis** salvo pedido explícito.
+```
+
+O parêntese do bullet de *fallback* nomeia os recursos opcionais do próprio vault (ex.: "Perplexity,
+NotebookLM" ou, no Trabalhista, "Perplexity, Jusbrasil") — é a única variação permitida. Em uso:
+Ambiental, Constitucional, Criminal, Eleitoral, Trabalhista.
+
+### §6B — Aviso: não usar `obsidian_*` em vault sem porta própria
+
+```
+> **NÃO use os tools `obsidian_*` neste vault.** O plugin Local REST API está instalado aqui e a API
+> escuta em `127.0.0.1:27124` **sem identificar o vault** — se outro cofre estiver com o plugin
+> ligado, a escrita cai nele, **sem erro nenhum**. Na configuração atual da máquina o MCP global
+> alcança o vault Eleitoral; escrever por MCP daqui é escrever no vault errado em silêncio.
+```
+
+Vale para vault cujo `CLAUDE.md` **não** ativa deliberadamente os `obsidian_*` — o Eleitoral é a
+exceção declarada, e carrega o canário de porta próprio em vez deste aviso (§2, item "TRAVA DE VAULT
+ÚNICO" do seu `CLAUDE.md`). Em uso: Ambiental, Constitucional, Criminal, Dissertacao, ExecucaoPenal,
+Familia, ProcessoCivil, Psicologia.
+
+### §6C — Índices de navegação (index.md)
+
+```
+## Índices de navegação (index.md)
+
+- Cada pasta de conteúdo tem um `index.md`: uma linha por nota (`[[nota]] — gancho`) e links para os índices das subpastas.
+- REGRA DE LEITURA: antes de abrir notas de uma pasta, consulte o `index.md` dela e escolha só os arquivos necessários (economia de contexto e tokens).
+- REGRA DE ESCRITA: ao criar, renomear, mover ou excluir nota, atualize o `index.md` da pasta na mesma operação.
+- `.claude/`, `Anexos/` e pastas geradas por pipeline não têm índice e não devem ser editadas manualmente.
+```
+
+Em uso: Ambiental, Constitucional, Criminal, Eleitoral, ExecucaoPenal, Familia, ProcessoCivil,
+Psicologia, Trabalhista. **Não usado** em Dissertacao, MestradoCeuma e JuntaMedica — vaults de
+projeto ou pessoal com regra de índice mais enxuta ou ausente; não é defeito por si, mas fica
+registrado como ponto de checagem em `PADRAO-VAULT-DIAGNOSTICO.md` §14.
+
+### §6D — Fontes canônicas e slash commands (infra compartilhada)
+
+Duas variantes, conforme a classe — não são o mesmo bloco, mas resolvem o mesmo problema, que é
+apontar para `~/.notebooklm/FONTES-CANONICAS.md` sem duplicar o catálogo da máquina:
+
+- **Variante Classe A** — `.claude/tools/` do próprio vault é a fonte canônica; o manual da máquina
+  entra só como conferência cruzada opcional. Em uso: Ambiental, Constitucional, Criminal, Eleitoral.
+- **Variante Classe B** — `~/.notebooklm/FONTES-CANONICAS.md` é a fonte direta, sem canônico local
+  equivalente. Em uso: ExecucaoPenal, Familia, ProcessoCivil, Trabalhista.
+
+Ambas citam o manual gerado por `python ~/.notebooklm/tools/gerar_fontes_canonicas.py` — fonte nova é
+rodar o gerador, nunca editar o catálogo à mão. Por variar por vault no texto (nome dos próprios
+helpers), esta seção **não** exige cópia byte-idêntica como §6A-C — só a citação da proveniência do
+padrão, quando presente.
+
+## 7. O que a norma deliberadamente não uniformiza
 
 - **Tamanho.** Um vault de 39 notas e um de 1.265 são igualmente conformes.
 - **Vocabulário de domínio.** `area`, `subtema` e o conjunto de tags são de cada vault.

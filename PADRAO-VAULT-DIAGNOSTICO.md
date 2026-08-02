@@ -648,3 +648,77 @@ Para varrer dotfolder, `os.walk`.
 barra invertida pelo shell: (1) `[\/]` que deixa de casar barra invertida, (2) `io.open(...,"w")`
 que converte LF em CRLF e derruba o agente do registro, (3) `\1` que vira 0x01. **Regra prática:
 script que reescreve texto vai em arquivo, escrito pela ferramenta de escrita — nunca por heredoc.**
+
+---
+
+## 14. Auditoria de descrição/regras/extensão dos `CLAUDE.md` — 2026-08-01
+
+Disparada por pedido do usuário para conferir os `CLAUDE.md` dos 13 vaults contra melhores práticas
+(externas — docs oficiais da Anthropic — e internas — este `PADRAO-VAULT.md`). Cobre também os
+**4 vaults nascidos depois do snapshot de 2026-07-26** e nunca antes auditados: Trabalhista,
+JuntaMedica, MestradoCeuma e Dissertacao (este último já existia em 2026-07-26 mas não entrou na
+matriz da época).
+
+### Referencial externo (Anthropic, `code.claude.com/docs/en/best-practices` e `.../memory`)
+
+Conferido via pesquisa web em 2026-08-01: `CLAUDE.md` sem formato obrigatório, mas "conciso e
+legível"; suporta `@caminho` com import recursivo até **4 níveis** (não 5); hierarquia de memória
+Enterprise > Projeto > Usuário > `CLAUDE.local.md` (depreciado). Nenhum dos 13 vaults usa `@import`
+nativo — todos usam wikilink `[[...]]` para apontar a `REQUISITOS-EXTERNOS.md`, que é convenção do
+Obsidian e **não é resolvida automaticamente pelo Claude Code** (a IA decide se abre ou não). Fica
+registrado como opção, não como defeito: trocar por `@REQUISITOS-EXTERNOS.md` garantiria carregar o
+conteúdo, ao custo de sempre pagar aquele token mesmo quando não precisar — dado que a norma já
+sanciona a variação de tamanho (§7, "não uniformiza"), a opção fica em aberto por vault.
+
+### Checklist §4 rodado contra os 4 vaults não cobertos em 2026-07-26
+
+| Eixo | Trabalhista (A) | JuntaMedica (B, fora do domínio jurídico) | MestradoCeuma (B, projeto) | Dissertacao (B, projeto) |
+|---|---|---|---|---|
+| Raiz — 4 arquivos + MOC | passa | passa | **reprova — sem `MOC-MestradoCeuma.md` e sem desvio declarado** | passa |
+| Declaração de classe | passa | passa | passa | passa |
+| `settings.json` | passa | passa | passa | passa |
+| `/health-check` local | passa | **n/a, declarado** (domínio clínico, fora do escopo do padrão jurídico) | **reprova — ausente e não declarado** (vault-irmão `Dissertacao` tem) | passa |
+| `lint-vault` | usa global (skills/ vazia — pendência já declarada em `REQUISITOS-EXTERNOS.md` §3) | **n/a, declarado** | usa global | usa global |
+| Caminhos absolutos | **reprova — corrigido nesta sessão** (3 ocorrências, ver abaixo) | passa | passa | passa (1 achado é falso positivo, ver abaixo) |
+| Frontmatter em português, 7 chaves | passa (amostra) | **reprova parcial** — `titulo` ecoa o prefixo do arquivo (ver abaixo) | passa (amostra) | não amostrado nesta rodada (já coberto por auditorias anteriores do próprio vault) |
+
+### Achados e o que foi corrigido nesta sessão
+
+1. **Trabalhista/REQUISITOS-EXTERNOS.md — 3 caminhos absolutos** (`C:/Users/alden/.notebooklm/jusbrasil/jusbrasil_cli.py`, linhas 25/76/81). Violação direta do §2.7 ("zero caminho absoluto, sem exceção de classe"). **Corrigido** → `~/.notebooklm/jusbrasil/jusbrasil_cli.py`.
+2. **Dissertacao e MestradoCeuma — `CLAUDE.md` e (achado nesta auditoria) também `REQUISITOS-EXTERNOS.md` de Dissertacao — sem acentuação** (ASCII puro, único caso do conjunto). Quebra a legibilidade em português e criava ambiguidade real: "Vault Dissertacao — constituicao" sem o til podia ler-se como se o vault fosse sobre Direito Constitucional, que não é. **Corrigido nos três arquivos**, preservando sem acento tudo que é literal (nomes de pasta, prefixos, valores de frontmatter, wikilinks) e reacentuando prosa e as citações do edital — ex.: "Alcantara" → "Alcântara" (Corte IDH), hoje fiel ao texto oficial em vez de perpetuar a corrupção.
+3. **Eleitoral — bloco "Estilo de trabalho" divergente**: faltava o bullet "Fallback silencioso" presente nos outros 4 vaults com o mesmo bloco, e carregava um bullet redundante de idioma (já dito em "Quem sou eu"). **Corrigido.**
+4. **JuntaMedica — ordem do cabeçalho**: blockquote de classe vinha *antes* do H1, único caso entre os 13. **Corrigido** (H1 primeiro, blockquote depois).
+5. **`PADRAO-VAULT.md` §3 (modelos de referência) — desatualizado**: citava ProcessoCivil com "92 linhas"; o vault cresceu (seção "Ramos hospedados") e está em ~123. **Corrigido**, com nota de que `settings.json` e a declaração de classe — que o texto antigo listava como pendência — já foram resolvidos (ver §8-9 acima).
+6. **Frase de propósito ausente em 8 dos 13 `CLAUDE.md`** (Criminal, Dissertacao, ExecucaoPenal, Familia, JuntaMedica, MestradoCeuma, ProcessoCivil, Psicologia) — só 4 vaults + o `SegundoCerebro` abriam dizendo o que o arquivo *é* ("lido automaticamente... é a constituição deste cofre"). Nenhuma norma exige a frase, mas é exatamente o tipo de descrição que evita que humano e IA tenham de inferir o papel do arquivo. **Adicionada nos 8**, dentro do blockquote de classe já existente.
+7. **Falso positivo confirmado, não corrigido**: `Dissertacao/40-Recursos/UNB-2025-Xukuru-Ororuba-Corte-IDH.md:9126` tem um `file:///C:/Users/SAMSUNG/Downloads/...` — é hyperlink herdado do PDF de origem (nome de usuário de terceiro, não desta máquina), dentro da camada RAW, que deve ficar **fiel** ao original (§2.5.4). Não é o vault citando caminho absoluto próprio; não mexer.
+
+### Achados registrados, não corrigidos nesta sessão — pendem decisão
+
+8. **MestradoCeuma sem `MOC-MestradoCeuma.md`** — nenhum arquivo, stub ou substituto nomeado, e o `CLAUDE.md` não declara o desvio. É o único dos 13 vaults sem MOC nem exceção declarada. Criar o arquivo exige curadoria de conteúdo (não é correção mecânica) — fica para quando o usuário quiser.
+9. **MestradoCeuma sem `/health-check` local** — o vault-irmão `Dissertacao` (mesmo padrão de vault de projeto) tem; aqui não há, e não está declarado como decisão consciente.
+10. **JuntaMedica — `titulo` do frontmatter ecoa o prefixo do arquivo**: `titulo: CONC-Acidente-Isquemico-Transitorio` em vez de um nome legível ("Acidente Isquêmico Transitório (AIT)"), nas notas amostradas de `10-Wiki/Conceitos/`. Contraria o próprio padrão ("Nome legível da nota") — provável efeito de captura em lote sem revisão de título. Extensão do problema (quantas notas) não medida; requer critério clínico por nota, não só mecânico.
+
+### Item 7 — blocos-padrão de `CLAUDE.md` (novo `PADRAO-VAULT.md` §6)
+
+Quatro blocos de regra eram colados quase byte a byte em 8 a 12 vaults sem fonte única declarada —
+e já haviam divergido de fato (achado 3 acima). Criado `PADRAO-VAULT.md` §6A-D com o texto canônico
+de cada um, e anotada a proveniência (`*Bloco-padrão — texto canônico em \`PADRAO-VAULT.md\` §6X;
+mudar a regra lá primeiro.*`) nas cópias locais:
+
+| Bloco | Vaults anotados | Vaults com a mesma regra em formato divergente (não anotados) |
+|---|---|---|
+| §6A Estilo de trabalho | Ambiental, Constitucional, Criminal, Eleitoral, Trabalhista | — |
+| §6B Aviso `obsidian_*`/porta 27124 | Ambiental, Constitucional, Dissertacao, ExecucaoPenal, Familia, Psicologia | Criminal e ProcessoCivil trazem o mesmo conteúdo, mas embutido como bullet dentro de "Convenções deste vault", não como bloco autônomo — não anotados para não forçar reestruturação fora do escopo pedido |
+| §6C Índices de navegação | Ambiental, Constitucional, Criminal, Eleitoral, ExecucaoPenal, Familia, ProcessoCivil, Psicologia, Trabalhista | Dissertacao, MestradoCeuma e JuntaMedica não têm o bloco (vaults de projeto/pessoal com regra de índice mais enxuta) — não é defeito, registrado como ponto de checagem |
+| §6D Fontes canônicas (2 variantes: Classe A / Classe B) | não anotado por vault — o texto varia por natureza (nomes de helpers próprios); a seção do padrão documenta as duas variantes e quem usa cada uma | — |
+
+A cópia continua obrigatória nos 13 vaults (Classe A não pode depender de `@import` externo sem
+quebrar portabilidade); o que mudou é que agora há **uma** fonte para conferir antes de editar
+qualquer uma das cópias, em vez de confiar em memória de quantos lugares repetem a regra.
+
+### Conferência
+
+Zero caminhos absolutos remanescentes nos 4 vaults auditados (fora do falso positivo declarado no
+item 7 acima). Acentuação: 3 arquivos corrigidos, zero pendências de ASCII detectadas nos demais 10
+vaults + `PADRAO-VAULT.md`. Frase de propósito: presente agora em 12 dos 13 `CLAUDE.md` de domínio
+(falta só o `SegundoCerebro`, que já tem versão equivalente própria e está em desativação).
