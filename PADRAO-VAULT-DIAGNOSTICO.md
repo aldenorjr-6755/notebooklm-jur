@@ -708,11 +708,13 @@ sanciona a variação de tamanho (§7, "não uniformiza"), a opção fica em abe
     legível (`Acidente Isquêmico Transitório (AIT)`, não `CONC-Acidente-Isquemico-Transitorio`).
     Provável falso positivo do diagnóstico original, ou já corrigido por sessão paralela antes desta
     reconferência. Sem evidência de que o defeito persista — baixado.
-11. **JuntaMedica não é repositório git** — achado novo em 2026-08-01, fora do escopo dos itens 8-10
-    originais. É o único dos 12 vaults ativos sem `.git`/hook de auto-commit (os 3 nascidos depois do
-    snapshot de 2026-07-26 — Trabalhista, MestradoCeuma, Dissertação — têm; só o JuntaMedica não).
-    Pode ser decisão consciente (dado clínico sensível, menor necessidade de versionamento) ou
-    lacuna — fica para o usuário decidir; não inicializado nesta sessão.
+11. ~~JuntaMedica não é repositório git~~ — **resolvido em 2026-08-01**, por decisão explícita do
+    usuário (perguntado antes de agir, por envolver dado clínico sensível). Inicializado `git init`
+    + `.gitignore`/`.gitattributes` no padrão dos demais 12 (réplica de `Psicologia`, adaptada —
+    exclui também `.jpg`/`.jpeg`/`.png`, que este vault usa para foto de receita/exame) + hook
+    `autocommit.py` + permissões `git *` em `settings.json`. Local apenas, sem remoto — não muda o
+    que já valia sobre não exportar/compartilhar (`CLAUDE.md` §2). Os 2 PDFs do vault (compilado da
+    raiz + um em `00-Inbox/`) ficaram fora do histórico via `.gitignore`; seguem só no OneDrive.
 
 ### Item 7 — blocos-padrão de `CLAUDE.md` (novo `PADRAO-VAULT.md` §6)
 
