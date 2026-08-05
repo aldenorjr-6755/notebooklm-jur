@@ -26,6 +26,8 @@ import re
 HOME = pathlib.Path(os.path.expanduser("~"))
 BASE = HOME / ".notebooklm"
 TOOLS = BASE / "tools"
+FONTES_STF = BASE / "informativo_stf" / "fontes"
+FONTES_STJ = BASE / "informativo_stj" / "fontes"
 CMDS = HOME / ".claude" / "commands"
 AGENTS = HOME / ".claude" / "agents"
 SKILLS = HOME / ".claude" / "skills"
@@ -129,6 +131,13 @@ w("1. **Nunca cite norma, súmula, tese ou precedente de memória** — rode o h
 w("2. Datasets são **snapshots**: confirme vigência (EC/lei alteradora/cancelamento) na fonte oficial.")
 w("3. Notebook do NotebookLM é **doutrina ou acervo indexado** — cite título/autor/data/URL e confirme o inteiro teor.")
 w("4. Falta de dado → escreva `[VERIFICAR]`. Não complete nem parafraseie dispositivo legal.")
+w("5. **\"Artigo não encontrado\" pode ser defeito do dataset, não erro da pergunta.** Em 2026-08-05,")
+w("   o RISTF rodava havia meses **sem 29 artigos** — inclusive todo o rito da súmula vinculante —")
+w("   porque o extrator só aceitava sufixo de letra maiúscula; e o RITJMA devolvia a redação")
+w("   **revogada** do art. 390. Antes de concluir que a norma não existe, rode:")
+w("   `python ~/.notebooklm/tools/lint_fontes_canonicas.py --so-suspeitos`")
+w("   (LACUNA = artigo sumiu · MOJIBAKE = acento corrompido, busca falha em silêncio ·")
+w("   REDACOES = redações sucessivas sem placa · ORFAO = dataset que helper nenhum consulta).")
 w("")
 
 # ---------------------------------------------------------------- slashes
@@ -164,7 +173,8 @@ if cf:
 cs = dataset("constituicao_supremo.json")
 if cs:
     w(f"| A Constituição e o Supremo (CF anotada pelo STF) | `consultar_constituicao_supremo.py <art>` · `/constituicao` | {conta(cs,'artigos')} artigos → página do PDF |")
-for f, nome, slash in [("stf", "RISTF", "/ristf"), ("tjma", "RITJMA", "/ritjma"), ("tse", "RITSE", "/ritse")]:
+for f, nome, slash in [("stf", "RISTF", "/ristf"), ("stj", "RISTJ", "/ristj"),
+                       ("tjma", "RITJMA", "/ritjma"), ("tse", "RITSE", "/ritse")]:
     d = dataset(f"regimento_{f}.json")
     if d:
         w(f"| {nome} | `consultar_regimento.py --fonte {f} <art>` · `{slash}` | {conta(d,'artigos')} artigos |")
@@ -211,6 +221,42 @@ w("| Súmula do STF + aplicação (online, vigente) | `consultar_aplicacao_sumul
 w("| Temas de Repercussão Geral | `consultar_repercussao_geral.py \"<palavra>\"` · `/tese-rg` | JSON oficial STF (com/sem RG) |")
 w("| Precedentes qualificados (BNP/Pangea CNJ) | `consultar_bnp.py` · `/bnp` | RG/RR/SV/IAC/IRDR; não cobre TSE |")
 w("| Corpus full-text STF·STJ·TRF1 | `consultar_jurisprudencia.py \"<termo>\"` · `/jurisprudencia` | Informativos, Teses, Repetitivos, BIJ, SV |")
+w(f"| Informativos do **STF** | `consultar_informativo_stf.py \"<termo>\"` · `/consulta-informativo-stf` | {len(list(FONTES_STF.glob('*.md')))} arquivos, **2014–2026** (ed. ~733–1220) |")
+w(f"| Informativos do **STJ** | `consultar_informativo_stj.py \"<termo>\"` · `/consulta-informativo-stj` | {len(list(FONTES_STJ.glob('*.md')))} arquivos, nº 1–853 (1998–2025) — **sem 2019** |")
+w("")
+w("**Informativo do STF — o que o helper resolve e o que não resolve.** O corpus tem duas")
+w("famílias: 2014–2019 (*Teses e Fundamentos*, por matéria, conversão DOCX legada) e 2020–2026")
+w("(*Informativo Temático*, por ramo, conversão PDF paginada — o helper cita a **página do PDF**).")
+w("O **número da edição** sai resolvido em ~90% dos trechos dos temáticos e ~94% em 2017–2018,")
+w("mas é **estruturalmente irrecuperável em 2014, 2015, 2016 e 2019**, onde não existe marcador")
+w("no texto: ali cite processo + relator e declare a edição como não identificada — nunca a")
+w("deduza pela faixa do arquivo.")
+w("")
+w("**Lacuna declarada — Informativo do STF.** O acervo começa em **2014**; as edições **1 a ~732")
+w("(1995–2013) não estão nele**. Nada encontrado ali não é achado negativo: para o período")
+w("anterior use o agente `rtj-stf` (RTJ, 1957–2017) ou o portal do STF.")
+w("")
+w("**Informativo do STJ — o que o helper resolve.** Para cada trecho devolve **nº da edição,")
+w("ano, órgão julgador, ramo do direito, processo, relator e tema de repetitivo**, lendo as duas")
+w("diagramações do acervo (até ~2016, texto corrido com a citação fechando a entrada; de ~2017,")
+w("campos `PROCESSO / RAMO DO DIREITO / TEMA / DESTAQUE`). A busca é **insensível a acento**.")
+w("O helper **se autolocaliza**: dentro de um vault com espelho próprio, o mesmo arquivo em")
+w("`.claude/tools/` lê `.claude/corpora/informativo_stj/fontes` — não há caminho externo.")
+w("Ele também separa o processo **julgado** do processo **citado como precedente**, e nomeia a")
+w("entrada **em segredo de justiça** em vez de lhe emprestar o número da entrada vizinha.")
+w("")
+w("**Lacuna declarada — Informativo do STJ.** O **ano de 2019 inteiro está fora do acervo**")
+w("(~23 edições, nº 639–661): o ZIP de origem tem 0 byte e o corpus salta de `Inf0638` para")
+w("`Inf0662`. Nada encontrado ali não é achado negativo — para 2019 use o corpus full-text")
+w("STF·STJ·TRF1 (de 2015 em diante) ou `scon.stj.jus.br`.")
+w("")
+w("**Proveniência — Informativo do STJ (2026-08-05).** O corpus foi **reconvertido dos RTF**")
+w("oficiais por `rtf_stj_para_md.py`. A conversão anterior descartava o escape `\\uNNNN` do RTF")
+w("e preservava o fallback ASCII, trocando **todo acento por `?`** (`compet?ncia`) em 795 dos 835")
+w("arquivos, e deixando vazar lixo binário das imagens embutidas. Busca por \"competência\" achava")
+w("**29** arquivos; hoje acha **684**. Espelhos com `?` no lugar de acento estão desatualizados:")
+w("reponha com `implantar_informativo_stj.py --vault <NOME>`. Os 3 notebooks do NotebookLM que")
+w("indexavam a conversão velha foram **apagados em 2026-08-05** — a consulta é só local.")
 w("")
 w("**Vocabulário controlado** — `consultar_tesauro.py` (descritor STF, `/termo-juridico`) · ")
 w("`consultar_glossario.py` (definições STF, `/glossario`) · `consultar_glossario_tse.py` (`/glossario-tse`).")

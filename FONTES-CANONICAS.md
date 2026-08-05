@@ -1,6 +1,6 @@
 # Fontes canônicas — manual único
 
-> Gerado por `~/.notebooklm/tools/gerar_fontes_canonicas.py` em 2026-07-28. **Não edite à mão**:
+> Gerado por `~/.notebooklm/tools/gerar_fontes_canonicas.py` em 2026-08-05. **Não edite à mão**:
 > acrescente a fonte (helper/dataset/agente/slash) e rode o gerador de novo.
 > Referenciado por uma linha em cada `CLAUDE.md` — este arquivo é a única fonte de verdade.
 
@@ -10,12 +10,19 @@
 2. Datasets são **snapshots**: confirme vigência (EC/lei alteradora/cancelamento) na fonte oficial.
 3. Notebook do NotebookLM é **doutrina ou acervo indexado** — cite título/autor/data/URL e confirme o inteiro teor.
 4. Falta de dado → escreva `[VERIFICAR]`. Não complete nem parafraseie dispositivo legal.
+5. **"Artigo não encontrado" pode ser defeito do dataset, não erro da pergunta.** Em 2026-08-05,
+   o RISTF rodava havia meses **sem 29 artigos** — inclusive todo o rito da súmula vinculante —
+   porque o extrator só aceitava sufixo de letra maiúscula; e o RITJMA devolvia a redação
+   **revogada** do art. 390. Antes de concluir que a norma não existe, rode:
+   `python ~/.notebooklm/tools/lint_fontes_canonicas.py --so-suspeitos`
+   (LACUNA = artigo sumiu · MOJIBAKE = acento corrompido, busca falha em silêncio ·
+   REDACOES = redações sucessivas sem placa · ORFAO = dataset que helper nenhum consulta).
 
 ## Slash commands (escopo de usuário — valem em qualquer vault)
 
-74 comandos em `~/.claude/commands/`. Um vault pode sombrear qualquer um deles com
+77 comandos em `~/.claude/commands/`. Um vault pode sombrear qualquer um deles com
 uma versão local em `<vault>/.claude/commands/` (escopo de projeto vence).
-Há hoje **229 slash commands locais** distribuídos por 9 cofres — a tabela
+Há hoje **251 slash commands locais** distribuídos por 13 cofres — a tabela
 por vault está no fim deste documento, em *Recursos do Claude Code*.
 
 | Slash | O que faz |
@@ -65,6 +72,7 @@ por vault está no fim deste documento, em *Recursos do Claude Code*.
 | `/lei12850` | Lei de Organização Criminosa (Lei 12.850/2013, compilada) — texto literal por artigo ou palavra |
 | `/lei12965` | Marco Civil da Internet (Lei 12.965/2014) — texto literal por artigo ou palavra |
 | `/lei9296` | Lei de Interceptação Telefônica (Lei 9.296/1996, compilada) — texto literal por artigo ou palavra |
+| `/lei9605` | Lei de Crimes Ambientais (Lei 9.605/1998, compilada) — texto literal por artigo ou palavra |
 | `/lei9613` | Lei de Lavagem de Dinheiro (Lei 9.613/1998, compilada) — texto literal por artigo ou palavra |
 | `/lei9873` | Lei de Prescrição Administrativa (Lei 9.873/1999, compilada) — texto literal por artigo ou palavra |
 | `/lep` | LEP — Lei de Execução Penal (Lei 7.210/1984, compilada) — texto literal por artigo ou palavra |
@@ -81,7 +89,9 @@ por vault está no fim deste documento, em *Recursos do Claude Code*.
 | `/pidcp` | Pacto Internacional sobre Direitos Civis e Políticos (PIDCP/ONU, Decreto 592/92) — artigo ou palavra |
 | `/processar-inbox` | Destila o 00-Inbox em notas atômicas por encadeamento de etapas, com crítica antes de gravar |
 | `/ristf` | Texto literal de artigo do Regimento Interno do STF (até ER 59/2023) |
+| `/ristj` | Texto literal de artigo do Regimento Interno do STJ (consolidado até ER 53/2026) |
 | `/ritjma` | Texto literal de artigo do Regimento Interno do TJMA (consolidado até Res.-GP 13/2026) |
+| `/rstj` | Busca no inteiro teor da Revista do STJ (RSTJ, 1989–2024) — 303 volumes, ~19 mil acórdãos, com página conferível |
 | `/sc-direito-ambiental` | Coleção Supremo Contemporâneo — Direito Ambiental (índice tema → página) |
 | `/sc-liberdade-expressao` | Coleção Supremo Contemporâneo — Liberdade de Expressão (índice tema → página) |
 | `/senso-incomum` | Consulta o acervo "Senso Incomum" (Lenio Streck, ConJur) — hermenêutica/teoria da decisão — por tema |
@@ -103,14 +113,15 @@ por vault está no fim deste documento, em *Recursos do Claude Code*.
 |---|---|---|
 | CF/1988 (texto Planalto) | `python $HOME/.notebooklm/tools/consultar_cf.py <art>` · `/cf` | 276 artigos (ADCT não indexado) |
 | A Constituição e o Supremo (CF anotada pelo STF) | `consultar_constituicao_supremo.py <art>` · `/constituicao` | 264 artigos → página do PDF |
-| RISTF | `consultar_regimento.py --fonte stf <art>` · `/ristf` | 370 artigos |
+| RISTF | `consultar_regimento.py --fonte stf <art>` · `/ristf` | 399 artigos |
+| RISTJ | `consultar_regimento.py --fonte stj <art>` · `/ristj` | 441 artigos |
 | RITJMA | `consultar_regimento.py --fonte tjma <art>` · `/ritjma` | 727 artigos |
 | RITSE | `consultar_regimento.py --fonte tse <art>` · `/ritse` | 94 artigos |
 | Convenção Americana sobre Direitos Humanos (Pacto de São José da Costa Rica) — Decreto 678/1992 | `consultar_tratado.py --fonte cadh <art>` · `/cadh` | 82 artigos |
 | Pacto Internacional sobre Direitos Civis e Políticos (PIDCP) — Decreto 592/1992 | `consultar_tratado.py --fonte pidcp <art>` · `/pidcp` | 53 artigos |
 | Estatuto de Roma do Tribunal Penal Internacional (TPI) — Decreto 4.388/2002 | `consultar_tratado.py --fonte tpi <art>` · `/tpi` | 128 artigos |
 
-**Códigos e leis** — helper único, 34 fontes:
+**Códigos e leis** — helper único, 36 fontes:
 
 ```bash
 python $HOME/.notebooklm/tools/consultar_codigo.py --fonte <sigla> <artigo|palavra>
@@ -134,6 +145,7 @@ python $HOME/.notebooklm/tools/consultar_codigo.py --fonte <sigla> <artigo|palav
 | `lei12830` | Lei 12.830/2013 (Investigação Criminal pelo Delegado de Polícia) | 4 |
 | `lei12850` | Lei 12.850/2013 (Organização Criminosa) | 36 |
 | `lei12965` | Lei 12.965/2014 (Marco Civil da Internet) | 37 |
+| `lei13146` | Lei 13.146/2015 (Estatuto da Pessoa com Deficiencia) | 130 |
 | `lei13431` | Lei 13.431/2017 (Sistema de Garantia de Direitos da Criança e do Adolescente Vítima ou Testemunha de Violência) | 29 |
 | `lei13709` | Lei 13.709/2018 (LGPD) | 80 |
 | `lei4737` | Código Eleitoral (Lei 4.737/1965 — texto TSE) | 385 |
@@ -145,6 +157,7 @@ python $HOME/.notebooklm/tools/consultar_codigo.py --fonte <sigla> <artigo|palav
 | `lei9099` | Lei 9.099/1995 (Juizados Especiais Cíveis e Criminais) | 99 |
 | `lei9296` | Lei 9.296/1996 (Interceptação Telefônica) | 14 |
 | `lei9504` | Lei das Eleições (Lei 9.504/1997) | 152 |
+| `lei9605` | Lei 9.605/1998 (Crimes Ambientais) | 87 |
 | `lei9613` | Lei 9.613/1998 (Lavagem de Dinheiro) | 29 |
 | `lei9784` | Lei 9.784/1999 (Processo Administrativo Federal) | 80 |
 | `lei9868` | Lei 9.868/1999 (ADI e ADC) — edição temática STF (anotada) | 39 |
@@ -161,12 +174,48 @@ não é o número nominal de artigos da lei. Nova norma = rodar `extrair_codigo.
 | Fonte | Comando | Cobertura |
 |---|---|---|
 | Súmulas do STJ | `consultar_sumula_stj.py "<palavra>"` · `/sumula-stj` | 656 verbetes |
-| Súmulas do STF (comuns) | `consultar_sumula_stf.py "<palavra>"` · `/sumula-stf` | 735 verbetes |
+| Súmulas do STF (comuns) | `consultar_sumula_stf.py "<palavra>"` · `/sumula-stf` | 736 verbetes |
 | Súmulas Vinculantes (CF 103-A) | `consultar_sumula_vinculante.py "<palavra>"` · `/sumula-vinculante` | 63 verbetes |
 | Súmula do STF + aplicação (online, vigente) | `consultar_aplicacao_sumula.py --tipo sv\|comum <n>` · `/aplicacao-sumula` | versão atual + precedentes |
 | Temas de Repercussão Geral | `consultar_repercussao_geral.py "<palavra>"` · `/tese-rg` | JSON oficial STF (com/sem RG) |
 | Precedentes qualificados (BNP/Pangea CNJ) | `consultar_bnp.py` · `/bnp` | RG/RR/SV/IAC/IRDR; não cobre TSE |
 | Corpus full-text STF·STJ·TRF1 | `consultar_jurisprudencia.py "<termo>"` · `/jurisprudencia` | Informativos, Teses, Repetitivos, BIJ, SV |
+| Informativos do **STF** | `consultar_informativo_stf.py "<termo>"` · `/consulta-informativo-stf` | 13 arquivos, **2014–2026** (ed. ~733–1220) |
+| Informativos do **STJ** | `consultar_informativo_stj.py "<termo>"` · `/consulta-informativo-stj` | 835 arquivos, nº 1–853 (1998–2025) — **sem 2019** |
+
+**Informativo do STF — o que o helper resolve e o que não resolve.** O corpus tem duas
+famílias: 2014–2019 (*Teses e Fundamentos*, por matéria, conversão DOCX legada) e 2020–2026
+(*Informativo Temático*, por ramo, conversão PDF paginada — o helper cita a **página do PDF**).
+O **número da edição** sai resolvido em ~90% dos trechos dos temáticos e ~94% em 2017–2018,
+mas é **estruturalmente irrecuperável em 2014, 2015, 2016 e 2019**, onde não existe marcador
+no texto: ali cite processo + relator e declare a edição como não identificada — nunca a
+deduza pela faixa do arquivo.
+
+**Lacuna declarada — Informativo do STF.** O acervo começa em **2014**; as edições **1 a ~732
+(1995–2013) não estão nele**. Nada encontrado ali não é achado negativo: para o período
+anterior use o agente `rtj-stf` (RTJ, 1957–2017) ou o portal do STF.
+
+**Informativo do STJ — o que o helper resolve.** Para cada trecho devolve **nº da edição,
+ano, órgão julgador, ramo do direito, processo, relator e tema de repetitivo**, lendo as duas
+diagramações do acervo (até ~2016, texto corrido com a citação fechando a entrada; de ~2017,
+campos `PROCESSO / RAMO DO DIREITO / TEMA / DESTAQUE`). A busca é **insensível a acento**.
+O helper **se autolocaliza**: dentro de um vault com espelho próprio, o mesmo arquivo em
+`.claude/tools/` lê `.claude/corpora/informativo_stj/fontes` — não há caminho externo.
+Ele também separa o processo **julgado** do processo **citado como precedente**, e nomeia a
+entrada **em segredo de justiça** em vez de lhe emprestar o número da entrada vizinha.
+
+**Lacuna declarada — Informativo do STJ.** O **ano de 2019 inteiro está fora do acervo**
+(~23 edições, nº 639–661): o ZIP de origem tem 0 byte e o corpus salta de `Inf0638` para
+`Inf0662`. Nada encontrado ali não é achado negativo — para 2019 use o corpus full-text
+STF·STJ·TRF1 (de 2015 em diante) ou `scon.stj.jus.br`.
+
+**Proveniência — Informativo do STJ (2026-08-05).** O corpus foi **reconvertido dos RTF**
+oficiais por `rtf_stj_para_md.py`. A conversão anterior descartava o escape `\uNNNN` do RTF
+e preservava o fallback ASCII, trocando **todo acento por `?`** (`compet?ncia`) em 795 dos 835
+arquivos, e deixando vazar lixo binário das imagens embutidas. Busca por "competência" achava
+**29** arquivos; hoje acha **684**. Espelhos com `?` no lugar de acento estão desatualizados:
+reponha com `implantar_informativo_stj.py --vault <NOME>`. Os 3 notebooks do NotebookLM que
+indexavam a conversão velha foram **apagados em 2026-08-05** — a consulta é só local.
 
 **Vocabulário controlado** — `consultar_tesauro.py` (descritor STF, `/termo-juridico`) · 
 `consultar_glossario.py` (definições STF, `/glossario`) · `consultar_glossario_tse.py` (`/glossario-tse`).
@@ -198,14 +247,16 @@ A varredura cobre **os dois escopos**: `~/.claude/agents/` e o `.claude/agents/`
 A coluna **Onde** diz em qual deles o agente vive — num cofre Classe A ele mora dentro do vault,
 e só é acionável com o Claude Code iniciado na raiz dele.
 
-Marcados **(apagado)** os 3 notebooks já removidos da conta — registro em
+Marcados **(apagado)** os 6 notebooks já removidos da conta — registro em
 `~/.notebooklm/notebooks_mortos.txt`. Não tente consultá-los.
 
 | Agente | Onde | Notebooks |
 |---|---|---|
 | `abraham-maslow` | vault **Psicologia** | `a7969675-a508-49d6-ab00-8b8e4cf774dd` |
 | `acervo-familia-sucessoes` | `~/.claude/` | `0efe9aef-c085-42d2-9dcb-28b1d5e7faf8` · `7ecafd16-fd43-4167-a6bd-ef9d58742ae5` · `b90f1834-9dff-4d4c-bcd9-39d5c93f4ed4` · `c29cb334-adae-4aed-bd50-b0efad82faeb` |
+| `analise-capacidade-adjudicatoria` | `~/.claude/` | `bd675d49-8704-419b-97e7-73597e4c545e` |
 | `analise-confronto-testemunhal` | `~/.claude/` | `10bb4a29-6c43-4bb3-94a1-5e76021c286f` · `9681d5f6-db1f-4cf6-afd1-9bdebea3e8f4` · `bc44b655-5b7c-436e-8b06-fecef4943b35` · `db064855-08a6-4f69-9dee-c46053c97202` · `fb0eba5a-8050-4437-9391-5cb8ddb23162` |
+| `analise-decisao-sob-pressao-institucional` | `~/.claude/` | `17081d6b-8875-42ff-93d4-b2ce3f08371e` · `27b30c76-5fdb-4a69-bf17-719b10b3c797` · `7faae4b1-ddef-421e-a841-1e5b95226521` · `fb0eba5a-8050-4437-9391-5cb8ddb23162` |
 | `analise-deteccao-engano-depoimento` | vault **Criminal** | `9681d5f6-db1f-4cf6-afd1-9bdebea3e8f4` |
 | `analise-dinamica-juri` | vault **Criminal** | `56a8a026-1b5b-4831-8030-afc129416d05` |
 | `analise-emocao-punicao-decisao` | vault **Criminal** | `50601a41-c3a1-4c7a-b283-01298590e83e` |
@@ -261,7 +312,7 @@ Marcados **(apagado)** os 3 notebooks já removidos da conta — registro em
 | `epistemologia-do-testemunho` | vault **Criminal** | `2532e5f9-f47d-4ac4-9576-e7c0c23e8814` |
 | `informativo-tse` | vault **Eleitoral** | `245fd015-9e5b-4e93-ab67-3c9e5f79c2fc` · `2b904247-8693-499a-a87b-cc18c4b874f0` · `42ad973e-8eaa-4b81-894d-034e006a969e` · `72c946e0-fcd7-48d0-842e-7dd1af077e96` · `cb7ec492-a514-4a0b-bce1-0b3b4c37effa` |
 | `informativo-tse` | `~/.claude/` | `245fd015-9e5b-4e93-ab67-3c9e5f79c2fc` · `2b904247-8693-499a-a87b-cc18c4b874f0` · `42ad973e-8eaa-4b81-894d-034e006a969e` · `72c946e0-fcd7-48d0-842e-7dd1af077e96` · `cb7ec492-a514-4a0b-bce1-0b3b4c37effa` |
-| `informativos-stj` | `~/.claude/` | `460d5c0a-feb5-48a9-b70a-d98f67695ccf` · `5083fc24-eb3c-4250-aad3-b6632ec928e1` · `9b8f0368-48f3-495a-9d6f-7283066e3b50` |
+| `informativos-stf` | `~/.claude/` | `cb154c24-d844-45bc-b659-592a1ab6684a` |
 | `injustica-epistemica` | vault **Criminal** | `fb0eba5a-8050-4437-9391-5cb8ddb23162` |
 | `irvin-yalom` | vault **Psicologia** | `f5509d65-2531-4922-8d7c-2b374a6f79ae` |
 | `jurisprudencia-corpus` | vault **Constitucional** | `cb154c24-d844-45bc-b659-592a1ab6684a` |
@@ -270,6 +321,7 @@ Marcados **(apagado)** os 3 notebooks já removidos da conta — registro em
 | `justo-processo` | `~/.claude/` | `3fd409ea-05d1-45e2-af52-136351041675` |
 | `leslie-greenberg` | vault **Psicologia** | `49a3a3ff-640f-49f9-a539-6152e49c0575` |
 | `neurodireito-responsabilidade-penal` | vault **Criminal** | `32526abb-c2e8-4dcf-b46f-6a9759ebca9b` |
+| `rstj-stj` | `~/.claude/` | `515811b7-2be9-4f28-a09a-54efbfab820f` · `cc13ec8e-917b-4956-8051-68ff2b91a258` · `d6d12379-a1db-406f-b81d-00a794cae7f3` |
 | `rtj-stf` | vault **Constitucional** | `23559e60-804b-46fc-97ec-d7aeea131bd4` **(apagado)** · `a01e1821-48bd-4c80-880a-d00c29617255` **(apagado)** · `a35d98d9-8a0f-4c29-826e-da9e5a981291` **(apagado)** |
 | `rtj-stf` | `~/.claude/` | `23559e60-804b-46fc-97ec-d7aeea131bd4` **(apagado)** · `a01e1821-48bd-4c80-880a-d00c29617255` **(apagado)** · `a35d98d9-8a0f-4c29-826e-da9e5a981291` **(apagado)** |
 
@@ -309,6 +361,7 @@ Acervos com vários notebooks por período (IDs no arquivo):
 | `direito_de_defesa` | 140 |
 | `direitos_fundamentais` | 202 |
 | `ementa_cnj` | 2 |
+| `informativo_stf` | 13 |
 | `informativo_stj` | 835 |
 | `informativo_tse` | 674 |
 | `justo_processo` | 117 |
@@ -319,12 +372,13 @@ Acervos com vários notebooks por período (IDs no arquivo):
 | `nova_limite_penal` | 10 |
 | `perspectivas_direito_penal` | 11 |
 | `ristj_343a` | 2 |
+| `rstj` | 303 |
 | `senso_incomum` | 749 |
 | `validade_pericial` | 24 |
 
 ## Biblioteca (obras em PDF/HTML e sua versão Markdown)
 
-`~/.notebooklm/biblioteca/` — **207 originais** em `pdf/` e `html/`, **207 convertidos** em `md/`.
+`~/.notebooklm/biblioteca/` — **208 originais** em `pdf/` e `html/`, **208 convertidos** em `md/`.
 Cada página do PDF vira `## [p. N]` no Markdown: a página devolvida por um helper
 (`consultar_constituicao_supremo.py`, `consultar_cadh_stf.py`, `consultar_obra_tematica.py`)
 resolve direto no `.md` — leia o Markdown em vez de abrir o PDF.
@@ -336,7 +390,7 @@ resolve direto no `.md` — leia o Markdown em vez de abrir o PDF.
 | `md/Cadernos-STF/` | 9 |
 | `md/SNE-admin/` | 8 |
 | `md/SNE-TSE/` | 1 |
-| `md/` (raiz — obras avulsas) | 45 |
+| `md/` (raiz — obras avulsas) | 46 |
 
 Verificação da conversão (páginas, chars/página, NUL, OCR pendente):
 `~/.notebooklm/biblioteca/RELATORIO-CONVERSAO.md`. Reconverter:
@@ -354,11 +408,11 @@ Verificação da conversão (páginas, chars/página, NUL, OCR pendente):
 
 **Escopo de usuário (`~/.claude/`) — vale em qualquer vault:**
 
-- **183 agentes** em `~/.claude/agents/` — descobertos por intenção; a descrição de cada um já diz quando acioná-lo. Não replique catálogo de agente em `CLAUDE.md`.
-- **103 skills** em `~/.claude/skills/`.
-- **74 slash commands** em `~/.claude/commands/`.
+- **187 agentes** em `~/.claude/agents/` — descobertos por intenção; a descrição de cada um já diz quando acioná-lo. Não replique catálogo de agente em `CLAUDE.md`.
+- **109 skills** em `~/.claude/skills/`.
+- **77 slash commands** em `~/.claude/commands/`.
 
-**Escopo de vault (`<vault>/.claude/`) — 9 cofres com infra própria.**
+**Escopo de vault (`<vault>/.claude/`) — 13 cofres com infra própria.**
 Só acionável com o Claude Code iniciado **na raiz do vault**; o que é local sombreia o global
 de mesmo nome. Classe **A** guarda tudo dentro de si e sobrevive a um `git clone` sozinho;
 classe **B** é casca em torno do global e declara as dependências em `REQUISITOS-EXTERNOS.md`
@@ -366,13 +420,17 @@ classe **B** é casca em torno do global e declara as dependências em `REQUISIT
 
 | Vault | Classe | Agentes | Skills | Slashes | Helpers |
 |---|---|---|---|---|---|
-| Ambiental | **A** — autossuficiente | 13 | 9 | 37 | 13 |
-| Constitucional | **A** — autossuficiente | 15 | 14 | 49 | 22 |
-| Criminal | **A** — autossuficiente | 72 | 134 | 46 | 26 |
+| Ambiental | **A** — autossuficiente | 14 | 10 | 38 | 14 |
+| Constitucional | **A** — autossuficiente | 16 | 15 | 50 | 23 |
+| Criminal | **A** — autossuficiente | 73 | 135 | 47 | 28 |
 | Dissertacao | B — leve | 0 | 0 | 6 | 0 |
 | Eleitoral | **A** — autossuficiente | 26 | 7 | 65 | 18 |
-| ExecucaoPenal | B — leve | 0 | 0 | 6 | 0 |
+| ExecucaoPenal | B — leve | 1 | 1 | 7 | 1 |
 | Familia | B — leve | 0 | 0 | 8 | 0 |
-| ProcessoCivil | B — leve | 0 | 0 | 6 | 0 |
+| JuntaMedica | B — leve | 0 | 0 | 0 | 0 |
+| Longevidade | B — leve | 0 | 0 | 0 | 0 |
+| MestradoCeuma | B — leve | 0 | 0 | 1 | 0 |
+| ProcessoCivil | B — leve | 1 | 1 | 7 | 1 |
 | Psicologia | **A** — autossuficiente | 7 | 9 | 6 | 5 |
+| Trabalhista | **A** — autossuficiente | 8 | 1 | 16 | 5 |
 
