@@ -22,7 +22,7 @@ except Exception: pass
 DIR = r"C:\Users\alden\.notebooklm\clone_jurisprudencia\fontes"
 def norm(s): return unicodedata.normalize("NFKD", s or "").encode("ascii","ignore").decode().lower()
 TRIB = {"stj":["sumulasstj","informativos stj","jurisprudencia em teses","jurisprudência em teses","repetitivos"],
-        "stf":["sumulas stf","sumulas vinculantes stf","informativo","informativos2"],
+        "stf":["sumulas stf","sumulas_vinculantes","sumulas vinculantes stf","informativo_tematico","informativos20"],
         "trf1":["trf1"]}
 def main():
     ap=argparse.ArgumentParser()
