@@ -307,6 +307,14 @@ def detectar_perfil(caminho: str | Path, amostra: int = 12) -> str:
 # ==========================================================================
 # OCR seletivo por pagina
 # ==========================================================================
+# Sem timeout, um tesseract.exe que trava (ou que morre deixando o pipe de
+# stdout preso por handle herdado) prende a thread do watchdog pra sempre em
+# subprocess.communicate() — e como a conversao e' sequencial, isso emperra
+# TODA a fila atras dele. Achado ao vivo em 2026-08-02: pagina 3441 de um PDF
+# de 5710 paginas travou a fila inteira por mais de 1h.
+OCR_TIMEOUT_S = 120
+
+
 def _limiar_otsu(hist) -> int:
     """Limiar de Otsu a partir do histograma de 256 niveis.
 
@@ -366,7 +374,8 @@ def _ocr_pagina(page, perfil: Perfil) -> str:
 
     try:
         bruto = pytesseract.image_to_string(
-            img, lang=perfil.ocr_idioma, config=perfil.ocr_config) or ""
+            img, lang=perfil.ocr_idioma, config=perfil.ocr_config,
+            timeout=OCR_TIMEOUT_S) or ""
     except Exception:
         return ""
     # NFC: o OCR devolve acento DECOMPOSTO ("a"+"~"), e nesse estado o `grep`
