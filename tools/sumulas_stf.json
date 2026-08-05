@@ -1,7 +1,7 @@
 {
  "fonte": "STF — Súmula do STF (Secretaria de Documentação, atualizado 01/12/2017)",
- "total": 735,
- "total_comuns": 735,
+ "total": 736,
+ "total_comuns": 736,
  "total_vinculantes": 0,
  "sumulas": [
   {
@@ -4168,6 +4168,14 @@
    "enunciado": "É inconstitucional a taxa municipal de conservação de estradas de rodagem cuja base de cálculo seja idêntica à do imposto territorial rural.",
    "data_aprovacao": "15/12/1976",
    "situacao": "vigente"
+  },
+  {
+   "numero": 596,
+   "tipo": "sumula",
+   "enunciado": "As disposições do Decreto 22.626/33 não se aplicam às taxas de juros e aos outros encargos cobrados nas operações realizadas por instituições públicas ou privadas, que integram o sistema financeiro nacional.",
+   "data_aprovacao": "15/12/1976",
+   "situacao": "vigente",
+   "obs": "Registro reposto em 2026-08-05: faltava no dataset (detectado pelo lint_fontes_canonicas). Texto transcrito da publicacao oficial 'Sumulas do STF' (STF/Secretaria de Documentacao, ed. 2017), p. 338 — biblioteca/md/Sumulas_STF_2017.md. DJ de 03/01/1977, p. 7."
   },
   {
    "numero": 597,
