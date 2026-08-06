@@ -40,6 +40,33 @@
 !/tools/*.json
 !/tools/*.md
 
+# 3.1. Dentro de rstj/: a DOCUMENTACAO e o INDICE do corpus da Revista do STJ —
+#      nao o corpus.
+#
+#      A regra geral deste arquivo deixa corpora de fora porque "o backup delas e
+#      o OneDrive". Para a RSTJ essa premissa MORREU em 05/08/2026: os .md foram
+#      movidos de OneDrive\Ezzio Gabriel\RSTJ para ca' e a copia de la' foi
+#      apagada. Sobraram, sem versionamento nenhum, tres arquivos pequenos e
+#      escritos a mao que valem mais que o corpus — porque o corpus se rebaixa do
+#      portal do STJ e eles nao:
+#
+#        PROVENIENCIA.md   documenta o defeito do ordinal (204 volumes de
+#                          1989-2007 com "art. 5º" gravado "art. 52"). Perder
+#                          este arquivo e' voltar a citar dispositivo errado.
+#        rstj_volumes.tsv  indice de 303 volumes com a medicao por volume; e'
+#                          regeneravel por gerar_indice_rstj.py, mas so' se o
+#                          corpus existir.
+#        subir_rstj.sh     carga para o NotebookLM, com a correcao do skip de
+#                          retomada que custou 17 fontes duplicadas.
+#
+#      Fica de fora: fontes/ (393 MB) e os transitorios _subir_*.log,
+#      _fontes_*.json, _apagar.json, _robocopy.log.
+!/rstj/
+/rstj/*
+!/rstj/*.md
+!/rstj/*.tsv
+!/rstj/*.sh
+
 # 4. NUNCA — redundante com o `/*`, escrito para quem abrir este arquivo
 #    entender que a exclusao e deliberada e por que.
 #
