@@ -23,6 +23,11 @@
 !/PADRAO-VAULT-DIAGNOSTICO.md
 !/PADRAO-VAULT-TRIAGEM-COLISOES.md
 !/FONTES-CANONICAS.md
+# Registro dos notebooks ja removidos da conta. E dado canonico escrito a mao —
+# o gerador do FONTES-CANONICAS.md o le para marcar (apagado) e impedir que um
+# agente tente consultar id morto. Ficava de fora por omissao da lista de
+# permissao, e sem historico nao se sabe quando cada notebook caiu nem por que.
+!/notebooks_mortos.txt
 !/pdf_para_markdown.py
 # O app pdf2md: ~100 KB de fonte. O binario (dist/, build/) fica de fora,
 # mas o codigo precisa de historico — os tres apps anteriores viviam fora

@@ -1,0 +1,19 @@
+# Notebooks do NotebookLM que NÃO existem mais na conta.
+# Um id por linha. O gerador de FONTES-CANONICAS.md os marca como (apagado).
+
+# --- RTJ (verificado em 2026-07-26) ---
+a35d98d9-8a0f-4c29-826e-da9e5a981291   # RTJ 1957-1980
+23559e60-804b-46fc-97ec-d7aeea131bd4   # RTJ 1981-2000
+a01e1821-48bd-4c80-880a-d00c29617255   # RTJ 2001-2017
+
+# --- Informativos do STJ (apagados em 2026-08-05, a pedido) ---
+# Indexados sobre a conversão VELHA dos RTF, que perdia todo acento — devolviam
+# pior que o corpus local reconvertido. A auditoria feita antes de apagar mostrou
+# ainda dois defeitos de cobertura que nunca constaram da documentação:
+#   * o de 1998-2005 anunciava os informativos n. 1-256 mas parava no n. 129,
+#     e carregava CADA arquivo em duplicata (300 fontes para ~150 informativos);
+#   * o de 2014-2025 pulava do n. 821 ao 838, além da lacuna de 2019.
+# Substituídos por: corpus local + helper consultar_informativo_stj.py.
+460d5c0a-feb5-48a9-b70a-d98f67695ccf   # Informativos STJ 1998-2005 (300 fontes)
+9b8f0368-48f3-495a-9d6f-7283066e3b50   # Informativos STJ 2006-2014 (280 fontes)
+5083fc24-eb3c-4250-aad3-b6632ec928e1   # Informativos STJ 2014-2025 (275 fontes)
