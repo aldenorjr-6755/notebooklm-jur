@@ -67,6 +67,25 @@
 !/rstj/*.tsv
 !/rstj/*.sh
 
+# 3.2. Dentro de rtj/: o indice da RTJ do STF. Aqui NAO HA corpus nenhum —
+#      a pasta inteira sao 140 KB de indice e listas de URL, e e' so' isso que
+#      existe da RTJ nesta maquina.
+#
+#      Por que entra: dos 601 tomos (v. 1-239, 1957-2017) nao ha uma linha de
+#      texto local; ha o mapa para os PDFs oficiais do STF. E os 3 notebooks do
+#      NotebookLM que indexavam a RTJ foram apagados da conta (verificado em
+#      26/07/2026). Ou seja: este indice e' o UNICO mapa restante de um acervo
+#      que cobre 1957-2000, faixa que fonte nenhuma do repositorio alcanca.
+#      Perde-lo custa refazer o mapeamento tomo a tomo.
+#
+#      A filtragem por extensao e' defensiva: se um dia alguem baixar os PDFs
+#      ou converter os tomos para ca', o texto nao entra no git por descuido.
+!/rtj/
+/rtj/*
+!/rtj/*.tsv
+!/rtj/*.txt
+!/rtj/*.md
+
 # 4. NUNCA — redundante com o `/*`, escrito para quem abrir este arquivo
 #    entender que a exclusao e deliberada e por que.
 #
