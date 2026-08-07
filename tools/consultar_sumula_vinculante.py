@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """consultar_sumula_vinculante.py — Súmulas Vinculantes do STF (CF 103-A — EFEITO VINCULANTE).
 Fonte: tools/sumulas_vinculantes_stf.json. Uso: ...py "<palavra>" | --numero N | --json"""
-import sys,os,json,argparse,unicodedata
+import sys,os,json,argparse,unicodedata,textwrap
 try: sys.stdout.reconfigure(encoding="utf-8")
 except: pass
 DATA=os.path.join(os.path.dirname(os.path.abspath(__file__)),"sumulas_vinculantes_stf.json")
@@ -22,3 +22,8 @@ print(f"Fonte: {base['fonte']}  ·  {len(svs)} resultado(s)  ·  EFEITO VINCULAN
 for s in svs:
     flag={"PENDENTE":"  ⏳ PENDENTE DE PUBLICAÇÃO","CANCELADA":"  ⛔ CANCELADA"}.get(s["situacao"],"")
     print(f"Súmula Vinculante {s['numero']}{flag}\n  {s['enunciado']}\n")
+    # a observação carrega o que muda o uso (cancelamento, ato que cancelou, pendência):
+    # omiti-la fazia a SV cancelada sair sem dizer POR QUE nem POR QUAL ato.
+    obs = (s.get("observacao") or "").strip()
+    if obs:
+        print("  » " + textwrap.fill(obs, width=104, subsequent_indent="    ") + "\n")

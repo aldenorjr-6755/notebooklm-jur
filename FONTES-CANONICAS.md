@@ -20,7 +20,7 @@
 
 ## Slash commands (escopo de usuário — valem em qualquer vault)
 
-77 comandos em `~/.claude/commands/`. Um vault pode sombrear qualquer um deles com
+78 comandos em `~/.claude/commands/`. Um vault pode sombrear qualquer um deles com
 uma versão local em `<vault>/.claude/commands/` (escopo de projeto vence).
 Há hoje **251 slash commands locais** distribuídos por 13 cofres — a tabela
 por vault está no fim deste documento, em *Recursos do Claude Code*.
@@ -62,6 +62,7 @@ por vault está no fim deste documento, em *Recursos do Claude Code*.
 | `/health-check` | Audita a saúde de um vault — fallback genérico; prefira o /health-check local do vault |
 | `/hediondos` | Lei dos Crimes Hediondos (Lei 8.072/1990) — texto literal por artigo ou palavra |
 | `/ibe-abducao` | Compara hipóteses fáticas concorrentes pelo poder explicativo (Inferência à Melhor Explicação / Abdução Probatória) — notebook NotebookLM dedicado |
+| `/informativo-stf` | Busca nos Informativos de Jurisprudência do STF (corpus dedicado, 2014–2026, ed. ~733–1220) |
 | `/jecrim` | Lei dos Juizados Especiais (Lei 9.099/1995) — texto literal por artigo ou palavra (foco criminal) |
 | `/jurisprudencia` | Busca full-text no corpus oficial de jurisprudência (Informativos/Teses/Repetitivos STF·STJ·TRF1) |
 | `/justo-processo` | Consulta o acervo "Justo Processo" (coluna ConJur, NotebookLM) e traz a doutrina de processo penal / epistemologia da prova sobre um tema, com citação das fontes |
@@ -180,7 +181,7 @@ não é o número nominal de artigos da lei. Nova norma = rodar `extrair_codigo.
 | Temas de Repercussão Geral | `consultar_repercussao_geral.py "<palavra>"` · `/tese-rg` | JSON oficial STF (com/sem RG) |
 | Precedentes qualificados (BNP/Pangea CNJ) | `consultar_bnp.py` · `/bnp` | RG/RR/SV/IAC/IRDR; não cobre TSE |
 | Corpus full-text STF·STJ·TRF1 | `consultar_jurisprudencia.py "<termo>"` · `/jurisprudencia` | Informativos, Teses, Repetitivos, BIJ, SV |
-| Informativos do **STF** | `consultar_informativo_stf.py "<termo>"` · `/consulta-informativo-stf` | 13 arquivos, **2014–2026** (ed. ~733–1220) |
+| Informativos do **STF** | `consultar_informativo_stf.py "<termo>"` · `/informativo-stf` | 13 arquivos, **2014–2026** (ed. ~733–1220) |
 | Informativos do **STJ** | `consultar_informativo_stj.py "<termo>"` · `/consulta-informativo-stj` | 835 arquivos, nº 1–853 (1998–2025) — **sem 2019** |
 
 **Informativo do STF — o que o helper resolve e o que não resolve.** O corpus tem duas
@@ -410,7 +411,7 @@ Verificação da conversão (páginas, chars/página, NUL, OCR pendente):
 
 - **187 agentes** em `~/.claude/agents/` — descobertos por intenção; a descrição de cada um já diz quando acioná-lo. Não replique catálogo de agente em `CLAUDE.md`.
 - **109 skills** em `~/.claude/skills/`.
-- **77 slash commands** em `~/.claude/commands/`.
+- **78 slash commands** em `~/.claude/commands/`.
 
 **Escopo de vault (`<vault>/.claude/`) — 13 cofres com infra própria.**
 Só acionável com o Claude Code iniciado **na raiz do vault**; o que é local sombreia o global
@@ -422,7 +423,7 @@ classe **B** é casca em torno do global e declara as dependências em `REQUISIT
 |---|---|---|---|---|---|
 | Ambiental | **A** — autossuficiente | 14 | 10 | 38 | 14 |
 | Constitucional | **A** — autossuficiente | 16 | 15 | 50 | 23 |
-| Criminal | **A** — autossuficiente | 73 | 135 | 47 | 28 |
+| Criminal | **A** — autossuficiente | 73 | 135 | 47 | 29 |
 | Dissertacao | B — leve | 0 | 0 | 6 | 0 |
 | Eleitoral | **A** — autossuficiente | 26 | 7 | 65 | 18 |
 | ExecucaoPenal | B — leve | 1 | 1 | 7 | 1 |

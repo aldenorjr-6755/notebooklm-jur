@@ -221,7 +221,7 @@ w("| Súmula do STF + aplicação (online, vigente) | `consultar_aplicacao_sumul
 w("| Temas de Repercussão Geral | `consultar_repercussao_geral.py \"<palavra>\"` · `/tese-rg` | JSON oficial STF (com/sem RG) |")
 w("| Precedentes qualificados (BNP/Pangea CNJ) | `consultar_bnp.py` · `/bnp` | RG/RR/SV/IAC/IRDR; não cobre TSE |")
 w("| Corpus full-text STF·STJ·TRF1 | `consultar_jurisprudencia.py \"<termo>\"` · `/jurisprudencia` | Informativos, Teses, Repetitivos, BIJ, SV |")
-w(f"| Informativos do **STF** | `consultar_informativo_stf.py \"<termo>\"` · `/consulta-informativo-stf` | {len(list(FONTES_STF.glob('*.md')))} arquivos, **2014–2026** (ed. ~733–1220) |")
+w(f"| Informativos do **STF** | `consultar_informativo_stf.py \"<termo>\"` · `/informativo-stf` | {len(list(FONTES_STF.glob('*.md')))} arquivos, **2014–2026** (ed. ~733–1220) |")
 w(f"| Informativos do **STJ** | `consultar_informativo_stj.py \"<termo>\"` · `/consulta-informativo-stj` | {len(list(FONTES_STJ.glob('*.md')))} arquivos, nº 1–853 (1998–2025) — **sem 2019** |")
 w("")
 w("**Informativo do STF — o que o helper resolve e o que não resolve.** O corpus tem duas")
