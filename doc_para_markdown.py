@@ -13,7 +13,7 @@ Uso:
 NAO converte:
     PDF  -> use pdf2md / pdf_para_markdown.py. O markitdown NAO pagina: junta as
             paginas com quebra dupla e destroi a convencao `## [p. N]`.
-    HTML -> ver tools/converter_biblioteca_md.py (decisao pendente de bake-off).
+    HTML -> use html_para_markdown.py (as quatro travas do bake-off).
     RTF  -> ver tools/rtf_stj_para_md.py.
 
 Codigo de saida 3 = SUSPEITA DE PERDA: o Markdown tem menos texto que o censo
@@ -50,10 +50,10 @@ ACEITOS = {'.docx', '.pptx', '.xlsx', '.xls', '.epub',
 RECUSADOS = {
     '.pdf':  'PDF nao passa por aqui: o markitdown NAO pagina. '
              'Use: python ~/.notebooklm/pdf_para_markdown.py',
-    '.html': 'HTML ainda nao migrou (bake-off pendente). '
-             'Use: python ~/.notebooklm/tools/converter_biblioteca_md.py',
-    '.htm':  'HTML ainda nao migrou (bake-off pendente). '
-             'Use: python ~/.notebooklm/tools/converter_biblioteca_md.py',
+    '.html': 'HTML tem helper proprio (decodificacao + html5lib + regua). '
+             'Use: python ~/.notebooklm/html_para_markdown.py',
+    '.htm':  'HTML tem helper proprio (decodificacao + html5lib + regua). '
+             'Use: python ~/.notebooklm/html_para_markdown.py',
     '.rtf':  'RTF tem helper proprio. '
              'Use: python ~/.notebooklm/tools/rtf_stj_para_md.py',
 }
