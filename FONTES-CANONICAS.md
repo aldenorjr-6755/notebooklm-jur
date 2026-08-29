@@ -1,6 +1,6 @@
 # Fontes canônicas — manual único
 
-> Gerado por `~/.notebooklm/tools/gerar_fontes_canonicas.py` em 2026-08-05. **Não edite à mão**:
+> Gerado por `~/.notebooklm/tools/gerar_fontes_canonicas.py` em 2026-08-28. **Não edite à mão**:
 > acrescente a fonte (helper/dataset/agente/slash) e rode o gerador de novo.
 > Referenciado por uma linha em cada `CLAUDE.md` — este arquivo é a única fonte de verdade.
 
@@ -20,9 +20,9 @@
 
 ## Slash commands (escopo de usuário — valem em qualquer vault)
 
-78 comandos em `~/.claude/commands/`. Um vault pode sombrear qualquer um deles com
+79 comandos em `~/.claude/commands/`. Um vault pode sombrear qualquer um deles com
 uma versão local em `<vault>/.claude/commands/` (escopo de projeto vence).
-Há hoje **251 slash commands locais** distribuídos por 13 cofres — a tabela
+Há hoje **254 slash commands locais** distribuídos por 13 cofres — a tabela
 por vault está no fim deste documento, em *Recursos do Claude Code*.
 
 | Slash | O que faz |
@@ -58,6 +58,7 @@ por vault está no fim deste documento, em *Recursos do Claude Code*.
 | `/drogas` | Lei de Drogas (Lei 11.343/2006) — texto literal por artigo ou palavra |
 | `/eaoab` | Estatuto da Advocacia e da OAB (Lei 8.906/1994) — edição temática anotada do STF, por artigo ou palavra |
 | `/foundherentismo` | Avalia a prova como peças de um quebra-cabeça de palavras cruzadas pela Epistemologia Foundherentista de Susan Haack — notebook NotebookLM dedicado |
+| `/gerar-index` | Reconcilia os index.md dos vaults com o estado real das pastas (dry-run primeiro) |
 | `/glossario` | Glossário Jurídico do STF — definição de termo jurídico (por verbete ou palavra) |
 | `/health-check` | Audita a saúde de um vault — fallback genérico; prefira o /health-check local do vault |
 | `/hediondos` | Lei dos Crimes Hediondos (Lei 8.072/1990) — texto literal por artigo ou palavra |
@@ -410,8 +411,8 @@ Verificação da conversão (páginas, chars/página, NUL, OCR pendente):
 **Escopo de usuário (`~/.claude/`) — vale em qualquer vault:**
 
 - **187 agentes** em `~/.claude/agents/` — descobertos por intenção; a descrição de cada um já diz quando acioná-lo. Não replique catálogo de agente em `CLAUDE.md`.
-- **109 skills** em `~/.claude/skills/`.
-- **78 slash commands** em `~/.claude/commands/`.
+- **145 skills** em `~/.claude/skills/`.
+- **79 slash commands** em `~/.claude/commands/`.
 
 **Escopo de vault (`<vault>/.claude/`) — 13 cofres com infra própria.**
 Só acionável com o Claude Code iniciado **na raiz do vault**; o que é local sombreia o global
@@ -423,7 +424,7 @@ classe **B** é casca em torno do global e declara as dependências em `REQUISIT
 |---|---|---|---|---|---|
 | Ambiental | **A** — autossuficiente | 14 | 10 | 38 | 14 |
 | Constitucional | **A** — autossuficiente | 16 | 15 | 50 | 23 |
-| Criminal | **A** — autossuficiente | 73 | 135 | 47 | 29 |
+| Criminal | **A** — autossuficiente | 73 | 135 | 50 | 37 |
 | Dissertacao | B — leve | 0 | 0 | 6 | 0 |
 | Eleitoral | **A** — autossuficiente | 26 | 7 | 65 | 18 |
 | ExecucaoPenal | B — leve | 1 | 1 | 7 | 1 |
