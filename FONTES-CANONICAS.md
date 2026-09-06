@@ -1,6 +1,6 @@
 # Fontes canônicas — manual único
 
-> Gerado por `~/.notebooklm/tools/gerar_fontes_canonicas.py` em 2026-08-28. **Não edite à mão**:
+> Gerado por `~/.notebooklm/tools/gerar_fontes_canonicas.py` em 2026-08-30. **Não edite à mão**:
 > acrescente a fonte (helper/dataset/agente/slash) e rode o gerador de novo.
 > Referenciado por uma linha em cada `CLAUDE.md` — este arquivo é a única fonte de verdade.
 
@@ -20,7 +20,7 @@
 
 ## Slash commands (escopo de usuário — valem em qualquer vault)
 
-79 comandos em `~/.claude/commands/`. Um vault pode sombrear qualquer um deles com
+84 comandos em `~/.claude/commands/`. Um vault pode sombrear qualquer um deles com
 uma versão local em `<vault>/.claude/commands/` (escopo de projeto vence).
 Há hoje **254 slash commands locais** distribuídos por 13 cofres — a tabela
 por vault está no fim deste documento, em *Recursos do Claude Code*.
@@ -33,11 +33,13 @@ por vault está no fim deste documento, em *Recursos do Claude Code*.
 | `/atomismo-holismo` | Diagnostica se uma análise jurídica (prova, argumento, norma, decisão) é atomista, holista ou dialeticamente equilibrada — notebook NotebookLM dedicado |
 | `/bayes-juridico` | Aplica o Teorema de Bayes (likelihood ratio/odds) à prova jurídica e audita falácias probabilísticas — notebook NotebookLM dedicado |
 | `/bnp` | Busca precedentes qualificados no Banco Nacional de Precedentes (BNP/Pangea, CNJ) — RG, RR, SV, Súmula, IAC, IRDR |
+| `/boletim-precedentes` | Consulta os Boletins de Precedentes do STJ (nº 1–140, 2017–2026) e devolve o enunciado da tese firmada com a citação do Boletim |
 | `/cadh-stf` | Localiza a leitura do STF sobre um artigo da CADH (obra "Convenção Americana sobre DH", 2ª ed.) |
 | `/cadh` | Convenção Americana de Direitos Humanos (Pacto de São José / Decreto 678/92) — artigo ou palavra |
 | `/cc` | Código Civil (Lei 10.406/2002, compilada) — texto literal por artigo ou palavra |
 | `/cf` | Devolve o texto literal de um artigo da Constituição Federal (Planalto, até EC 139) |
 | `/codoje` | Código de Divisão e Organização Judiciárias do Maranhão (consolidado até LC 298/2026) — por artigo ou palavra |
+| `/coletanea-tse` | Consulta a Coletânea de Jurisprudência por Assunto do TSE — 22 temas eleitorais com teses e precedentes, no corpus local |
 | `/constituicao` | Dado um artigo da CF, localiza a leitura do STF na obra "A Constituição e o Supremo |
 | `/correicao-parcial` | Redige uma Correição Parcial criminal (medida residual contra erro de procedimento/inversão tumultuária) no padrão dos Tribunais, via subagente |
 | `/corroboracao-falsificacionista` | Audita a força epistêmica de uma hipótese fática/acusatória pela Teoria da Corroboração Falsificacionista (Popper) — notebook NotebookLM dedicado |
@@ -73,6 +75,7 @@ por vault está no fim deste documento, em *Recursos do Claude Code*.
 | `/lei12830` | Lei da Investigação Criminal pelo Delegado de Polícia (Lei 12.830/2013) — texto literal por artigo ou palavra |
 | `/lei12850` | Lei de Organização Criminosa (Lei 12.850/2013, compilada) — texto literal por artigo ou palavra |
 | `/lei12965` | Marco Civil da Internet (Lei 12.965/2014) — texto literal por artigo ou palavra |
+| `/lei13097` | Lei 13.097/2015 (compilada) — concentração dos atos na matrícula; texto literal por artigo ou palavra |
 | `/lei9296` | Lei de Interceptação Telefônica (Lei 9.296/1996, compilada) — texto literal por artigo ou palavra |
 | `/lei9605` | Lei de Crimes Ambientais (Lei 9.605/1998, compilada) — texto literal por artigo ou palavra |
 | `/lei9613` | Lei de Lavagem de Dinheiro (Lei 9.613/1998, compilada) — texto literal por artigo ou palavra |
@@ -80,6 +83,7 @@ por vault está no fim deste documento, em *Recursos do Claude Code*.
 | `/lep` | LEP — Lei de Execução Penal (Lei 7.210/1984, compilada) — texto literal por artigo ou palavra |
 | `/lgpd` | Lei Geral de Proteção de Dados (LGPD, Lei 13.709/2018, compilada) — texto literal por artigo ou palavra |
 | `/lindb` | LINDB — Lei de Introdução às Normas do Direito Brasileiro (DL 4.657/1942) — por artigo ou palavra |
+| `/lrp` | Lei de Registros Públicos (Lei 6.015/1973, compilada) — texto literal por artigo ou palavra |
 | `/maria-da-penha` | Lei Maria da Penha (Lei 11.340/2006) — texto literal por artigo ou palavra |
 | `/meta-prova` | Camada META da epistemologia da prova — seleciona e arbitra entre os doze métodos probatórios e audita o resíduo que método nenhum captura |
 | `/ms` | Lei 12.016/2009 (Mandado de Segurança individual e coletivo) — texto literal por artigo ou palavra |
@@ -100,6 +104,7 @@ por vault está no fim deste documento, em *Recursos do Claude Code*.
 | `/standards-of-proof` | Audita se o conjunto probatório atinge o standard of proof exigido pelo tipo de processo/decisão — notebook NotebookLM dedicado |
 | `/sumula-stf` | Consulta as Súmulas (comuns) do STF — fonte canônica — por número ou palavra |
 | `/sumula-stj` | Consulta as Súmulas do STJ (fonte canônica) por número ou palavra e padroniza a citação |
+| `/sumula-tse` | Consulta as Súmulas do TSE (73 súmulas, 66 vigentes) por número ou tema e padroniza a citação |
 | `/sumula-vinculante` | Consulta as Súmulas Vinculantes do STF (CF 103-A — efeito vinculante) por número ou palavra |
 | `/termo-juridico` | Consulta o Tesauro Jurídico do STF e padroniza a terminologia (cria/atualiza nota da Wiki) |
 | `/tese-rg` | Pesquisa os Temas de Repercussão Geral do STF e destila em nota da Wiki |
@@ -123,7 +128,7 @@ por vault está no fim deste documento, em *Recursos do Claude Code*.
 | Pacto Internacional sobre Direitos Civis e Políticos (PIDCP) — Decreto 592/1992 | `consultar_tratado.py --fonte pidcp <art>` · `/pidcp` | 53 artigos |
 | Estatuto de Roma do Tribunal Penal Internacional (TPI) — Decreto 4.388/2002 | `consultar_tratado.py --fonte tpi <art>` · `/tpi` | 128 artigos |
 
-**Códigos e leis** — helper único, 36 fontes:
+**Códigos e leis** — helper único, 38 fontes:
 
 ```bash
 python $HOME/.notebooklm/tools/consultar_codigo.py --fonte <sigla> <artigo|palavra>
@@ -147,10 +152,12 @@ python $HOME/.notebooklm/tools/consultar_codigo.py --fonte <sigla> <artigo|palav
 | `lei12830` | Lei 12.830/2013 (Investigação Criminal pelo Delegado de Polícia) | 4 |
 | `lei12850` | Lei 12.850/2013 (Organização Criminosa) | 36 |
 | `lei12965` | Lei 12.965/2014 (Marco Civil da Internet) | 37 |
+| `lei13097` | Lei 13.097/2015 (compilada) — concentração dos atos na matrícula | 169 |
 | `lei13146` | Lei 13.146/2015 (Estatuto da Pessoa com Deficiencia) | 130 |
 | `lei13431` | Lei 13.431/2017 (Sistema de Garantia de Direitos da Criança e do Adolescente Vítima ou Testemunha de Violência) | 29 |
 | `lei13709` | Lei 13.709/2018 (LGPD) | 80 |
 | `lei4737` | Código Eleitoral (Lei 4.737/1965 — texto TSE) | 385 |
+| `lei6015` | Lei de Registros Públicos (Lei 6.015/1973, compilada) | 321 |
 | `lei6830` | Lei 6.830/1980 (Execução Fiscal — LEF) | 42 |
 | `lei8072` | Lei 8.072/1990 (Crimes Hediondos) | 13 |
 | `lei8137` | Lei 8.137/1990 (Crimes contra a Ordem Tributária) | 23 |
@@ -380,7 +387,7 @@ Acervos com vários notebooks por período (IDs no arquivo):
 
 ## Biblioteca (obras em PDF/HTML e sua versão Markdown)
 
-`~/.notebooklm/biblioteca/` — **208 originais** em `pdf/` e `html/`, **208 convertidos** em `md/`.
+`~/.notebooklm/biblioteca/` — **209 originais** em `pdf/` e `html/`, **208 convertidos** em `md/`.
 Cada página do PDF vira `## [p. N]` no Markdown: a página devolvida por um helper
 (`consultar_constituicao_supremo.py`, `consultar_cadh_stf.py`, `consultar_obra_tematica.py`)
 resolve direto no `.md` — leia o Markdown em vez de abrir o PDF.
@@ -410,9 +417,9 @@ Verificação da conversão (páginas, chars/página, NUL, OCR pendente):
 
 **Escopo de usuário (`~/.claude/`) — vale em qualquer vault:**
 
-- **187 agentes** em `~/.claude/agents/` — descobertos por intenção; a descrição de cada um já diz quando acioná-lo. Não replique catálogo de agente em `CLAUDE.md`.
-- **145 skills** em `~/.claude/skills/`.
-- **79 slash commands** em `~/.claude/commands/`.
+- **186 agentes** em `~/.claude/agents/` — descobertos por intenção; a descrição de cada um já diz quando acioná-lo. Não replique catálogo de agente em `CLAUDE.md`.
+- **113 skills** em `~/.claude/skills/`.
+- **84 slash commands** em `~/.claude/commands/`.
 
 **Escopo de vault (`<vault>/.claude/`) — 13 cofres com infra própria.**
 Só acionável com o Claude Code iniciado **na raiz do vault**; o que é local sombreia o global
@@ -422,17 +429,17 @@ classe **B** é casca em torno do global e declara as dependências em `REQUISIT
 
 | Vault | Classe | Agentes | Skills | Slashes | Helpers |
 |---|---|---|---|---|---|
-| Ambiental | **A** — autossuficiente | 14 | 10 | 38 | 14 |
-| Constitucional | **A** — autossuficiente | 16 | 15 | 50 | 23 |
-| Criminal | **A** — autossuficiente | 73 | 135 | 50 | 37 |
-| Dissertacao | B — leve | 0 | 0 | 6 | 0 |
-| Eleitoral | **A** — autossuficiente | 26 | 7 | 65 | 18 |
-| ExecucaoPenal | B — leve | 1 | 1 | 7 | 1 |
-| Familia | B — leve | 0 | 0 | 8 | 0 |
-| JuntaMedica | B — leve | 0 | 0 | 0 | 0 |
-| Longevidade | B — leve | 0 | 0 | 0 | 0 |
-| MestradoCeuma | B — leve | 0 | 0 | 1 | 0 |
-| ProcessoCivil | B — leve | 1 | 1 | 7 | 1 |
-| Psicologia | **A** — autossuficiente | 7 | 9 | 6 | 5 |
-| Trabalhista | **A** — autossuficiente | 8 | 1 | 16 | 5 |
+| Ambiental | **A** — autossuficiente | 14 | 11 | 38 | 14 |
+| Constitucional | **A** — autossuficiente | 16 | 16 | 50 | 23 |
+| Criminal | **A** — autossuficiente | 73 | 136 | 50 | 37 |
+| Dissertacao | B — leve | 0 | 1 | 6 | 0 |
+| Eleitoral | **A** — autossuficiente | 26 | 8 | 65 | 18 |
+| ExecucaoPenal | B — leve | 1 | 2 | 7 | 1 |
+| Familia | B — leve | 0 | 1 | 8 | 0 |
+| JuntaMedica | B — leve | 0 | 1 | 0 | 0 |
+| Longevidade | B — leve | 0 | 1 | 0 | 0 |
+| MestradoCeuma | B — leve | 0 | 1 | 1 | 0 |
+| ProcessoCivil | B — leve | 1 | 2 | 7 | 1 |
+| Psicologia | **A** — autossuficiente | 7 | 10 | 6 | 5 |
+| Trabalhista | **A** — autossuficiente | 8 | 2 | 16 | 5 |
 

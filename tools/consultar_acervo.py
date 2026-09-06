@@ -22,6 +22,12 @@ ACERVOS = {
     "justo_processo": "Justo Processo",
     "direitos_fundamentais": "Direitos Fundamentais",
     "direito_de_defesa": "Direito de Defesa",
+    # registrados em 2026-08-30 (antes eram corpora orfaos, sem consumidor)
+    "critica_penal": "Critica Penal (ConJur)",
+    "nova_limite_penal": "Nova Limite Penal (Migalhas, 2023) - complementa criminal_player",
+    "migalhas_criminais": "Migalhas Criminais",
+    "migalhas_direitos_fundamentais": "Migalhas - Direitos Fundamentais",
+    "perspectivas_direito_penal": "Perspectivas do Direito Penal",
 }
 def norm(s): return unicodedata.normalize("NFKD", s or "").encode("ascii","ignore").decode().lower()
 def ano(fn):

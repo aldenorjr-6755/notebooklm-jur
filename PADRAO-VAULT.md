@@ -414,6 +414,11 @@ Regras:
   `tipo: conceito`, não `tipo: jurisprudencia`.
 - `fontes` é onde caminho externo e id de NotebookLM são legítimos, em qualquer classe de vault.
 - Nota sem frontmatter não é nota — é rascunho no `00-Inbox/`.
+- **Corpo:** logo abaixo do título (`# H1`) vai o preâmbulo `## Para o próximo agente` — duas ou
+  três frases dizendo o que a nota contém, por que foi guardada e qual a ressalva. Nota é
+  recuperada sozinha, e o preâmbulo é o que decide se ela serve. Convenção **daqui para a
+  frente**, documentada no `AGENTS.md` da raiz dos cofres: nota antiga sem preâmbulo
+  continua válida e o `lint-vault` não acusa a ausência.
 
 #### O que não é nota, e por isso não exige frontmatter
 
@@ -427,6 +432,53 @@ O esquema acima governa **nota**. Não governa:
 - **`index.md` e MOC**, que têm esquema próprio e mínimo: `type: index` e `updated: AAAA-MM-DD`.
   Esse esquema é obrigatório — `index.md` sem ele é defeito, e é a lacuna real que a auditoria de
   2026-07-26 encontrou (12 índices e 1 MOC).
+
+### 2.6.1 `relacoes:` — a aresta que carrega tese
+
+Fixado em 2026-08-28. `related:` diz **que** duas notas se relacionam; não diz **como**. Para a
+maior parte das ligações isso basta, e é o que ele faz bem. Mas há aresta cujo tipo **é** a tese:
+um julgado que supera outro, um dispositivo revogado, duas Turmas que divergem. Aí perder o tipo
+não é perder navegação — é citar como vigente o que foi superado.
+
+Essas se declaram tipadas, em bloco indentado:
+
+```yaml
+relacoes:
+  supera: ["[[JUR-STJ-Tema-1234]]"]
+  contradiz:
+    - "[[JUR-TJMA-AP-0000000-00.2020.8.10.0001]]"
+```
+
+**Vocabulário fechado.** Todo tipo tem inversa — é ela que faz o grafo ser lido nos dois sentidos
+e é o que permite acusar o ciclo contraditório:
+
+| Tipo | Inversa | Uso |
+|---|---|---|
+| `supera` | `superado_por` | overruling — este julgado/tese substitui o do alvo |
+| `distingue` | `distinguido_por` | distinguishing — a moldura fática do alvo não alcança este caso |
+| `revoga` | `revogado_por` | revogação normativa, expressa ou tácita |
+| `regulamenta` | `regulamentado_por` | decreto/resolução × a lei que regulamenta |
+| `depende_de` | `exigido_por` | a tese desta nota só se sustenta se a do alvo valer |
+| `contradiz` | `contradiz` | simétrica — divergência entre as duas |
+
+Regras:
+
+- **Camada opcional e aditiva.** `related:` **não migra** — eram 1.056 notas com ele em 2026-08-28,
+  e a maioria dessas ligações é genérica por natureza. Só vira `relacoes:` a aresta cujo tipo
+  alguém precisaria consultar depois. Vault que nunca usar a camada não está em falta.
+- **Aresta é afirmação**, e vale nela a regra de citação do §2.6: não se declara `supera` sem ter
+  conferido que supera. Aresta não conferida segue a mesma dívida — `status: verificar` e
+  `[VERIFICAR]` no corpo, dizendo qual aresta.
+- **Alvo é wikilink**, com a mesma resolução de qualquer link. Alvo que não resolve é defeito, não
+  semente de nota futura.
+- **Só a forma de bloco.** Mapa na mesma linha (`relacoes: {supera: "[[X]]"}`) é recusado: não se
+  parseia com confiança linha a linha, e aresta lida pela metade é pior que aresta recusada.
+- **Ciclo contraditório é defeito crítico**: A e B afirmando o mesmo tipo assimétrico um do outro
+  (A supera B **e** B supera A) não é inversa faltando — é contradição, e uma das duas está errada.
+- **Inversa não declarada nunca é obrigatória.** Declarar dos dois lados é conveniência — quem
+  abre o julgado superado vê que foi superado. O `lint-vault` reporta como informação.
+
+Aferição: `lint-vault`, seções 15 e 15b.
 
 ### 2.7 Política de caminhos
 

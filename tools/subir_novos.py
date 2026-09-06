@@ -11,7 +11,7 @@ Uso:
   python subir_novos.py <dir_corpus> <notebook_id> [--desde AAAA-MM-DD] [--so-listar]
 """
 from __future__ import annotations
-import json, os, re, subprocess, sys, unicodedata
+import json, os, re, shutil, subprocess, sys, unicodedata
 
 sys.stdout.reconfigure(encoding="utf-8")
 RAIZ = r"C:\Users\alden\.notebooklm"
@@ -39,7 +39,10 @@ def chave_url(u: str) -> str:
 
 
 def cli(*args) -> str:
-    p = subprocess.run([sys.executable, "-m", "notebooklm", *args],
+    nlm = shutil.which("nlm")   # o modulo do pacote e notebooklm_tools; `-m` com o nome curto nao existe
+    if nlm is None:
+        raise SystemExit("[ERRO] CLI `nlm` nao encontrada no PATH.")
+    p = subprocess.run([nlm, *args],
                        capture_output=True, encoding="utf-8", errors="replace", cwd=RAIZ)
     if p.returncode != 0:
         raise RuntimeError((p.stderr or p.stdout)[-500:])
@@ -68,7 +71,7 @@ def data_do_titulo(nome: str) -> str | None:
 
 
 def fontes_do_notebook(nb: str):
-    d = json.loads(cli("source", "list", "-n", nb, "--json"))
+    d = json.loads(cli("source", "list", nb, "--json"))
     s = d.get("sources", d) if isinstance(d, dict) else d
     chaves, titulos, datas = set(), set(), set()
     for x in s:
@@ -132,7 +135,7 @@ def main():
     ok = 0
     for p, t, data in pendentes:
         try:
-            cli("source", "add", "-n", nb, "--type", "file", "--title", t[:150], p)
+            cli("source", "add", nb, "--file", p, "--title", t[:150])
             ok += 1
             print(f"   OK {data} {t[:60]}")
         except Exception as e:
