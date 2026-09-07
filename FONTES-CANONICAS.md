@@ -1,6 +1,6 @@
 # Fontes canônicas — manual único
 
-> Gerado por `~/.notebooklm/tools/gerar_fontes_canonicas.py` em 2026-08-30. **Não edite à mão**:
+> Gerado por `~/.notebooklm/tools/gerar_fontes_canonicas.py` em 2026-09-07. **Não edite à mão**:
 > acrescente a fonte (helper/dataset/agente/slash) e rode o gerador de novo.
 > Referenciado por uma linha em cada `CLAUDE.md` — este arquivo é a única fonte de verdade.
 
@@ -22,7 +22,7 @@
 
 84 comandos em `~/.claude/commands/`. Um vault pode sombrear qualquer um deles com
 uma versão local em `<vault>/.claude/commands/` (escopo de projeto vence).
-Há hoje **254 slash commands locais** distribuídos por 13 cofres — a tabela
+Há hoje **255 slash commands locais** distribuídos por 13 cofres — a tabela
 por vault está no fim deste documento, em *Recursos do Claude Code*.
 
 | Slash | O que faz |
@@ -329,7 +329,10 @@ Marcados **(apagado)** os 6 notebooks já removidos da conta — registro em
 | `justo-processo` | vault **Criminal** | `3fd409ea-05d1-45e2-af52-136351041675` |
 | `justo-processo` | `~/.claude/` | `3fd409ea-05d1-45e2-af52-136351041675` |
 | `leslie-greenberg` | vault **Psicologia** | `49a3a3ff-640f-49f9-a539-6152e49c0575` |
+| `migalhas-criminais` | vault **Criminal** | `f4b221d3-9ad7-45fc-b140-78539fa1b615` |
 | `neurodireito-responsabilidade-penal` | vault **Criminal** | `32526abb-c2e8-4dcf-b46f-6a9759ebca9b` |
+| `nova-limite-penal` | vault **Criminal** | `5a64160d-e7b6-4bc8-82d0-f763818a2f9d` |
+| `perspectivas-direito-penal` | vault **Criminal** | `82440107-2cbd-4c63-890b-eb8b88f7726d` |
 | `rstj-stj` | `~/.claude/` | `515811b7-2be9-4f28-a09a-54efbfab820f` · `cc13ec8e-917b-4956-8051-68ff2b91a258` · `d6d12379-a1db-406f-b81d-00a794cae7f3` |
 | `rtj-stf` | vault **Constitucional** | `23559e60-804b-46fc-97ec-d7aeea131bd4` **(apagado)** · `a01e1821-48bd-4c80-880a-d00c29617255` **(apagado)** · `a35d98d9-8a0f-4c29-826e-da9e5a981291` **(apagado)** |
 | `rtj-stf` | `~/.claude/` | `23559e60-804b-46fc-97ec-d7aeea131bd4` **(apagado)** · `a01e1821-48bd-4c80-880a-d00c29617255` **(apagado)** · `a35d98d9-8a0f-4c29-826e-da9e5a981291` **(apagado)** |
@@ -410,15 +413,26 @@ Verificação da conversão (páginas, chars/página, NUL, OCR pendente):
 - **Pesquisa pesada sem gastar contexto** — skill `notebooklm`: cria notebook, sobe fontes, pergunta, e só o destilado com citação volta para a Wiki. Slash `/pesquisar-notebooklm`.
 - **Dado recente ou disperso na web** — MCP `mcp__perplexity__*` (`_search` fatos/URLs · `_ask` resposta com citação · `_reason` raciocínio em etapas · `_research` multi-fonte). Slash `/pesquisa-perplexity`.
 - **PDF escaneado → Markdown** — watcher em `~/.notebooklm/` (Tesseract/Ghostscript) ou `converter_pdf_ocr.py`. Compare o tamanho antes de destilar: conversão perde conteúdo em silêncio.
+- **Página, tamanho e tarja em PDF** — `tools/pdf_ops.py` (PyMuPDF, sem servidor; Tesseract/Ghostscript via `pdf2md/ambiente.py`). Skill `/pdf-ops`. `info` (quantas páginas são digitalizadas) · `juntar` · `dividir --tamanho 10MB` (limite de upload do PJe; `--cada N`, `--paginas 1-50,51-`) · `comprimir` · `redigir --termos … --identificadores [--ocr]` (tarja QUEIMADA de nomes, CPF, CNPJ, e-mail, telefone; página digitalizada só com `--ocr`; os nomes do mapa do `anonimizar.py` servem de `--termos-arquivo`) · `girar` · `extrair` · `pdfa` (Ghostscript do PDF24). Nunca sobrescreve a entrada; exit 3 = termo não encontrado, página digitalizada sem OCR ou parte que não coube. NÃO converte PDF em Markdown (isso é `pdf2md`). Stirling-PDF foi avaliado e descartado em 2026-09-07: não pagina e o OCR só roda em servidor Java.
 - **Saída .docx** — skill `docx-juridico-padrao` (Sitka Text 12, entrelinha 1,16, 6 pt depois, margens 2 cm; citação em bloco recuado 2 cm com Segoe UI 12/1,08). Só fuja do padrão a pedido explícito.
 - **Nota-tese** — slash `/tese`: cruza vocabulário → norma → jurisprudência → doutrina, cada camada com citação, e rotula norma × jurisprudência × doutrina.
+- **Autos do PJe → atos → índice híbrido → recuperação citável** (espec `~/.notebooklm/ESPEC-INTELIGENCIA-JURIDICA-CRIMINAL.md`):
+  1. `pdf2md` perfil PJe (ou `pdf_para_markdown.py`) → `.md` paginado `## [p. N]`;
+  2. `fatiar_atos.py <vol01.md> [vol02.md …] --cnj <CNJ>` → um `.md` por ato processual (fronteira = `Num. X - Pág. N` + assinatura, OCR do id tolerado), `atos.jsonl`, `relatorio_fatiamento.md`;
+  3. `.venv-rag314/Scripts/python indexar.py casos --extracted <pasta>/extracted` → SQLite FTS5 + LanceDB/bge-m3, um chunk por página, em `%LOCALAPPDATA%\cerebro\casos.*` (**fora do OneDrive**; corpora públicos vão para `vault.*` com `indexar.py vault --pasta … --colecao …`);
+  4. `.venv-rag314/Scripts/python buscar.py casos "<pergunta>" --cnj <CNJ> [--tipo DECISAO] [--json]` → FTS5 ∪ vetorial → reranker `bge-reranker-v2-m3` → top-k prefixado `[ID <id_pje> | <vol> p. <n> | <tipo> | <data>]`. A minuta só cita o que veio daqui; o validador de fontes confere o prefixo.
+  5. distiladores sem LLM sobre o `atos.jsonl`: `cronologia_atos.py` (linha do tempo por ato + `marcos.json`: recebimento, audiência, sentença, trânsito, lidos do tipo e do texto na forma afirmativa) · `prazo_cpp.py --atos …` (radar de prazos da defesa em dias corridos, CPP 798, Súm. 310/710 STF, rito detectado na capa; `--intimacao D --dias N` calcula um prazo; `--comarca` liga feriado municipal) · `prescricao_cp.py --dispositivo lei9605:50 --fato D --atos …` (CP 109-117, pena lida do dataset do artigo, marcos do `marcos.json`, `--pena-concreta` para CP 110 §1º). Feriados em `calendario_forense.py`.
+  6. `distilar_atos.py atos.jsonl [--distiladores controversia,nulidades,prisao,dosimetria]` → LLM local (qwen3:8b, temperatura 0, JSON com schema do Ollama, um ato por chamada, trecho literal conferido) grava `distill/llm/*.json` e `distill/{controversia,nulidades,prisao,dosimetria}.md`; atos acima do teto vão para `distill/para_nuvem.json`. O local EXTRAI, não julga: vícios/nulidades são do agente `auditoria-nulidades-criminal`.
+  7. nuvem: `anonimizar.py --cnj X --capa … --denuncia … [--nomes …] [--termos …]` monta o mapa de pseudônimos (fora do OneDrive) e `llm_nuvem.py --tier forte|longo|barato|nacional --cnj X --arquivo … [--dry-run]` anonimiza → chama (tiers em `config_llm.json`, `data_collection: deny`) → reverte, logando só hash/tokens/custo em `relatorios/llm-log.jsonl`. Chaves só por variável de ambiente (`OPENROUTER_API_KEY`, `FCC_PROXY_TOKEN`, `MARITACA_API_KEY`).
+  8. gate pós-inferência: `validar_minuta.py minuta.md --atos <extracted>/atos.jsonl --peca resposta-acusacao|memoriais|apelacao|hc|rese|resp|re|… [--rito jecrim] [--intimacao D]` → `validador_fontes.py` (súmulas, temas de RG, artigos dos datasets, precedentes/temas por busca literal nos corpora, informativos, IDs e páginas do caso; marcador inline `[VERIFICAÇÃO NECESSÁRIA: …]`) + `validador_processual.py` (nulidade→pedido, pedido→fundamentação, rito, honorários em peça criminal, rol de testemunhas, prequestionamento/RG, tempestividade, âncoras) → `*.validada.md`, dois relatórios, `*.citacoes_para_verificar.json` para o agente `verificador-citacoes`. Só APROVADO vai ao .docx; 'não localizada' nunca é 'não existe'.
+  Seletores do PJe (TJMA = método `pje4`) lidos da extensão MinutaIA Conecta: `tools/pje_seletores_conecta.json`. Benchmark do LLM local: `Criminal/40-Recursos/benchmark-llm-local.md`.
 
 ## Recursos do Claude Code — os dois escopos
 
 **Escopo de usuário (`~/.claude/`) — vale em qualquer vault:**
 
 - **186 agentes** em `~/.claude/agents/` — descobertos por intenção; a descrição de cada um já diz quando acioná-lo. Não replique catálogo de agente em `CLAUDE.md`.
-- **113 skills** em `~/.claude/skills/`.
+- **115 skills** em `~/.claude/skills/`.
 - **84 slash commands** em `~/.claude/commands/`.
 
 **Escopo de vault (`<vault>/.claude/`) — 13 cofres com infra própria.**
@@ -431,9 +445,9 @@ classe **B** é casca em torno do global e declara as dependências em `REQUISIT
 |---|---|---|---|---|---|
 | Ambiental | **A** — autossuficiente | 14 | 11 | 38 | 14 |
 | Constitucional | **A** — autossuficiente | 16 | 16 | 50 | 23 |
-| Criminal | **A** — autossuficiente | 73 | 136 | 50 | 37 |
+| Criminal | **A** — autossuficiente | 73 | 136 | 50 | 38 |
 | Dissertacao | B — leve | 0 | 1 | 6 | 0 |
-| Eleitoral | **A** — autossuficiente | 26 | 8 | 65 | 18 |
+| Eleitoral | **A** — autossuficiente | 26 | 8 | 66 | 19 |
 | ExecucaoPenal | B — leve | 1 | 2 | 7 | 1 |
 | Familia | B — leve | 0 | 1 | 8 | 0 |
 | JuntaMedica | B — leve | 0 | 1 | 0 | 0 |
