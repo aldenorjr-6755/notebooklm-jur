@@ -1,0 +1,124 @@
+{
+  "_origem": "Extraído por leitura estática da extensão Chrome 'MinutaIA Conecta' v3.0.22 (ID kimheklbcampgaeojcniknnhlmgfddac), arquivos assets/NewChatLogic.js, dados.js.js, pje-init.js.js, em 2026-09-07. Nenhum código da extensão foi executado.",
+  "_uso": "Referência para o fatiador de atos (fatiar_atos.py) e para o MCP PJe (~/.notebooklm/mcp_pje). TJMA usa o método 'pje4' (PJe 2.9.7.0, mesma versão nos dois graus, conferida em 2026-09-04/05).",
+  "_aviso": "Seletores de DOM envelhecem a cada atualização do PJe. Sondar antes de confiar; o MCP PJe já cobre a maior parte por listProcessoCompletoAdvogado.seam + divTimeLine + documento/download/{id}.",
+
+  "metodo_por_tribunal": {
+    "tjma.jus.br": "pje4",
+    "_outros_pje4": ["tjmg", "tjes", "tjpe", "tjmt", "tjrn", "tjdft", "tjpa", "tjpi", "tjce", "tjap", "tjpb"],
+    "_prioridade_entre_metodos": {"pje1": 0.5, "pje2": 0.4, "pje3": 0.3, "pje4": 0.9, "pje5": 0.8, "eproc": 1.0}
+  },
+
+  "grau": {
+    "regra": "pathname começa com /pje2g/ → 2º grau; /pje/ → 1º grau; fallback por referrer, window.top e recursos carregados",
+    "prefixo": {"1": "/pje", "2": "/pje2g"},
+    "hosts_tjma": {"1": "https://pje.tjma.jus.br", "2": "https://pje2.tjma.jus.br"}
+  },
+
+  "capa_do_processo": {
+    "pagina": "*/Processo/ConsultaProcesso/Detalhe/listProcessoCompletoAdvogado.seam?id=<id>&ca=<ca>",
+    "numero_cnj": {"seletor": ".titulo-topo-desktop", "pos": "primeiro token com '-' e '.' e >= 20 caracteres"},
+    "classe": {"seletor": "dt", "regra": "dt cujo texto == 'Classe judicial' → nextElementSibling (dd)"},
+    "polo_ativo": "#poloAtivo tbody td span",
+    "polo_ativo_representacao": "#poloAtivo .tree li small span",
+    "polo_passivo": "#poloPassivo tbody td span",
+    "polo_passivo_representacao": "#poloPassivo .tree li small span",
+    "fallback_generico": "[id*=\"processo\"], [class*=\"processo\"] (texto de todos, chave = id ou className)"
+  },
+
+  "aba_documentos_grid": {
+    "abrir_aba": "a#navbar\\:linkAbaDocumentos (click, aguardar ~2 s)",
+    "aba_autos_home": "a#navbar\\:linkAbaAutosHome",
+    "corpo_grid": "#processoDocumentoGridList\\:tb",
+    "linhas": "#processoDocumentoGridList\\:tb tr",
+    "colunas": {
+      "id_documento": "td:first-child div span",
+      "coluna_7": "td:nth-child(7) div  (texto usado como metadado da linha; conferir cabeçalho no TJMA — provavelmente 'Juntado por' ou tipo)",
+      "links": "td:last-child a[href]"
+    },
+    "ignorar_link_se": ["onclick contém 'alert('", "title contém 'indisponível'"],
+    "classificacao_do_link": {
+      "3_binario_pdf": "href contém 'nomeArqProcDocBin' OU target começa com 'idpdf'",
+      "2_externo": "ícone com classe 'fa-external-link'",
+      "1_html": "href contém 'visualizarExpediente.seam' ou 'documentoHTML.seam', ou ícone 'fa-file-text-o'"
+    },
+    "nome_do_arquivo_binario": "regex nomeArqProcDocBin=([^&]+) no href, urldecode",
+    "paginacao": {
+      "campo_pagina": "input.rich-inslider-field-right  (setar value + dispatchEvent('change'))",
+      "total_paginas": ".rich-inslider-right-num (parseInt)",
+      "detectar_troca": "comparar innerHTML do grid e o id da 1ª e da última linha; polling 250 ms, timeout com retry"
+    }
+  },
+
+  "timeline_angular_frontend": {
+    "_quando": "PJe com front Angular (frontend.pje.<tribunal>). O TJMA hoje serve o JSF clássico; guardar como reserva.",
+    "item": "li.tl-item-container[id^=\"doc_\"]",
+    "anexos_container": "pje-timeline-anexos",
+    "anexo": ".tl-item-anexo[id^=\"doc_\"], .tl-item-anexo[id^=\"anexo_\"], li.tl-subitem-container[id^=\"anexo_\"]",
+    "titulo_e_id": "regex ^(.+)\\s+-\\s+([a-f0-9]+)$ sobre o texto do item; ou 'id <hex> - <título>'",
+    "data": ".tl-data, [name=\"dataItemTimeline\"]",
+    "hora": ".tl-item-hora span",
+    "botao_visualizar": "a.tl-documento[role=\"button\"]:not([target=\"_blank\"])",
+    "conteudo_html_apos_click": "pje-historico-scroll-documento .conteudo-html, mat-card.container-html .conteudo-html, .envelope-conteudo-html .conteudo-html"
+  },
+
+  "endpoints": {
+    "autos_completos_pdf": {
+      "metodo": "POST",
+      "url": "{base}/Processo/ConsultaProcesso/Detalhe/listProcessoCompletoAdvogado.seam",
+      "headers": {"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8", "Cookie": "sessão do PJe", "Origin": "{base}", "Referer": "página do processo"},
+      "body": {
+        "AJAXREQUEST": "_viewRoot",
+        "detalheDocumento": "detalheDocumento",
+        "autoScroll": "",
+        "javax.faces.ViewState": "valor de input[name='javax.faces.ViewState'] da página",
+        "detalheDocumento:downloadPJeDocs": "detalheDocumento:downloadPJeDocs",
+        "AJAX:EVENTS_COUNT": "1"
+      },
+      "resposta": "HTML/JS com window.open('<url do PDF>') → regex window\\.open\\('([^']+)'; trocar &amp; por &",
+      "pre_requisito_dom": "#detalheDocumento\\:downloadPJeDocs existe na página"
+    },
+    "documento_individual": {
+      "legacy_rest": [
+        "{base}{prefixo_grau}/seam/resource/rest/pje-legacy/documento/download/{idDoc}",
+        "{base}{prefixo_grau}/seam/resource/rest/pje-legacy/documento/download/{idDoc}?download=true"
+      ],
+      "comum_api_download": [
+        "{base}{prefixo_grau}/seam/resource/rest/pje-comum-api/api/processos/id/{idProc}/documentos/id/{idDoc}/download?incluirCapa=false&grau={grau}&incluirAssinatura=true",
+        "{base}{prefixo_grau}/seam/resource/rest/pje-comum-api/api/processos/id/{idProc}/documentos/id/{idDoc}/download",
+        "{base}{prefixo_grau}/seam/resource/rest/pje-comum-api/api/documentos/id/{idDoc}/download"
+      ],
+      "comum_api_conteudo_html": [
+        "{base}{prefixo_grau}/seam/resource/rest/pje-comum-api/api/processos/id/{idProc}/documentos/id/{idDoc}/conteudo?incluirCapa=false&grau={grau}&incluirAssinatura=true",
+        "{base}{prefixo_grau}/seam/resource/rest/pje-comum-api/api/documentos/id/{idDoc}/conteudo"
+      ],
+      "html_jsf": [
+        "{base}{prefixo_grau}/documentoHTML.seam?idDocumento={idDoc}",
+        "{base}{prefixo_grau}/Processo/ConsultaDocumento/listView.seam?idDocumento={idDoc}",
+        "{base}{prefixo_grau}/Painel/painel_usuario/documentoHTML.seam?idProcessoDoc={idDoc}",
+        "{base}{prefixo_grau}/Painel/painel_usuario/popup/visualizarExpediente.seam?paramIdProcessoDocumento={idDoc}&idProcessoDoc={idDoc}&paramIdProcessoDocumentoBin={idBin}&idBin={idBin}"
+      ],
+      "_nota": "A extensão tenta cada variante em ordem e detecta o tipo pelo magic number (%PDF, PNG, JPEG) e pelo content-type; 'pje-comum-api' foi sondado no TJMA em 2026-09-04/05 — ver ~/.notebooklm/mcp_pje/COMPARACAO-pje-ia.md"
+    },
+    "lista_documentos_json": [
+      "{base}{prefixo_grau}/seam/resource/rest/pje-comum-api/api/processos/id/{idProc}/documentos?grau={grau}",
+      "{base}{prefixo_grau}/seam/resource/rest/pje-comum-api/api/processos/id/{idProc}/documentos?incluirDocumentosJuntados=true"
+    ],
+    "autos_digitais_pagina": "{base}{prefixo_grau}/Processo/ConsultaProcesso/Detalhe/listAutosDigitais.seam?idProcesso={idProc}&cid={cid}&ca={ca}&aba=documentos&origem=pje2web",
+    "variantes_de_base": ["{origem}{prefixo_grau}/seam/resource/rest/{rota}", "{origem}/seam/resource/rest/{rota}", "{origem}{prefixo_grau}/{rota}", "{origem}/{rota}"]
+  },
+
+  "editor_de_minuta_pje": {
+    "tinymce": "window.tinyMCE.activeEditor ou iframe cujo body.id == 'tinymce'; fallback tinyMCE.get('docPrincipalEditorTextArea')",
+    "operacoes": {"inserir": "execCommand('mceInsertContent', false, texto)", "substituir": "setContent(texto)", "extrair": "getContent({format:'text'})"}
+  },
+
+  "ja_coberto_pelo_mcp_pje_local": {
+    "listProcessoCompletoAdvogado.seam": true,
+    "documento/download/{id}": true,
+    "divTimeLine:* (âncoras da linha do tempo)": true,
+    "grid #processoDocumentoGridList com paginação": false,
+    "pje-comum-api (documentos JSON, conteudo HTML)": "sondado, ver COMPARACAO-pje-ia.md",
+    "downloadPJeDocs (PDF único dos autos)": "conferir em pje_client.py se o POST AJAX é o mesmo"
+  }
+}
