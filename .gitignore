@@ -125,3 +125,7 @@
 __pycache__/
 *.pyc
 *.bak-*
+
+# 2026-09-07: espec da arquitetura criminal (norma escrita a mao) e o alvo do lote noturno.
+!/ESPEC-*.md
+!/LOTE_NOTURNO.bat

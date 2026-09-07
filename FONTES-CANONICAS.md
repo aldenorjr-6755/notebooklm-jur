@@ -22,7 +22,7 @@
 
 84 comandos em `~/.claude/commands/`. Um vault pode sombrear qualquer um deles com
 uma versão local em `<vault>/.claude/commands/` (escopo de projeto vence).
-Há hoje **255 slash commands locais** distribuídos por 13 cofres — a tabela
+Há hoje **257 slash commands locais** distribuídos por 13 cofres — a tabela
 por vault está no fim deste documento, em *Recursos do Claude Code*.
 
 | Slash | O que faz |
@@ -425,6 +425,8 @@ Verificação da conversão (páginas, chars/página, NUL, OCR pendente):
   6. `distilar_atos.py atos.jsonl [--distiladores controversia,nulidades,prisao,dosimetria]` → LLM local (qwen3:8b, temperatura 0, JSON com schema do Ollama, um ato por chamada, trecho literal conferido) grava `distill/llm/*.json` e `distill/{controversia,nulidades,prisao,dosimetria}.md`; atos acima do teto vão para `distill/para_nuvem.json`. O local EXTRAI, não julga: vícios/nulidades são do agente `auditoria-nulidades-criminal`.
   7. nuvem: `anonimizar.py --cnj X --capa … --denuncia … [--nomes …] [--termos …]` monta o mapa de pseudônimos (fora do OneDrive) e `llm_nuvem.py --tier forte|longo|barato|nacional --cnj X --arquivo … [--dry-run]` anonimiza → chama (tiers em `config_llm.json`, `data_collection: deny`) → reverte, logando só hash/tokens/custo em `relatorios/llm-log.jsonl`. Chaves só por variável de ambiente (`OPENROUTER_API_KEY`, `FCC_PROXY_TOKEN`, `MARITACA_API_KEY`).
   8. gate pós-inferência: `validar_minuta.py minuta.md --atos <extracted>/atos.jsonl --peca resposta-acusacao|memoriais|apelacao|hc|rese|resp|re|… [--rito jecrim] [--intimacao D]` → `validador_fontes.py` (súmulas, temas de RG, artigos dos datasets, precedentes/temas por busca literal nos corpora, informativos, IDs e páginas do caso; marcador inline `[VERIFICAÇÃO NECESSÁRIA: …]`) + `validador_processual.py` (nulidade→pedido, pedido→fundamentação, rito, honorários em peça criminal, rol de testemunhas, prequestionamento/RG, tempestividade, âncoras) → `*.validada.md`, dois relatórios, `*.citacoes_para_verificar.json` para o agente `verificador-citacoes`. Só APROVADO vai ao .docx; 'não localizada' nunca é 'não existe'.
+  9-10. no vault Criminal: `/analisar-autos <CNJ>` e `/minutar <peça> <CNJ>` (scripts espelhados em `Criminal/.claude/tools/pipeline/`); lote: `lote_noturno.py [--sem-llm] [--janela-min N]` roda tudo para cada `%LOCALAPPDATA%\cerebro\casos\<CNJ>\caso.json` e grava `relatorios/custo-<data>.md` (tempo por etapa, tokens locais, US$ em nuvem); `LOTE_NOTURNO.bat` é o alvo do `schtasks` (não registrado por padrão).
+  11. interface: `rag_server.py [--porta 8765]` expõe busca, casos, arquivos do caso, gate e pseudonimização por HTTP local (127.0.0.1); `openwebui_tool_cerebro.py` é a Tool do Open WebUI que o consome (Open WebUI exige Python 3.11-3.12; ver espec §7 fase 11).
   Seletores do PJe (TJMA = método `pje4`) lidos da extensão MinutaIA Conecta: `tools/pje_seletores_conecta.json`. Benchmark do LLM local: `Criminal/40-Recursos/benchmark-llm-local.md`.
 
 ## Recursos do Claude Code — os dois escopos
@@ -445,7 +447,7 @@ classe **B** é casca em torno do global e declara as dependências em `REQUISIT
 |---|---|---|---|---|---|
 | Ambiental | **A** — autossuficiente | 14 | 11 | 38 | 14 |
 | Constitucional | **A** — autossuficiente | 16 | 16 | 50 | 23 |
-| Criminal | **A** — autossuficiente | 73 | 136 | 50 | 38 |
+| Criminal | **A** — autossuficiente | 73 | 136 | 52 | 38 |
 | Dissertacao | B — leve | 0 | 1 | 6 | 0 |
 | Eleitoral | **A** — autossuficiente | 26 | 8 | 66 | 19 |
 | ExecucaoPenal | B — leve | 1 | 2 | 7 | 1 |

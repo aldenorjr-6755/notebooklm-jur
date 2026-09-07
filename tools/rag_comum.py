@@ -32,7 +32,10 @@ def _garantir_venv() -> None:
              os.path.join(os.path.expanduser("~"), ".notebooklm", ".venv-rag314", "bin", "python")]
     for py in cands:
         if py and os.path.isfile(py) and os.path.abspath(py) != os.path.abspath(_sys.executable):
-            os.execv(py, [py] + _sys.argv)
+            # subprocess, nao os.execv: no Windows o execv junta os argumentos sem aspas e
+            # "acordo de nao persecucao penal" vira cinco argumentos
+            import subprocess
+            raise SystemExit(subprocess.run([py] + _sys.argv).returncode)
     raise SystemExit("lancedb nao instalado e venv RAG nao encontrado: crie ~/.notebooklm/.venv-rag314 "
                      "(python.org 3.14 + pip install lancedb sentence-transformers torch --index-url https://download.pytorch.org/whl/cpu) "
                      "ou aponte CEREBRO_PY para um Python que tenha lancedb")
