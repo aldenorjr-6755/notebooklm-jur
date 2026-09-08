@@ -25,7 +25,7 @@
   },
   {
    "artigo": "6",
-   "texto": "Art. 6 o Esta Lei entra em vigor 90 (noventa) dias após a data de sua publicação. Brasília, 17 de setembro de 2009; 188 o da Independência e 121 o da República. LUIZ INÁCIO LULA DA SILVA Tarso Genro Paulo Bernardo Silva Este texto não substitui o publicado no DOU de 18.9.2009 (function(){var f5_cspm={f5_p:'DBKIECCEGMAOKNKGOMDBOKEJKBCJEHBKMNBCEDMDMDGPOAIPOHNMNLPHMKLGKLCPGCKBFLKHAAJIPAOJJGJAAEBFAANBIALFDIGHMEDAICPGDHEODIHEJHBOMIEHDHDL',setCharAt:function(str,index,chr){if(index>str.length-1)return str;return str.substr(0,index)+chr+str.substr(index+1);},get_byte:function(str,i){var s=(i/16)|0;i=(i&15);s=s*32;return((str.charCodeAt(i+16+s)-65) >4)+65));str=f5_cspm.setCharAt(str,(i+s),String.fromCharCode((b&15)+65));return str;},set_latency:function(str,latency){latency=latency&0xffff;str=f5_cspm.set_byte(str,40,(latency>>8));str=f5_cspm.set_byte(str,41,(latency&0xff));str=f5_cspm.set_byte(str,35,2);return str;},wait_perf_data:function(){try{var wp=window.performance.timing;if(wp.loadEventEnd>0){var res=wp.loadEventEnd-wp.navigationStart;if(res"
+   "texto": "Art. 6 o Esta Lei entra em vigor 90 (noventa) dias após a data de sua publicação. Brasília, 17 de setembro de 2009; 188 o da Independência e 121 o da República. LUIZ INÁCIO LULA DA SILVA Tarso Genro Paulo Bernardo Silva Este texto não substitui o publicado no DOU de 18.9.2009"
   }
  ]
 }

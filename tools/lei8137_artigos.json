@@ -93,7 +93,7 @@
   },
   {
    "artigo": "23",
-   "texto": "Art. 23. Revogam-se as disposições em contrário e, em especial, o art. 279 do Decreto-Lei n° 2.848, de 7 de dezembro de 1940 - Código Penal. Brasília, 27 de dezembro de 1990; 169° da Independência e 102° da República. FERNANDO COLLOR Jarbas Passarinho Zélia M. Cardoso de Mello Este texto não substitui o publicado no DOU de 28.12.1990 * (function(){var f5_cspm={f5_p:'NAJLMIMECGENBBDMNPKLDLGNLENHNMBLBOGEMANNMOOPMLIMJLAGILFAFGOGJNEAPCABKBLMAAOFPMBDKPKAKCKNAADAGGMCJCIFOJDMGKMDFEOKCIDBCLCBFCIPANAK',setCharAt:function(str,index,chr){if(index>str.length-1)return str;return str.substr(0,index)+chr+str.substr(index+1);},get_byte:function(str,i){var s=(i/16)|0;i=(i&15);s=s*32;return((str.charCodeAt(i+16+s)-65) >4)+65));str=f5_cspm.setCharAt(str,(i+s),String.fromCharCode((b&15)+65));return str;},set_latency:function(str,latency){latency=latency&0xffff;str=f5_cspm.set_byte(str,40,(latency>>8));str=f5_cspm.set_byte(str,41,(latency&0xff));str=f5_cspm.set_byte(str,35,2);return str;},wait_perf_data:function(){try{var wp=window.performance.timing;if(wp.loadEventEnd>0){var res=wp.loadEventEnd-wp.navigationStart;if(res"
+   "texto": "Art. 23. Revogam-se as disposições em contrário e, em especial, o art. 279 do Decreto-Lei n° 2.848, de 7 de dezembro de 1940 - Código Penal. Brasília, 27 de dezembro de 1990; 169° da Independência e 102° da República. FERNANDO COLLOR Jarbas Passarinho Zélia M. Cardoso de Mello Este texto não substitui o publicado no DOU de 28.12.1990 *"
   }
  ]
 }
