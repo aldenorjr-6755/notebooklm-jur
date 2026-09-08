@@ -1,7 +1,16 @@
 import sys,re,json
+from html import unescape   # NAO usar `import html`: a variavel `html` guarda a pagina
 html=open(sys.argv[1],"rb").read().decode("latin-1")
 fonte,url=sys.argv[3],sys.argv[4]
-txt=re.sub(r'<[^>]+>',' ',html); txt=re.sub(r'&nbsp;|&#160;',' ',txt); txt=re.sub(r'[ \t]+',' ',txt)
+# Mesmo defeito do extrair_codigo.py, corrigido em 2026-09-08: o strip de tags apaga a TAG e
+# preserva o CONTEUDO, entao o <script> de anti-bot do Planalto (F5 CSPM) era acumulado no ULTIMO
+# artigo do tratado. Script, style e comentario caem antes.
+html=re.sub(r'(?is)<script\b.*?</script>',' ',html)
+html=re.sub(r'(?is)<style\b.*?</style>',' ',html)
+html=re.sub(r'(?s)<!--.*?-->',' ',html)
+txt=re.sub(r'<[^>]+>',' ',html)
+txt=unescape(txt).replace('\xa0',' ')   # entidades: cobre &nbsp; e QUALQUER &#NNNN;
+txt=re.sub(r'[ \t]+',' ',txt)
 heads=list(re.finditer(r'(?:ARTIGO|Artigo)\s*(\d+)', txt)); M={}  # capital A; nao a ref minuscula "artigo"
 for k,m in enumerate(heads):
     n=int(m.group(1)); s=m.end(); e=heads[k+1].start() if k+1<len(heads) else len(txt)
