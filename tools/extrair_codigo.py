@@ -1,4 +1,5 @@
 import sys,re,json
+from html import unescape   # NAO usar `import html`: a variavel `html` guarda a pagina
 # Extrator generico de CODIGO/LEI Planalto: cabecalho de artigo INICIA um <p>...> ("Art. N").
 # Acumula paragrafos seguintes (incisos/paragrafos) ate o proximo "Art. N".
 # Uso: python extrair_codigo.py <html> <out.json> "<fonte>" "<url>" <art_max>
@@ -24,10 +25,20 @@ raw=open(sys.argv[1],"rb").read()
 if raw[:2] in (b'\xff\xfe',b'\xfe\xff'): html=raw.decode("utf-16",errors="ignore")
 elif raw[:3]==b'\xef\xbb\xbf': html=raw.decode("utf-8-sig")
 else: html=raw.decode("latin-1")
+# O Planalto serve um <script> de anti-bot (F5 CSPM) junto com o texto da lei. O strip de tags do
+# clean() apaga a TAG e preserva o CONTEUDO, entao o JavaScript ia sendo acumulado no ultimo
+# artigo em curso: o art. 12 da Lei 9.296 saiu com 780 caracteres de codigo colados na norma, e
+# 32 dos 62 datasets carregavam o mesmo lixo no artigo final. Script, style e comentario sao
+# ruido de pagina, nunca norma - caem aqui, antes do fatiamento por <p>.
+html=re.sub(r'(?is)<script\b.*?</script>',' ',html)
+html=re.sub(r'(?is)<style\b.*?</style>',' ',html)
+html=re.sub(r'(?s)<!--.*?-->',' ',html)
+
 fonte,url=sys.argv[3],sys.argv[4]; amax=int(sys.argv[5]) if len(sys.argv)>5 else 0
 def clean(s):
     s=re.sub(r'<[^>]+>',' ',s)
-    s=s.replace('&nbsp;',' ').replace('&#160;',' ').replace('&quot;','"').replace('&amp;','&').replace('&ordm;','º').replace('&deg;','º')
+    s=unescape(s)                     # cobre &nbsp; &quot; &amp; &ordm; e QUALQUER &#NNNN;
+    s=s.replace('\xa0',' ')          # nbsp ja decodificado vira espaco de verdade
     s=re.sub(r'[ \t\r\n]+',' ',s).strip()
     s=re.sub(r'\bA\s?rt\s?\.\s*(?=\d)','Art. ',s)  # corrige cabeçalho quebrado "A rt." / "Ar t."
     s=re.sub(r'^Art\s+(?=\d)','Art. ',s)           # cabeçalho sem ponto: "Art 61." (Lei 9.504)
