@@ -1,5 +1,15 @@
 {
  "fonte": "Constituição Federal de 1988 (texto Planalto, atualizado até EC 139)",
+ "origem": {
+  "tipo": "pdf",
+  "arquivo": "~/.notebooklm/biblioteca/pdf/CF_Planalto_EC139.pdf",
+  "markdown": "~/.notebooklm/biblioteca/md/CF_Planalto_EC139.md",
+  "paginas": 286,
+  "sha256": "7004e0a2dd3c94af7ebcc52b354912e78bd6da5841901a3aff57d728c548b6a4",
+  "extrator": "extrair_cf.py",
+  "nota": "NAO re-extrair com extrair_codigo.py/extrair_tratado.py: a origem e' PDF, nao HTML. Por isso este dataset nao tem campo `url` e fica de fora da re-extracao automatica.",
+  "publicador": "https://portal.stf.jus.br/arquivo/livraria/"
+ },
  "total": 276,
  "artigos": [
   {

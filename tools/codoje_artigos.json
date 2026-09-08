@@ -1,5 +1,14 @@
 {
  "fonte": "Código de Divisão e Organização Judiciárias do Maranhão (consolidado até LC 298/2026)",
+ "origem": {
+  "tipo": "pdf",
+  "arquivo": "~/.notebooklm/biblioteca/pdf/CODOJE_MA_LC298_2026.pdf",
+  "markdown": "~/.notebooklm/biblioteca/md/CODOJE_MA_LC298_2026.md",
+  "paginas": 97,
+  "sha256": "fd64d89f6959a16a1a83be9e529ad19b727d49acf57d8338b7237dce6bda9b60",
+  "extrator": "nao registrado — a extracao foi feita a partir deste PDF",
+  "nota": "NAO re-extrair com extrair_codigo.py/extrair_tratado.py: a origem e' PDF, nao HTML. Por isso este dataset nao tem campo `url` e fica de fora da re-extracao automatica."
+ },
  "total": 275,
  "artigos": [
   {

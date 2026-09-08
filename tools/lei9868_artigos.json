@@ -1,5 +1,15 @@
 {
  "fonte": "Lei 9.868/1999 (ADI e ADC) — edição temática STF (anotada)",
+ "origem": {
+  "tipo": "pdf",
+  "arquivo": "~/.notebooklm/biblioteca/pdf/Lei9868_ADI_ADC_tematica_STF.pdf",
+  "markdown": "~/.notebooklm/biblioteca/md/Lei9868_ADI_ADC_tematica_STF.md",
+  "paginas": 63,
+  "sha256": "9b66bdb2d3302743ebf159bfdc1acf899c0a0bfd5822e40aeaab1006fdca4f70",
+  "extrator": "nao registrado — a extracao foi feita a partir deste PDF",
+  "nota": "NAO re-extrair com extrair_codigo.py/extrair_tratado.py: a origem e' PDF, nao HTML. Por isso este dataset nao tem campo `url` e fica de fora da re-extracao automatica.",
+  "publicador": "https://portal.stf.jus.br/"
+ },
  "total": 39,
  "artigos": [
   {

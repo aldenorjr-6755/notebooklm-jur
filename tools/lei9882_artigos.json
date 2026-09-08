@@ -1,5 +1,15 @@
 {
  "fonte": "Lei 9.882/1999 (ADPF) — edição temática STF (anotada)",
+ "origem": {
+  "tipo": "pdf",
+  "arquivo": "~/.notebooklm/biblioteca/pdf/Lei9882_ADPF_tematica_STF.pdf",
+  "markdown": "~/.notebooklm/biblioteca/md/Lei9882_ADPF_tematica_STF.md",
+  "paginas": 36,
+  "sha256": "647cdef5fb4662b1312c30e2222d3f6084b67b919bbaff3a4bbd87e679f7c179",
+  "extrator": "nao registrado — a extracao foi feita a partir deste PDF",
+  "nota": "NAO re-extrair com extrair_codigo.py/extrair_tratado.py: a origem e' PDF, nao HTML. Por isso este dataset nao tem campo `url` e fica de fora da re-extracao automatica.",
+  "publicador": "https://portal.stf.jus.br/"
+ },
  "total": 14,
  "artigos": [
   {

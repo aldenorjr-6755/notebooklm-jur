@@ -1,5 +1,15 @@
 {
  "fonte": "Estatuto da Advocacia e da OAB (Lei 8.906/1994) — edição temática STF (anotada)",
+ "origem": {
+  "tipo": "pdf",
+  "arquivo": "~/.notebooklm/biblioteca/pdf/EAOAB_Lei8906_tematica_STF.pdf",
+  "markdown": "~/.notebooklm/biblioteca/md/EAOAB_Lei8906_tematica_STF.md",
+  "paginas": 53,
+  "sha256": "55e9206abd7854a9780d395c09f32de79b0a90a65ca75ceaafdfc8e412529f6f",
+  "extrator": "nao registrado — a extracao foi feita a partir deste PDF",
+  "nota": "NAO re-extrair com extrair_codigo.py/extrair_tratado.py: a origem e' PDF, nao HTML. Por isso este dataset nao tem campo `url` e fica de fora da re-extracao automatica.",
+  "publicador": "https://portal.stf.jus.br/"
+ },
  "total": 88,
  "artigos": [
   {
