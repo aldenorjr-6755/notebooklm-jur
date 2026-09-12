@@ -28,6 +28,13 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 import rag_comum as R  # noqa: E402
 
+# stdout em UTF-8: sem isto, `--json > arquivo` no Windows sai em cp1252 e o JSON fica ilegivel
+for _s in (sys.stdout, sys.stderr):
+    try:
+        _s.reconfigure(encoding="utf-8", errors="replace")
+    except AttributeError:
+        pass
+
 _RERANKER = None
 
 # Medido em 2026-09-07 (Core 7 150U): o reranker custa ~1-2 s por par a 512 tokens. Com 20-30

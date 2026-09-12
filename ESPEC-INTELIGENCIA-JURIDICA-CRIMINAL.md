@@ -26,7 +26,7 @@ completo em `Criminal/40-Recursos/benchmark-llm-local.md`):
 | Modelo | Geração | Ingestão de prompt | Prompt de 2k tokens | Autos deste caso (733 págs ≈ 368k tokens) |
 |---|---|---|---|---|
 | qwen3:8b (Q4_K_M, 5,2 GB) | 5,5 tok/s (3,5 com contexto cheio) | **13-14 tok/s** | 147 s | ~7,3 h só de ingestão |
-| phi4-mini (2,5 GB) | 11,5 tok/s | 23 tok/s | ~90 s (estim.) | ~4,4 h |
+| phi4-mini (2,5 GB) — *removido em 2026-09-09* | 11,5 tok/s | 23 tok/s | ~90 s (estim.) | ~4,4 h |
 | bge-m3 (embedding, 1024d) | 2 textos em 5,4 s com carga; ~20-40 chunks/s em regime | | | minutos |
 | bge-reranker-v2-m3 (venv `.venv-rag314`, torch CPU) | 2 pares em 1,1 s | | | reordenar 40 candidatos ≈ 20 s |
 
@@ -51,7 +51,7 @@ o texto anonimizado antes de sair da máquina. A divisão exata por faixa de tam
 | Fontes primárias | CF, CP, CPP, LEP, CPC, CC, CTN, EAOAB, leis especiais em JSON por artigo; súmulas STF/STJ/vinculantes; Temas de RG; informativos STF/STJ/TSE; RSTJ, RTJ; boletins de precedentes; 10 colunas ConJur/Migalhas | `~/.notebooklm/tools/*.json`, `~/.notebooklm/<corpus>/` |
 | Entrada de autos | MCP PJe TJMA (autos por CNJ + OCR), DataJud, DJEN (API oficial, tarefa diária), Jusbrasil CLI, PDPJ | `~/.notebooklm/mcp_pje/`, `datajud/`, `djen_monitor/`, `jusbrasil/`, `pdpj/` |
 | Grafo | graphify (god nodes, comunidades) já rodado no vault Criminal | `Criminal/graphify-out/` |
-| Inferência local | Ollama com `qwen3:8b`, `phi4-mini` e `bge-m3` baixados em 2026-09-07; reranker `bge-reranker-v2-m3` no venv `.venv-rag314` (Python 3.14 do python.org, porque o Smart App Control bloqueia o Python do `uv`) | `%LOCALAPPDATA%\Programs\Ollama`, `~/.notebooklm/.venv-rag314` |
+| Inferência local | Ollama com `qwen3:8b` e `bge-m3` (o `phi4-mini`, baixado em 2026-09-07, foi removido em 2026-09-09 — a classificação de `ato_tipo` passou ao `qwen3:8b`); reranker `bge-reranker-v2-m3` no venv `.venv-rag314` (Python 3.14 do python.org, porque o Smart App Control bloqueia o Python do `uv`) | `%LOCALAPPDATA%\Programs\Ollama`, `~/.notebooklm/.venv-rag314` |
 | Inferência remota | Claude Code (este ambiente); proxy `fcc` → DeepSeek V4 Pro (porta 8082, token expirado hoje); NotebookLM via CLI `nlm` | memória `fcc-deepseek-proxy`, `notebooklm-mcp-cli-*` |
 | Anti-alucinação | agente `verificador-citacoes` (read-only, contexto isolado); skill `/verificar-fila`; lint de CPF/CNPJ | `~/.claude/agents/`, vault |
 | Exportação | `gerar_docx_juridico.py` + skill `docx-juridico-padrao` (Sitka) | vault Criminal `.claude/tools/` |
@@ -436,7 +436,7 @@ validador antes de chegar ao Express.
 
 | Faixa do ato | Motor | Por quê |
 |---|---|---|
-| até 2k tokens (a maioria dos despachos, decisões, certidões, termos) | LLM local (qwen3:8b; phi4-mini para classificação) | ~2,5 min por ato no pior caso; lote noturno cobre o processo inteiro |
+| até 2k tokens (a maioria dos despachos, decisões, certidões, termos) | LLM local (`qwen3:8b`, inclusive a classificação de `ato_tipo`) | ~2,5 min por ato no pior caso; lote noturno cobre o processo inteiro |
 | 2k a 8k tokens | LLM local só se houver folga; senão nuvem barata | 8k tokens = 10 min só de ingestão |
 | acima de 8k (anexos, laudos, procedimentos administrativos, IP) | nuvem barata, anonimizado | um anexo de 56k tokens levaria mais de 1 h local |
 | síntese cross-document (`controversia`, `jurisprudencia-filtrada`, `cronologia` final) | nuvem forte | precisa ver todos os atos de uma vez |
@@ -450,6 +450,14 @@ leitura. A denúncia de 1,4k tokens com JSON de 900 tokens levou 316 s. Por isso
 `num_predict` 700) e a saída estruturada usa o `format` do Ollama, que impõe o schema no decode.
 Cada `trecho` é conferido contra o texto do ato (`localizado`): o que não for encontrado fica
 marcado no relatório, nunca apagado.
+
+**Custo da reatribuição do fallback (2026-09-09):** com a remoção do `phi4-mini`, a classificação
+de `ato_tipo` quando o regex falha passou ao `qwen3:8b`. Pelo benchmark de 2026-09-07 (§0.1), isso
+custa cerca de **2× em tempo**: geração de 5,5 tok/s contra 11,5, ingestão de 13-14 tok/s contra 23.
+Para ato curto — que é o caso de uso do fallback — a diferença é de segundos e não muda o desenho.
+Ela só pesa em lote noturno com muitos atos caindo no fallback: se o regex de `ato_tipo` degradar
+a ponto de o fallback virar regra, a resposta é corrigir o regex (§3.1.2), não repuxar um segundo
+modelo — dois modelos no disco custam RAM e uma segunda carga fria a cada troca.
 
 ### 3.4 Fase 4 — Express (minutagem em camadas)
 
@@ -534,7 +542,8 @@ Detalhes que a espec-base não previa e o histórico deste ambiente exige:
 ```bash
 ollama pull qwen3:8b          # ~5 GB, distiladores por ato, PT-BR bom, tool-calling
 ollama pull bge-m3            # embedding 1024d
-ollama pull phi4-mini         # ~2,5 GB, classificação rápida de ato_tipo quando o regex falha
+# classificação de ato_tipo quando o regex falha: usar o próprio qwen3:8b
+# (o phi4-mini foi baixado em 2026-09-07 e removido em 2026-09-09, sem uso amarrado em código)
 # opcional, qualidade > velocidade:
 ollama pull gemma3:12b        # ~8 GB, ~3-5 tok/s
 ```
@@ -611,7 +620,7 @@ linha do OCR), logo o texto revertido não é byte a byte igual ao original.
 
 | Fase | Entrega | Existe? | Esforço | Dependência |
 |---|---|---|---|---|
-| 1 | `ollama pull` (qwen3:8b, bge-m3, phi4-mini) + benchmark registrado | **feito 2026-09-07** (§0.1) | — | — |
+| 1 | `ollama pull` (qwen3:8b, bge-m3, phi4-mini — este removido em 2026-09-09) + benchmark registrado | **feito 2026-09-07** (§0.1) | — | — |
 | 2 | venv com `lancedb`, `sentence-transformers`, `torch` CPU e o reranker baixado | **feito 2026-09-07**: `.venv-rag314` (python.org 3.14; o SAC bloqueou o Python do `uv`); lancedb 0.38, torch 2.14+cpu, reranker testado | — | — |
 | 3 | `fatiar_atos.py` (§3.1.2) + `atos.jsonl` + testes nos autos de `~/.notebooklm/autos/0800515` e `casos/0801524-21.2024.8.10.0093`; conferência cruzada com o grid do PJe (§3.1.3, `pje_seletores_conecta.json`) | **feito 2026-09-07** em `tools/fatiar_atos.py`: 733 págs → 110 atos, 8 indeterminados, 14 ids de OCR unificados, 2 atos atravessando volume; falta a conferência cruzada com o grid do PJe (depende do MCP) | — | MCP PJe |
 | 4 | `indexar.py`: FTS5 + LanceDB (dois bancos) + `buscar.py` híbrido com reranker | **feito 2026-09-07** (`tools/rag_comum.py`, `indexar.py`, `buscar.py`; bancos em `%LOCALAPPDATA%\cerebro\`). Caso de teste: 747 chunks (uma página cada) em 37 min de embedding; consulta com reranker 35-40 s, sem reranker (fusão RRF) 1,5 s com o mesmo top-2; corpus Crítica Penal indexado no banco `vault` (102 chunks, só FTS por ora). Reranker leve `gte-multilingual-reranker-base` testado e descartado (código próprio incompatível). Falta: embeddings dos corpora públicos em lote noturno; reranker mais leve ainda em aberto | — | fases 1-2 |

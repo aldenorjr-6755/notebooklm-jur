@@ -396,6 +396,47 @@ def classificar_por_cabecalho(texto: str, max_linhas: int = 60) -> tuple[str | N
     return None, None, None
 
 
+RE_FICHA_TIPO = re.compile(r"Tipo\s+de\s+documento:\s*(.+)", re.I)
+RE_FICHA_DESC = re.compile(r"Descri[çc][ãa]o\s+do\s+documento:\s*(.+)", re.I)
+RE_FICHA_DATA = re.compile(r"Data\s+da\s+assinatura:\s*(\d{2}/\d{2}/\d{4})", re.I)
+TIPOS_FICHA_PJE = {  # "Tipo de documento" do PJe 2º grau -> tipo do vocabulario (quando o titulo nao decide)
+    "peticao inicial": "PETICAO", "peticao": "PETICAO", "protocolo de inquerito policial e procedimentos": "ANEXO PROCEDIMENTO EXTERNO",
+    "documento diverso": "DOCUMENTO DIVERSO", "documentos diversos": "DOCUMENTO DIVERSO", "certidao": "CERTIDAO", "decisao": "DECISAO",
+    "despacho": "DESPACHO", "sentenca": "SENTENCA", "acordao": "ACORDAO", "mandado": "MANDADO", "oficio": "OFICIO",
+    "termo": "TERMO", "procuracao": "PROCURACAO", "carta precatoria": "CARTA PRECATORIA", "intimacao": "INTIMACAO",
+    "denuncia": "DENUNCIA", "resposta a acusacao": "RESPOSTA A ACUSACAO", "alegacoes finais": "ALEGACOES FINAIS",
+    "recurso": "RECURSO", "razoes": "RAZOES", "contrarrazoes": "CONTRARRAZOES", "parecer": "PARECER MP", "laudo": "LAUDO",
+    "ata de audiencia": "TERMO DE AUDIENCIA", "termo de audiencia": "TERMO DE AUDIENCIA", "diligencia": "DILIGENCIA",
+    "ato ordinatorio": "ATO ORDINATORIO",
+}
+
+
+def ler_ficha_pje(texto: str) -> dict | None:
+    """Exportacao do PJe (2º grau, e alguns 1º) traz, na 1ª pagina de cada documento, a ficha
+    'Tipo de documento: … / Descrição do documento: … / Data da assinatura: …'. E' a classificacao
+    oficial do proprio sistema: vale mais que o cabecalho."""
+    cabeca = texto[:3000]
+    mt = RE_FICHA_TIPO.search(cabeca)
+    if not mt:
+        return None
+    md = RE_FICHA_DESC.search(cabeca)
+    mdt = RE_FICHA_DATA.search(cabeca)
+    tipo_pje = mt.group(1).strip()
+    desc = md.group(1).strip() if md else ""
+    chave = _sem_acento(tipo_pje).lower()
+    tipo = None
+    for k, v in TIPOS_FICHA_PJE.items():
+        if chave.startswith(k):
+            tipo = v
+            break
+    # a descricao pode ser mais especifica ("Denúncia MPE", "Decisão que recebe a denúncia")
+    t2, _ = _tipo_do_indice({"documento": desc, "tipo": None}) if desc else (None, None)
+    if t2 and t2 not in TIPOS_GENERICOS:
+        tipo = t2
+    return {"tipo": tipo or _slug_tipo(tipo_pje).replace("-", " "), "tipo_pje": tipo_pje, "documento": desc,
+            "data": mdt.group(1) if mdt else None}
+
+
 def _tipo_do_indice(entrada: dict) -> tuple[str | None, str | None]:
     """Tipo a partir da linha do indice da capa: o campo 'documento' (ex.: 'Denúncia MPE (70)')
     e' mais especifico que a coluna 'tipo' (ex.: 'Petição Inicial')."""
@@ -504,6 +545,11 @@ def _montar_ato(seq: int, grupo: list[Pagina], indice: dict[str, dict], multi_vo
     tipo, tipo_origem, titulo = None, "indeterminado", None
     if id_pje is None and seq == 1:
         tipo, tipo_origem, titulo = "CAPA INDICE", "posicao", "Capa e indice dos autos"
+    ficha = ler_ficha_pje(texto) if tipo is None else None
+    if ficha:
+        tipo, tipo_origem, titulo = ficha["tipo"], "ficha-pje", (ficha["documento"] or ficha["tipo_pje"])[:120]
+        if data_br is None and ficha.get("data"):
+            data_br = ficha["data"]
     if tipo is None and entrada:
         t_idx, tit_idx = _tipo_do_indice(entrada)
         if t_idx:

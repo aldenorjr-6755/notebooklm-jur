@@ -263,6 +263,8 @@ def main(argv=None) -> int:
     ap.add_argument("--atos", help="atos.jsonl para ler marcos (recebimento, pronúncia, sentença, acórdão)")
     ap.add_argument("--marcos-json", help="marcos.json do cronologia_atos.py (padrão: <extracted>/../distill/marcos.json se existir)")
     ap.add_argument("--marco", nargs=2, action="append", metavar=("DATA", "DESCRICAO"), default=[])
+    ap.add_argument("--ignorar", action="append", default=[], metavar="PALAVRA",
+                    help="descarta marcos cuja descrição contém a palavra (ex.: --ignorar recebimento, quando a decisão de recebimento foi anulada)")
     ap.add_argument("--suspensao", nargs=3, action="append", metavar=("INI", "FIM", "MOTIVO"), default=[])
     ap.add_argument("--hoje")
     ap.add_argument("--cnj")
@@ -288,9 +290,21 @@ def main(argv=None) -> int:
     mj = a.marcos_json or (str(Path(a.atos).parent.parent / "distill" / "marcos.json") if a.atos else None)
     if mj and Path(mj).is_file():
         m2, avisos_extra = marcos_do_json(mj)
-        vistos = {(d, f) for d, _, f in marcos}
-        marcos += [x for x in m2 if (x[0], x[2]) not in vistos]
+        marcos += m2
     marcos += [(date.fromisoformat(d), desc, "linha de comando") for d, desc in a.marco]
+    # dedup: mesmo dia + mesmo tipo de marco (o texto da fonte varia entre atos.jsonl e marcos.json)
+    vistos, unicos = set(), []
+    for d, desc, f in marcos:
+        chave = (d, desc.split("(")[0].strip().lower()[:24])
+        if chave in vistos:
+            continue
+        vistos.add(chave)
+        unicos.append((d, desc, f))
+    marcos = unicos
+    if a.ignorar:
+        antes = len(marcos)
+        marcos = [m for m in marcos if not any(p.lower() in m[1].lower() for p in a.ignorar)]
+        avisos_extra.append(f"marcos ignorados por --ignorar {a.ignorar}: {antes - len(marcos)} (cenário em que o ato interruptivo é nulo)")
     susp = [(date.fromisoformat(i), date.fromisoformat(f), m) for i, f, m in a.suspensao]
     r = calcular(pena_max, fato, marcos, hoje, date.fromisoformat(a.nascimento) if a.nascimento else None,
                  date.fromisoformat(a.data_sentenca) if a.data_sentenca else None,

@@ -102,7 +102,21 @@ def chamar(tier: str, instrucao: str, texto: str, cnj: str | None = None, schema
         body = {"model": modelo, "messages": mensagens, "temperature": t["temperatura"],
                 "max_tokens": max_tokens or t["max_tokens"]} | prov.get("politica", {})
         if schema:
-            body["response_format"] = {"type": "json_schema", "json_schema": {"name": "saida", "strict": True, "schema": schema}}
+            # Nem todo provedor aceita structured output por json_schema. A API direta da DeepSeek,
+            # por exemplo, so tem {"type": "json_object"} — mandar json_schema devolve HTTP 400.
+            # Quando o provedor nao suporta, o schema vai NO PROMPT e o parse fica por conta do
+            # chamador (que ja valida required antes de aceitar a saida).
+            if prov.get("suporta_json_schema", True):
+                body["response_format"] = {"type": "json_schema",
+                                           "json_schema": {"name": "saida", "strict": True, "schema": schema}}
+            else:
+                body["response_format"] = {"type": "json_object"}
+                body["messages"] = [mensagens[0], {
+                    "role": "user",
+                    "content": mensagens[1]["content"] +
+                    "\n\n=== FORMATO OBRIGATORIO DA RESPOSTA ===\nResponda SOMENTE com um objeto JSON "
+                    "valido que obedeca exatamente a este JSON Schema, sem texto fora do JSON:\n"
+                    + json.dumps(schema, ensure_ascii=False)}]
         if m["provedor"] == "openrouter":
             body["usage"] = {"include": True}
         t0 = time.time()
@@ -114,7 +128,14 @@ def chamar(tier: str, instrucao: str, texto: str, cnj: str | None = None, schema
         except (urllib.error.URLError, TimeoutError) as e:
             erros.append(f"{modelo}: {e}")
             continue
-        conteudo = d["choices"][0]["message"]["content"]
+        conteudo = (d.get("choices") or [{}])[0].get("message", {}).get("content")
+        if not conteudo:
+            # modelo devolveu content vazio/null (acontece em recusa, corte por filtro ou tool_call
+            # inesperado). Sem esta guarda o None chegava ao reverter() e virava
+            # "TypeError: expected string or bytes-like object" — visto em 09/09/2026.
+            erros.append(f"{modelo}: resposta sem conteudo (finish_reason="
+                         f"{(d.get('choices') or [{}])[0].get('finish_reason')})")
+            continue
         uso = d.get("usage", {}) or {}
         reg = {"ts": time.strftime("%Y-%m-%dT%H:%M:%S"), "cnj": cnj, "tier": tier, "provedor": m["provedor"], "modelo": modelo,
                "tokens_in": uso.get("prompt_tokens"), "tokens_out": uso.get("completion_tokens"),

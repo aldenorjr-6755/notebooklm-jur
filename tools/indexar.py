@@ -14,7 +14,13 @@ Uso:
   .venv-rag314/Scripts/python tools/indexar.py vault --pasta ~/.notebooklm/informativo_stj/fontes --colecao informativos_stj
   # so FTS (sem embeddings), para testar rapido
   ... --sem-vetor
+  # continuar indexacao interrompida (desligamento, queda do Ollama): nao refaz o que ja tem vetor
+  ... --retomar
 Reindexar uma colecao apaga o que havia dela antes (por colecao, nao o banco inteiro).
+Com --retomar, o LanceDB e' preservado: pulam-se os chunk_id ja gravados e removem-se os que
+sumiram da fonte. A chave e' o chunk_id, que embute o hash do bloco — texto alterado gera id novo,
+entao edicao da fonte e' reindexada sozinha. Se a leitura do indice falhar, cai para refazer tudo
+(avisando), porque retomar as cegas duplicaria vetores.
 """
 from __future__ import annotations
 
@@ -108,8 +114,61 @@ def chunks_de_nota(md: str, colecao: str, fonte: str) -> list[dict]:
     return out
 
 
+def _trava(banco: str, colecao: str, forcar: bool = False):
+    """Impede DUAS indexacoes simultaneas da mesma colecao. Sem isso, cada processo le o indice no
+    inicio, todos concluem que faltam os mesmos chunks e todos gravam — o resultado e' vetor
+    duplicado (visto em 09/09/2026: 1.632 linhas para 800 chunk_id). Devolve o Path da trava."""
+    import os as _os
+    alvo = R.CEREBRO_DIR / f".lock-{banco}-{re.sub(r'[^A-Za-z0-9._-]', '_', colecao)}"
+    if alvo.exists() and not forcar:
+        try:
+            pid = int(alvo.read_text(encoding="utf-8").split()[0])
+        except Exception:
+            pid = -1
+        vivo = False
+        if pid > 0:
+            try:
+                _os.kill(pid, 0)          # no Windows so sinaliza se o processo existe
+                vivo = True
+            except OSError:
+                vivo = False
+            except Exception:
+                vivo = True               # na duvida, trata como vivo
+        if vivo:
+            raise SystemExit(f"ERRO: ja ha indexacao da colecao {colecao} em curso (PID {pid}). "
+                             f"Espere terminar, ou use --forcar se tiver certeza de que morreu "
+                             f"(trava: {alvo})")
+        print(f"  trava orfa de PID {pid} ignorada", flush=True)
+    alvo.write_text(f"{_os.getpid()} {time.time():.0f}\n", encoding="utf-8")
+    return alvo
+
+
+def _ids_no_lance(tbl, colecao: str):
+    """chunk_ids ja embutidos para a colecao. Devolve None se nao der para ler com seguranca —
+    e' o sinal para NAO retomar (retomar sem saber o que ha gravado duplicaria vetores)."""
+    try:
+        tb = (tbl.search().where(f"colecao = '{colecao}'")
+              .select(["chunk_id"]).limit(10_000_000).to_arrow())
+        return set(tb.column("chunk_id").to_pylist())
+    except Exception:
+        return None
+
+
+def _apagar_ids(tbl, ids: list, lote: int = 200) -> int:
+    """Remove do LanceDB os chunk_ids dados (os que sumiram da fonte). Devolve quantos foram."""
+    n = 0
+    for i in range(0, len(ids), lote):
+        alvo = ", ".join("'" + s.replace("'", "''") + "'" for s in ids[i:i + lote])
+        try:
+            tbl.delete(f"chunk_id IN ({alvo})")
+            n += len(ids[i:i + lote])
+        except Exception:
+            pass
+    return n
+
+
 def gravar(banco: str, colecao: str, chunks: list[dict], sem_vetor: bool, lote: int = 16,
-           quiet: bool = False) -> dict:
+           quiet: bool = False, retomar: bool = False, sem_vetor_em: str = "") -> dict:
     con = R.abrir_sqlite(banco)
     con.execute("DELETE FROM chunks WHERE colecao = ?", (colecao,))
     agora = time.time()
@@ -120,19 +179,46 @@ def gravar(banco: str, colecao: str, chunks: list[dict], sem_vetor: bool, lote: 
           c["data"], c["volume"], c["pagina"], c["parte"], c["chars"], c["hash"], c["texto"], agora)
          for c in chunks])
     con.commit()
-    stats = {"chunks": len(chunks), "vetores": 0, "seg_embed": 0.0}
+    stats = {"chunks": len(chunks), "vetores": 0, "seg_embed": 0.0, "reaproveitados": 0,
+             "sem_vetor": 0}
     if sem_vetor:
         con.close()
         return stats
     db = R.abrir_lance(banco)
     tbl = R.tabela_lance(db)
-    try:
-        tbl.delete(f"colecao = '{colecao}'")
-    except Exception:
-        pass
+    # chunks que ficam SO no FTS5: tabela numerica bruta (ERB/CDR, planilha) nao ganha nada com
+    # embedding — a busca util nelas e' exata (numero, data), que o FTS5 ja faz. Ficam no SQLite.
+    vetorizaveis = chunks
+    if sem_vetor_em:
+        rx = re.compile(sem_vetor_em, re.I)
+        vetorizaveis = [c for c in chunks if not rx.search(f"{c['volume']} {c['fonte']}")]
+        stats["sem_vetor"] = len(chunks) - len(vetorizaveis)
+        if not quiet and stats["sem_vetor"]:
+            fora = sorted({c["volume"] for c in chunks if rx.search(f"{c['volume']} {c['fonte']}")})
+            print(f"  so-FTS ({sem_vetor_em}): {stats['sem_vetor']} chunks fora do vetor "
+                  f"— {', '.join(fora) if len(fora) < 6 else str(len(fora)) + ' fontes'}", flush=True)
+    pendentes = vetorizaveis
+    ja = _ids_no_lance(tbl, colecao) if retomar else None
+    if retomar and ja is None and not quiet:
+        print("  AVISO: nao consegui ler o indice existente — refazendo a colecao inteira",
+              flush=True)
+    if ja is not None:
+        novos = {c["chunk_id"] for c in vetorizaveis}
+        obsoletos = sorted(ja - novos)   # sumiram da fonte OU sairam do vetor por --sem-vetor-em
+        rem = _apagar_ids(tbl, obsoletos) if obsoletos else 0
+        pendentes = [c for c in vetorizaveis if c["chunk_id"] not in ja]
+        stats["reaproveitados"] = len(vetorizaveis) - len(pendentes)
+        if not quiet:
+            print(f"  retomando: {stats['reaproveitados']} chunks ja embutidos, "
+                  f"{len(pendentes)} a fazer, {rem} obsoletos removidos", flush=True)
+    else:
+        try:
+            tbl.delete(f"colecao = '{colecao}'")
+        except Exception:
+            pass
     t0 = time.time()
-    for i in range(0, len(chunks), lote):
-        grupo = chunks[i:i + lote]
+    for i in range(0, len(pendentes), lote):
+        grupo = pendentes[i:i + lote]
         vecs = R.embed([c["texto"] for c in grupo])
         tbl.add([{
             "chunk_id": c["chunk_id"], "colecao": c["colecao"], "ato_seq": c["ato_seq"],
@@ -143,8 +229,8 @@ def gravar(banco: str, colecao: str, chunks: list[dict], sem_vetor: bool, lote: 
         if not quiet and (i // lote) % 10 == 0:
             el = time.time() - t0
             rate = stats["vetores"] / el if el else 0
-            print(f"  embed {stats['vetores']}/{len(chunks)}  {rate:.1f} chunks/s  "
-                  f"faltam ~{(len(chunks) - stats['vetores']) / rate / 60 if rate else 0:.0f} min", flush=True)
+            print(f"  embed {stats['vetores']}/{len(pendentes)}  {rate:.1f} chunks/s  "
+                  f"faltam ~{(len(pendentes) - stats['vetores']) / rate / 60 if rate else 0:.0f} min", flush=True)
     stats["seg_embed"] = time.time() - t0
     con.close()
     return stats
@@ -159,6 +245,15 @@ def main(argv=None) -> int:
     ap.add_argument("--colecao", help="nome da colecao no banco vault")
     ap.add_argument("--sem-vetor", action="store_true", help="so FTS5, sem embeddings")
     ap.add_argument("--lote", type=int, default=16)
+    ap.add_argument("--forcar", action="store_true",
+                    help="ignora a trava de concorrencia (use so se souber que a outra execucao morreu)")
+    ap.add_argument("--sem-vetor-em", default="", metavar="REGEX",
+                    help="chunks cuja fonte/volume casa com o REGEX ficam SO no FTS5, sem embedding. "
+                         "Para tabela numerica bruta (ERB/CDR, planilha), onde a busca util e' exata "
+                         "e o vetor so custa tempo e polui o indice. Ex.: 'VOLUME-0[78]'")
+    ap.add_argument("--retomar", action="store_true",
+                    help="nao refaz o que ja esta embutido: pula os chunk_id ja gravados no LanceDB "
+                         "e remove os que sumiram da fonte. Use para continuar indexacao interrompida")
     ap.add_argument("--quiet", action="store_true")
     a = ap.parse_args(argv)
 
@@ -188,9 +283,19 @@ def main(argv=None) -> int:
             chunks += chunks_de_nota(md, colecao, str(f))
     if not a.quiet:
         print(f"{a.banco}/{colecao}: {len(chunks)} chunks ({sum(c['chars'] for c in chunks):,} chars) -> {R.CEREBRO_DIR}")
-    st = gravar(a.banco, colecao, chunks, a.sem_vetor, a.lote, a.quiet)
+    trava = _trava(a.banco, colecao, a.forcar)
+    try:
+        st = gravar(a.banco, colecao, chunks, a.sem_vetor, a.lote, a.quiet, a.retomar, a.sem_vetor_em)
+    finally:
+        try:
+            trava.unlink()
+        except Exception:
+            pass
     if not a.quiet:
-        print(f"gravado: chunks={st['chunks']} vetores={st['vetores']} embed={st['seg_embed']:.0f}s")
+        reap = f" reaproveitados={st['reaproveitados']}" if st.get("reaproveitados") else ""
+        softs = f" so-fts={st['sem_vetor']}" if st.get("sem_vetor") else ""
+        print(f"gravado: chunks={st['chunks']} vetores={st['vetores']}{reap}{softs} "
+              f"embed={st['seg_embed']:.0f}s")
     return 0
 
 

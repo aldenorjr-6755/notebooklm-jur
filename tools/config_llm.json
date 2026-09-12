@@ -1,73 +1,152 @@
 {
-  "_nota": "Tiers de modelo em nuvem (espec §5.3). IDs do OpenRouter mudam: conferir em openrouter.ai/models antes de fixar. A ordem dentro de cada tier e' a de preferencia; o cliente cai para o proximo em erro. Chaves so por variavel de ambiente.",
-  "provedores": {
-    "openrouter": {
-      "base_url": "https://openrouter.ai/api/v1",
-      "chave_env": "OPENROUTER_API_KEY",
-      "headers": {"HTTP-Referer": "https://local.cerebro-juridico", "X-Title": "cerebro-juridico-criminal"},
-      "politica": {"provider": {"data_collection": "deny", "allow_fallbacks": true}},
-      "_politica_nota": "data_collection=deny exclui provedores que treinam/retem prompts (ZDR). Conferir na conta: Settings > Privacy."
-    },
-    "fcc": {
-      "base_url": "http://127.0.0.1:8082/v1",
-      "chave_env": "FCC_PROXY_TOKEN",
-      "headers": {},
-      "politica": {},
-      "_nota": "proxy local fcc -> DeepSeek V4 Pro (memoria fcc-deepseek-proxy). Token expira; `fcc-restart` apos renovar."
-    },
-    "maritaca": {
-      "base_url": "https://chat.maritaca.ai/api",
-      "chave_env": "MARITACA_API_KEY",
-      "headers": {},
-      "politica": {},
-      "_nota": "residencia de dados no Brasil (sabia-3). Conferir termos de retencao antes de usar com autos."
+ "_nota": "Tiers de modelo em nuvem (espec §5.3). IDs do OpenRouter mudam: conferir em openrouter.ai/models antes de fixar. A ordem dentro de cada tier e' a de preferencia; o cliente cai para o proximo em erro. Chaves so por variavel de ambiente.",
+ "provedores": {
+  "openrouter": {
+   "base_url": "https://openrouter.ai/api/v1",
+   "chave_env": "OPENROUTER_API_KEY",
+   "headers": {
+    "HTTP-Referer": "https://local.cerebro-juridico",
+    "X-Title": "cerebro-juridico-criminal"
+   },
+   "politica": {
+    "provider": {
+     "data_collection": "deny",
+     "allow_fallbacks": true
     }
+   },
+   "_politica_nota": "data_collection=deny exclui provedores que treinam/retem prompts (ZDR). Conferir na conta: Settings > Privacy."
   },
-  "tiers": {
-    "forte": {
-      "uso": "peça, parecer, síntese cross-document (Express A-C, jurisprudencia-filtrada)",
-      "modelos": [
-        {"provedor": "openrouter", "modelo": "anthropic/claude-opus-5"},
-        {"provedor": "openrouter", "modelo": "anthropic/claude-sonnet-5"}
-      ],
-      "temperatura": 0.3, "max_tokens": 8000
-    },
-    "longo": {
-      "uso": "leitura de autos inteiros anonimizados (300-1000 páginas) quando o retrieval não basta",
-      "modelos": [
-        {"provedor": "openrouter", "modelo": "google/gemini-2.5-pro"},
-        {"provedor": "openrouter", "modelo": "anthropic/claude-sonnet-5"}
-      ],
-      "temperatura": 0.1, "max_tokens": 8000
-    },
-    "barato": {
-      "uso": "extração estruturada de atos grandes (para_nuvem.json), classificação em lote, lote noturno",
-      "modelos": [
-        {"provedor": "openrouter", "modelo": "deepseek/deepseek-v4-pro"},
-        {"provedor": "fcc", "modelo": "deepseek-v4-pro"},
-        {"provedor": "openrouter", "modelo": "google/gemini-2.5-flash"},
-        {"provedor": "openrouter", "modelo": "qwen/qwen3-235b-a22b"}
-      ],
-      "temperatura": 0.0, "max_tokens": 4000
-    },
-    "nacional": {
-      "uso": "quando o cliente exigir residência de dados no Brasil",
-      "modelos": [
-        {"provedor": "maritaca", "modelo": "sabia-3"}
-      ],
-      "temperatura": 0.1, "max_tokens": 4000
-    }
+  "fcc": {
+   "base_url": "http://127.0.0.1:8082/v1",
+   "chave_env": "FCC_PROXY_TOKEN",
+   "headers": {},
+   "politica": {},
+   "_nota": "proxy local fcc -> DeepSeek V4 Pro (memoria fcc-deepseek-proxy). Token expira; `fcc-restart` apos renovar."
   },
-  "log": "~/.notebooklm/relatorios/llm-log.jsonl",
-  "precos_usd_por_milhao_tokens_estimados": {
-    "_nota": "so para o --dry-run; conferir no catalogo do dia",
-    "anthropic/claude-opus-5": {"in": 15, "out": 75},
-    "anthropic/claude-sonnet-5": {"in": 3, "out": 15},
-    "google/gemini-2.5-pro": {"in": 1.25, "out": 10},
-    "google/gemini-2.5-flash": {"in": 0.3, "out": 2.5},
-    "deepseek/deepseek-v4-pro": {"in": 0.5, "out": 2},
-    "deepseek-v4-pro": {"in": 0.5, "out": 2},
-    "qwen/qwen3-235b-a22b": {"in": 0.2, "out": 0.8},
-    "sabia-3": {"in": 1, "out": 2}
+  "maritaca": {
+   "base_url": "https://chat.maritaca.ai/api",
+   "chave_env": "MARITACA_API_KEY",
+   "headers": {},
+   "politica": {},
+   "_nota": "residencia de dados no Brasil (sabia-3). Conferir termos de retencao antes de usar com autos."
+  },
+  "deepseek": {
+   "base_url": "https://api.deepseek.com",
+   "chave_env": "DEEPSEEK_API_KEY",
+   "headers": {},
+   "politica": {},
+   "suporta_json_schema": false,
+   "_nota": "API direta da DeepSeek (OpenAI-compativel). NAO aceita response_format json_schema, so json_object — o llm_nuvem manda o schema no prompt quando suporta_json_schema=false. Conferir a politica de retencao/treino da DeepSeek antes de usar com autos sob segredo: nao ha ZDR como no OpenRouter."
   }
+ },
+ "tiers": {
+  "forte": {
+   "uso": "peça, parecer, síntese cross-document (Express A-C, jurisprudencia-filtrada)",
+   "modelos": [
+    {
+     "provedor": "openrouter",
+     "modelo": "anthropic/claude-opus-5"
+    },
+    {
+     "provedor": "openrouter",
+     "modelo": "anthropic/claude-sonnet-5"
+    }
+   ],
+   "temperatura": 0.3,
+   "max_tokens": 8000
+  },
+  "longo": {
+   "uso": "leitura de autos inteiros anonimizados (300-1000 páginas) quando o retrieval não basta",
+   "modelos": [
+    {
+     "provedor": "openrouter",
+     "modelo": "google/gemini-2.5-pro"
+    },
+    {
+     "provedor": "openrouter",
+     "modelo": "anthropic/claude-sonnet-5"
+    }
+   ],
+   "temperatura": 0.1,
+   "max_tokens": 8000
+  },
+  "barato": {
+   "uso": "extração estruturada de atos grandes (para_nuvem.json), classificação em lote, lote noturno",
+   "modelos": [
+    {
+     "provedor": "deepseek",
+     "modelo": "deepseek-chat"
+    },
+    {
+     "provedor": "openrouter",
+     "modelo": "deepseek/deepseek-v4-pro"
+    },
+    {
+     "provedor": "fcc",
+     "modelo": "deepseek-v4-pro"
+    },
+    {
+     "provedor": "openrouter",
+     "modelo": "google/gemini-2.5-flash"
+    },
+    {
+     "provedor": "openrouter",
+     "modelo": "qwen/qwen3-235b-a22b"
+    }
+   ],
+   "temperatura": 0.0,
+   "max_tokens": 4000
+  },
+  "nacional": {
+   "uso": "quando o cliente exigir residência de dados no Brasil",
+   "modelos": [
+    {
+     "provedor": "maritaca",
+     "modelo": "sabia-3"
+    }
+   ],
+   "temperatura": 0.1,
+   "max_tokens": 4000
+  }
+ },
+ "log": "~/.notebooklm/relatorios/llm-log.jsonl",
+ "precos_usd_por_milhao_tokens_estimados": {
+  "_nota": "so para o --dry-run; conferir no catalogo do dia",
+  "anthropic/claude-opus-5": {
+   "in": 15,
+   "out": 75
+  },
+  "anthropic/claude-sonnet-5": {
+   "in": 3,
+   "out": 15
+  },
+  "google/gemini-2.5-pro": {
+   "in": 1.25,
+   "out": 10
+  },
+  "google/gemini-2.5-flash": {
+   "in": 0.3,
+   "out": 2.5
+  },
+  "deepseek/deepseek-v4-pro": {
+   "in": 0.5,
+   "out": 2
+  },
+  "deepseek-v4-pro": {
+   "in": 0.5,
+   "out": 2
+  },
+  "qwen/qwen3-235b-a22b": {
+   "in": 0.2,
+   "out": 0.8
+  },
+  "sabia-3": {
+   "in": 1,
+   "out": 2
+  },
+  "deepseek-chat": {
+   "in": 0.27,
+   "out": 1.1
+  }
+ }
 }

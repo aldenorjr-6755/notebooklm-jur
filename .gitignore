@@ -129,3 +129,8 @@ __pycache__/
 # 2026-09-07: espec da arquitetura criminal (norma escrita a mao) e o alvo do lote noturno.
 !/ESPEC-*.md
 !/LOTE_NOTURNO.bat
+
+# 2026-09-08: grafo MegaMemory (SQLite + WAL). Fica fora do git de proposito: e
+# binario, muda a cada sessao e nao se resolve por diff. Para sincronizar entre
+# maquinas, use `megamemory merge` sobre copias exportadas, nao o versionamento.
+/.megamemory/

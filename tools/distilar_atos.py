@@ -285,8 +285,10 @@ def _linhas(itens: list[dict], campo: str, extra: tuple[str, ...] = ()) -> list[
 def relatorio_controversia(res: list[tuple[dict, dict, dict]], cnj) -> str:
     L = [f"# Quadro de controvérsia — {cnj}", "", "> Extraído por LLM local (temperatura 0) de cada ato, item a item com trecho literal conferido. "
          "Hipótese de trabalho, não conclusão: conferir cada linha no ato antes de usar.", ""]
-    imp = [(a, o) for a, o, m in res if a.get("tipo") in ACUSACAO]
-    tes = [(a, o) for a, o, m in res if a.get("tipo") not in ACUSACAO]
+    # decide pelo que foi extraido (schema), nao pelo tipo do ato: razoes do MP classificadas como
+    # DENUNCIA pela prosa foram extraidas com --schema-de 83=teses e devem aparecer como teses
+    imp = [(a, o) for a, o, m in res if "tipos_penais_imputados" in o]
+    tes = [(a, o) for a, o, m in res if "preliminares" in o]
     L += ["## Imputação (acusação)", ""]
     for a, o in imp:
         L += [f"### {_anc(a)}", "", "- **Tipos penais imputados:**"] + _linhas(o.get("tipos_penais_imputados"), "dispositivo")
@@ -294,7 +296,7 @@ def relatorio_controversia(res: list[tuple[dict, dict, dict]], cnj) -> str:
         L += ["- **Qualificadoras / majorantes:**"] + (_linhas(o.get("qualificadoras_majorantes"), "descricao") or ["  - (nenhuma extraída)"])
         L += ["- **Provas indicadas:**"] + _linhas(o.get("provas_indicadas"), "prova")
         L += ["- **Acordos (ANPP, transação, sursis processual):**"] + (_linhas(o.get("acordos_negados_ou_propostos"), "instituto", ("motivo",)) or ["  - (nada)"]) + [""]
-    L += ["## Teses da defesa", ""]
+    L += ["## Teses (defesa, e acusação quando extraída como teses — ex.: razões de recurso do MP)", ""]
     for a, o in tes:
         L += [f"### {_anc(a)}", "", "- **Preliminares:**"] + (_linhas(o.get("preliminares"), "tese", ("fundamento",)) or ["  - (nenhuma)"])
         L += ["- **Mérito:**"] + (_linhas(o.get("merito"), "tese", ("fundamento",)) or ["  - (nenhuma)"])
@@ -364,6 +366,8 @@ def main(argv=None) -> int:
     ap.add_argument("--limite", type=int, help="processar so as N primeiras tarefas (teste)")
     ap.add_argument("--excluir-tipos", default="", help="tipos de ato a pular, separados por virgula (ex.: CERTIDAO,CARTA PRECATORIA)")
     ap.add_argument("--so-tipos", default="", help="se dado, processa so estes tipos")
+    ap.add_argument("--so-seqs", default="", help="se dado, processa so estes seq (ex.: 2,83)")
+    ap.add_argument("--schema-de", default="", help="forca o schema por seq: '83=teses,2=imputacao' (ato mal classificado)")
     ap.add_argument("--so-relatorio", action="store_true", help="nao chama o modelo; so monta os .md do cache")
     a = ap.parse_args(argv)
 
@@ -377,15 +381,37 @@ def main(argv=None) -> int:
     excl = {t.strip().upper() for t in a.excluir_tipos.split(",") if t.strip()}
     so = {t.strip().upper() for t in a.so_tipos.split(",") if t.strip()}
     fila = [(d, sk, ato) for d, sk, ato in fila if ato.get("tipo") not in excl and (not so or ato.get("tipo") in so)]
+    if a.so_seqs:
+        seqs = {int(x) for x in a.so_seqs.split(",") if x.strip()}
+        fila = [(d, sk, ato) for d, sk, ato in fila if ato["seq"] in seqs]
+    if a.schema_de:
+        forcados = {int(k): v for k, v in (p.split("=") for p in a.schema_de.split(",") if "=" in p)}
+        fila = [(d, forcados.get(ato["seq"], sk), ato) for d, sk, ato in fila]
     teto = a.ate
     locais, nuvem = [], []
     for d, sk, ato in fila:
         tok = int(ato.get("chars", 0) / CHARS_POR_TOKEN)
         (locais if tok <= teto else nuvem).append((d, sk, ato, tok))
     (distill).mkdir(parents=True, exist_ok=True)
-    io.open(distill / "para_nuvem.json", "w", encoding="utf-8", newline="\n").write(json.dumps(
-        [{"distilador": d, "schema": sk, "seq": ato["seq"], "tipo": ato.get("tipo"), "id_pje": ato.get("id_pje"),
-          "tokens_estimados": tok, "arquivo": ato["arquivo"]} for d, sk, ato, tok in nuvem], ensure_ascii=False, indent=1))
+    # para_nuvem.json ACUMULA entre invocacoes: rodar os distiladores em duas chamadas (controversia
+    # primeiro, depois nulidades/prisao/dosimetria) e' o uso normal, e sobrescrever perderia a fila
+    # da chamada anterior — visto em 09/09/2026, quando a lista da controversia sumiu ao rodar a 2a.
+    alvo = distill / "para_nuvem.json"
+    novos = [{"distilador": d, "schema": sk, "seq": ato["seq"], "tipo": ato.get("tipo"),
+              "id_pje": ato.get("id_pje"), "tokens_estimados": tok, "arquivo": ato["arquivo"]}
+             for d, sk, ato, tok in nuvem]
+    antigos = []
+    if alvo.is_file():
+        try:
+            antigos = json.loads(io.open(alvo, encoding="utf-8").read())
+        except Exception:
+            antigos = []
+    # a chave e' (distilador, seq): a mesma peca pode ir a nuvem por distiladores diferentes
+    juntos = {(i.get("distilador"), i.get("seq")): i for i in antigos}
+    juntos.update({(i["distilador"], i["seq"]): i for i in novos})
+    io.open(alvo, "w", encoding="utf-8", newline="\n").write(
+        json.dumps(sorted(juntos.values(), key=lambda i: (i.get("distilador") or "", i.get("seq") or 0)),
+                   ensure_ascii=False, indent=1))
     print(f"{cnj}: {len(fila)} tarefas → {len(locais)} locais (≤{teto} tok) · {len(nuvem)} para nuvem (distill/para_nuvem.json)", flush=True)
     if a.limite:
         locais = locais[:a.limite]
@@ -423,7 +449,23 @@ def main(argv=None) -> int:
         print(f"  [{i}/{len(locais)}] {d}/{sk} seq {ato['seq']} {ato.get('tipo')} ~{tok} tok: {met['seg_wall']}s "
               f"(prompt {met['seg_prompt']}s, geração {met['seg_geracao']}s, {met['gerados']} tok{', TRUNCADO' if met['truncado'] else ''}) "
               f"trechos {ok}/{tot}", flush=True)
+    # relatorio = TUDO que ha no cache do distilador (nao so a rodada atual): uma rodada filtrada por
+    # --so-tipos/--so-seqs nao pode apagar do .md os atos das rodadas anteriores
+    por_seq = {ato["seq"]: ato for ato in atos}
     for d in dists:
+        vistos = {ato["seq"] for ato, _, _ in resultados[d]}
+        for cache in sorted((distill / "llm" / d).glob("*.json")):
+            try:
+                prev = json.loads(io.open(cache, encoding="utf-8").read())
+            except json.JSONDecodeError:
+                continue
+            ato = por_seq.get(prev.get("seq"))
+            if not ato or ato["seq"] in vistos or "saida" not in prev or "_erro" in prev["saida"]:
+                continue
+            if prev.get("hash") != ato.get("hash_sha256"):
+                continue     # o ato mudou desde a extracao: nao misturar
+            resultados[d].append((ato, prev["saida"], prev.get("metricas", {})))
+        resultados[d].sort(key=lambda t: t[0]["seq"])
         md = RELATORIOS[d](resultados[d], cnj)
         io.open(distill / f"{d}.md", "w", encoding="utf-8", newline="\n").write(md)
     print(f"concluído em {(time.time() - t_total) / 60:.0f} min → " + ", ".join(f"distill/{d}.md ({len(resultados[d])} atos)" for d in dists), flush=True)

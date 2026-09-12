@@ -47,7 +47,8 @@ DIR_ANON = Path(os.environ.get("CEREBRO_DIR") or Path(os.environ.get("LOCALAPPDA
 
 # nome e papel na MESMA linha ([ \t], nunca \s: com \s o casamento preguicoso engolia as linhas
 # anteriores — "MINISTERIO PUBLICO ... AUTOR ... ELIO DIAS DA CRUZ (REU)" virava um nome so)
-RE_CAPA_PARTE = re.compile(r"^[ \t]*([A-ZÁÉÍÓÚÂÊÔÃÕÇÜ][A-ZÁÉÍÓÚÂÊÔÃÕÇÜ' \t\.-]{4,80}?)[ \t]*\((R[ÉE]U|R[ÉE]|AUTORA?|ADVOGAD[OA]|V[ÍI]TIMA|TESTEMUNHA|INVESTIGAD[OA]|INDICIAD[OA]|DENUNCIAD[OA]|QUERELAD[OA]|QUERELANTE|REPRESENTANTE|ASSISTENTE|DEFENSOR[A]?|CURADOR[A]?|TERCEIRO INTERESSADO)\)\s*$", re.M)
+RE_CAPA_PARTE = re.compile(r"^[ \t]*([A-ZÁÉÍÓÚÂÊÔÃÕÇÜ][A-ZÁÉÍÓÚÂÊÔÃÕÇÜ' \t\.-]{4,80}?)[ \t]*\(((?:[12]?[ºo°]?\s*)?(?:R[ÉE]U|R[ÉE]|AUTORA?|ADVOGAD[OA]|V[ÍI]TIMA|TESTEMUNHA|INVESTIGAD[OA]|INDICIAD[OA]|DENUNCIAD[OA]|QUERELAD[OA]|QUERELANTE|REPRESENTANTE|ASSISTENTE|DEFENSOR[A]?|CURADOR[A]?|TERCEIRO INTERESSADO|"
+                            r"APELANTE|APELAD[OA]|RECORRENTE|RECORRID[OA]|AGRAVANTE|AGRAVAD[OA]|EMBARGANTE|EMBARGAD[OA]|PACIENTE|IMPETRANTE|IMPETRAD[OA]|REQUERENTE|REQUERID[OA]|EXEQUENTE|EXECUTAD[OA]|REEDUCAND[OA]|APENAD[OA]|CONDENAD[OA]|ACUSAD[OA]))\)\s*$", re.M)
 STOP_INSTITUICAO = {"TRIBUNAL", "JUSTIÇA", "JUSTICA", "MINISTÉRIO", "MINISTERIO", "PÚBLICO", "PUBLICO", "ESTADUAL", "FEDERAL",
                     "VARA", "COMARCA", "ESTADO", "MARANHÃO", "MARANHAO", "JUIZ", "JUÍZA", "JUIZA", "SENHOR", "SENHORA",
                     "EXCELENTÍSSIMO", "EXCELENTISSIMO", "EXCELENTÍSSIMA", "EXCELENTISSIMA", "DOUTOR", "DOUTORA", "DIREITO",
@@ -136,8 +137,11 @@ class Anonimizador:
         n = 0
         for m in RE_CAPA_PARTE.finditer(texto):
             nome, papel = m.group(1).strip(" .-"), m.group(2)
-            if nome.split()[0] in STOP_INSTITUICAO and len(nome.split()) > 3 and "PUBLICO" in _sem_acento(nome):
-                continue   # MINISTERIO PUBLICO ... (AUTOR)
+            toks = [t for t in nome.split() if t not in ("DE", "DA", "DO", "DOS", "DAS", "E")]
+            # pessoa natural tem >= 2 nomes; "MARANHAO (APELADO)", "MINISTERIO PUBLICO ... (AUTOR)",
+            # "ESTADO DO MARANHAO (RECORRIDO)" sao instituicoes e nao entram no mapa
+            if len(toks) < 2 or any(_sem_acento(t).upper() in {_sem_acento(s).upper() for s in STOP_INSTITUICAO} for t in toks):
+                continue
             self.adicionar_pessoa(nome, papel)
             n += 1
         return n
